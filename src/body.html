@@ -1,0 +1,118 @@
+
+<svg class="defs" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="ripple" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.05" numOctaves="2" seed="4" result="n"><animate attributeName="baseFrequency" dur="16s" values="0.018 0.05;0.03 0.07;0.018 0.05" repeatCount="indefinite"/></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="9"/>
+    </filter>
+    <radialGradient id="pitG" cx="50%" cy="45%" r="60%"><stop offset="0" stop-color="#140c05"/><stop offset=".65" stop-color="#3a2512"/><stop offset="1" stop-color="#6e4d29"/></radialGradient>
+    <linearGradient id="roofG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8c36a"/><stop offset=".6" stop-color="#c0903b"/><stop offset="1" stop-color="#8d6125"/></linearGradient>
+    <linearGradient id="wallG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b98a58"/><stop offset=".5" stop-color="#d7ad78"/><stop offset="1" stop-color="#9c7142"/></linearGradient>
+  </defs>
+</svg>
+
+<main class="app" id="app">
+  <header class="top">
+    <div class="brand">
+      <h1 class="logo" aria-label="Cờ Thú"><span aria-hidden="true">C</span><span aria-hidden="true">Ờ</span><span aria-hidden="true"></span><span aria-hidden="true">T</span><span aria-hidden="true">H</span><span aria-hidden="true">Ú</span></h1>
+      <p class="tag" id="tagline">Đưa một quân vào hang đối phương để thắng.</p>
+    </div>
+    <div class="score" aria-label="Điểm số"><span class="pv"><em id="sc1-l">Thắng</em> <b id="wins">0</b></span><span class="pv"><em id="sc2-l">Thua</em> <b id="losses">0</b></span></div>
+  </header>
+
+  <div class="layout">
+    <section class="play" aria-label="Bàn cờ">
+      <div class="status">
+        <div class="pill" id="pill"><i class="dot"></i><span id="pill-text">Lượt của bạn</span></div>
+        <div class="bubble" id="bubble" role="status" aria-live="polite"><span class="b-emo">🐾</span><span class="b-text">Mời bạn đi trước. Chạm vào một quân để xem tuyệt kỹ của nó.</span></div>
+        <button class="btn alt" id="btn-skip" type="button" hidden>Bỏ qua thưởng</button>
+      </div>
+
+      <div class="team" aria-label="Quân bên trên"><span class="who"><em id="who-foe">Máy</em> <small id="cnt-foe">8/8</small></span><div class="strip" id="strip-foe"></div><span class="oc" id="oc-foe"></span></div>
+
+      <div class="frame" id="frame">
+        <div class="board" id="board" tabindex="0" role="application" aria-label="Bàn cờ thú. Dùng phím mũi tên để chọn ô, Enter để chọn quân hoặc đi quân, Esc để bỏ chọn.">
+          <canvas id="ground" aria-hidden="true"></canvas>
+          <div class="lakes" id="lakes"></div>
+          <div class="grid" id="grid"></div>
+          <div class="marks" id="marks"></div>
+          <div class="pieces" id="pieces"></div>
+          <div class="fx" id="fx"></div>
+        </div>
+        <div class="result" id="draft" hidden>
+          <div class="draft-card">
+            <div class="draft-tabs"><h2 id="draft-title">Chọn đội hình</h2></div>
+            <p class="mode-desc" id="draft-sub"></p>
+            <div id="draft-rows"></div>
+            <p class="draft-info" id="draft-info">Chạm vào một tướng để xem tuyệt kỹ của nó.</p>
+            <div class="result-actions"><button class="btn" id="draft-go" type="button">Vào trận</button><button class="btn alt" id="draft-rand" type="button">Ngẫu nhiên</button></div>
+          </div>
+        </div>
+        <div class="result" id="result" hidden>
+          <div class="result-card">
+            <div class="result-emoji" id="res-emoji">🏆</div>
+            <h2 id="res-title">Bạn thắng rồi!</h2>
+            <p id="res-sub"></p>
+            <div class="result-actions">
+              <button class="btn" id="res-new" type="button">Chơi ván mới</button>
+              <button class="btn alt" id="res-view" type="button">Xem bàn cờ</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="team" aria-label="Quân bên dưới"><span class="who"><em id="who-me">Bạn</em> <small id="cnt-me">8/8</small></span><div class="strip" id="strip-me"></div><span class="oc" id="oc-me"></span></div>
+    </section>
+
+    <aside class="side">
+      <div class="card info" id="info" aria-live="polite"></div>
+
+      <details class="card" id="roster-box">
+        <summary>Sổ tay thú</summary>
+        <div class="roster" id="roster"></div>
+      </details>
+
+      <div class="card">
+        <h2>Ván chơi</h2>
+        <div class="field-label">Đối thủ</div>
+        <div class="seg" role="radiogroup" aria-label="Đối thủ">
+          <input type="radio" name="opp" id="opp-ai" value="ai" checked><label for="opp-ai">Chơi với máy</label>
+          <input type="radio" name="opp" id="opp-pvp" value="pvp"><label for="opp-pvp">2 người chơi</label>
+        </div>
+        <div class="field-label">Chế độ</div>
+        <div class="seg wrap" role="radiogroup" aria-label="Chế độ chơi">
+          <input type="radio" name="mode" id="mode-basic" value="basic"><label for="mode-basic">Cổ điển</label>
+          <input type="radio" name="mode" id="mode-draft" value="draft" checked><label for="mode-draft">Chọn tướng</label>
+          <input type="radio" name="mode" id="mode-chal" value="chal"><label for="mode-chal">Thử thách</label>
+        </div>
+        <p class="mode-desc" id="mode-desc"></p>
+        <div id="chal-box" hidden><div class="field-label">Thử thách</div><select id="chal-sel" class="sel" aria-label="Chọn thử thách"></select><p class="mode-desc" id="chal-desc"></p></div>
+        <div id="lvl-box">
+          <div class="field-label">Cấp độ của máy</div>
+          <div class="seg wrap" role="radiogroup" aria-label="Cấp độ của máy">
+            <input type="radio" name="lvl" id="lvl-1" value="1"><label for="lvl-1">1 · Tập sự</label>
+            <input type="radio" name="lvl" id="lvl-2" value="2"><label for="lvl-2">2 · Dễ</label>
+            <input type="radio" name="lvl" id="lvl-3" value="3" checked><label for="lvl-3">3 · Vừa</label>
+            <input type="radio" name="lvl" id="lvl-4" value="4"><label for="lvl-4">4 · Khó</label>
+            <input type="radio" name="lvl" id="lvl-5" value="5"><label for="lvl-5">5 · Cao thủ</label>
+          </div>
+          <p class="lvl-note" id="lvl-note"></p>
+        </div>
+        <div class="btns">
+          <button class="btn" id="btn-new" type="button">Ván mới</button>
+          <button class="btn alt" id="btn-undo" type="button">Đi lại</button>
+          <button class="btn alt" id="btn-hint" type="button">Gợi ý</button>
+          <button class="btn alt" id="btn-sound" type="button" aria-pressed="true">Âm thanh: Bật</button>
+        </div>
+      </div>
+
+      <details class="card" id="rules">
+        <summary>Luật chung</summary>
+        <div class="ladder" id="ladder" aria-label="Thứ tự bậc từ thấp đến cao"></div>
+        <p class="ladder-note">Bậc từ thấp đến cao. Quân có bậc cao hơn hoặc bằng thì ăn được quân bậc thấp hơn.</p>
+        <ul class="rules" id="rules-list"></ul>
+      </details>
+    </aside>
+  </div>
+</main>
+<div id="confetti" aria-hidden="true"></div>
