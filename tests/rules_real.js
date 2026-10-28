@@ -22,7 +22,7 @@ c=empty();c[rc(5,6)]=-3;c[rc(5,5)]=4;ok('bank dog captures marsh wolf',mv(c,rc(5
 sel(sq(2,1),Z);c=empty();c[rc(5,5)]=2;ok('fox no dash through marsh (5,6)->(5,7)',!mv(c,rc(5,5)).some(x=>x.k===3&&x.t===rc(5,7)));
 c=empty();c[rc(6,6)]=2;ok('fox dash over grass->lands in marsh (6,6)->(4,6)? middle (5,6) marsh blocked',!mv(c,rc(6,6)).some(x=>x.k===3&&x.t===rc(4,6)));
 c=empty();c[rc(7,6)]=2;ok('fox dash lands in marsh (7,6)->(5,6)',mv(c,rc(7,6)).some(x=>x.k===3&&x.t===rc(5,6)));
-sel(sq(7,1),Z);c=empty();c[rc(7,6)]=7;ok('bison normal step remains available beside marsh',mv(c,rc(7,6)).some(x=>x.k===0&&x.t===rc(6,6)));
+sel(sq(7,1),Z);c=empty();c[rc(7,6)]=7;ok('bison dash may land in marsh when midpoint is clear',mv(c,rc(7,6)).some(x=>x.k===8&&x.t===rc(5,6)));
 c=empty();c[rc(6,6)]=7;ok('bison blocked by marsh middle (6,6)->(4,6)',!mv(c,rc(6,6)).some(x=>x.k===8&&x.t===rc(4,6)));
 c=empty();c[rc(7,6)]=7;ok('bison lands in marsh',mv(c,rc(7,6)).some(x=>x.k===8&&x.t===rc(5,6)));
 sel(Z,Z);E.SQ[0][7]=0;E.setKeys();
