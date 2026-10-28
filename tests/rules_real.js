@@ -12,17 +12,17 @@ let m=0,o=0,w=0;for(let i=0;i<N;i++){m+=E.MARSH[i];o+=E.OUTPOST[i];w+=E.WATER[i]
 ok('marsh 4 cells',m===4);ok('outposts 2',o===2);ok('river water 5',w===5);
 for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const a=rc(r,c),b=rc(ROWS-1-r,c);ok('sym',E.MARSH[a]===E.MARSH[b]&&E.OUTPOST[a]===E.OUTPOST[b]&&E.WATER[a]===E.WATER[b]&&E.ROCK[a]===E.ROCK[b]&&E.BUSH[a]===E.BUSH[b]&&E.TRAP[a]===-E.TRAP[b]);}
 // ---- marsh walkable by ordinary pieces
-sel(Z,Z);let c=empty();c[rc(6,5)]=4;ok('dog enters marsh',mv(c,rc(6,5)).length>=0);
+sel(Z,Z);let c=empty();c[rc(6,6)]=4;ok('dog enters marsh from (6,6) to (5,6)',mv(c,rc(6,6)).some(x=>x.t===rc(5,6)));
 c=empty();c[rc(5,5)]=4;ok('dog steps into marsh (5,6)',mv(c,rc(5,5)).some(x=>x.t===rc(5,6)));
 c=empty();c[rc(5,5)]=8;ok('elephant steps into marsh',mv(c,rc(5,5)).some(x=>x.t===rc(5,6)));
 c=empty();c[rc(5,6)]=4;c[rc(5,7)]=-3;ok('dog captures wolf inside marsh',mv(c,rc(5,6)).some(x=>x.t===rc(5,7)));
-c=empty();c[rc(5,6)]=3;c[rc(5,5)]=-4;ok('dog on bank captures wolf in marsh',mv(c,rc(5,5)).length===0||true);
+c=empty();c[rc(5,6)]=3;c[rc(5,5)]=-4;ok('dog on bank captures wolf in marsh',mv(c,rc(5,5)).some(x=>x.t===rc(5,6)));
 c=empty();c[rc(5,6)]=-3;c[rc(5,5)]=4;ok('bank dog captures marsh wolf',mv(c,rc(5,5)).some(x=>x.t===rc(5,6)));
 // ---- dashes cannot pass through marsh, can land
 sel(sq(2,1),Z);c=empty();c[rc(5,5)]=2;ok('fox no dash through marsh (5,6)->(5,7)',!mv(c,rc(5,5)).some(x=>x.k===3&&x.t===rc(5,7)));
 c=empty();c[rc(6,6)]=2;ok('fox dash over grass->lands in marsh (6,6)->(4,6)? middle (5,6) marsh blocked',!mv(c,rc(6,6)).some(x=>x.k===3&&x.t===rc(4,6)));
 c=empty();c[rc(7,6)]=2;ok('fox dash lands in marsh (7,6)->(5,6)',mv(c,rc(7,6)).some(x=>x.k===3&&x.t===rc(5,6)));
-sel(sq(7,1),Z);c=empty();c[rc(7,6)]=7;ok('bison no dash through marsh',!mv(c,rc(7,6)).some(x=>x.k===8&&x.t===rc(5,6))||true);
+sel(sq(7,1),Z);c=empty();c[rc(7,6)]=7;ok('bison normal step remains available beside marsh',mv(c,rc(7,6)).some(x=>x.k===0&&x.t===rc(6,6)));
 c=empty();c[rc(6,6)]=7;ok('bison blocked by marsh middle (6,6)->(4,6)',!mv(c,rc(6,6)).some(x=>x.k===8&&x.t===rc(4,6)));
 c=empty();c[rc(7,6)]=7;ok('bison lands in marsh',mv(c,rc(7,6)).some(x=>x.k===8&&x.t===rc(5,6)));
 sel(Z,Z);E.SQ[0][7]=0;E.setKeys();
@@ -36,7 +36,7 @@ c=empty();c[rc(5,6)]=-7;c[rc(5,5)]=8;ok('elephant attacks lion in marsh normally
 c=empty();c[rc(5,6)]=-1;c[rc(5,5)]=8;ok('bank elephant cannot capture rat in marsh',!mv(c,rc(5,5)).some(x=>x.t===rc(5,6)));
 c=empty();c[rc(5,6)]=-1;c[rc(5,7)]=4;ok('dog in marsh cannot capture rat in marsh',!mv(c,rc(5,7)).some(x=>x.t===rc(5,6)));
 c=empty();c[rc(5,6)]=1;c[rc(5,5)]=-8;ok('rat in marsh cannot hit bank elephant',!mv(c,rc(5,6)).some(x=>x.t===rc(5,5)));
-c=empty();c[rc(6,6)]=1;c[rc(6,5)]=-8;ok('rat on bank eats elephant on bank',mv(c,rc(6,6)).some(x=>x.t===rc(6,5))||true);
+c=empty();c[rc(6,6)]=1;c[rc(6,5)]=-8;ok('rat on bank eats elephant on bank',mv(c,rc(6,6)).some(x=>x.t===rc(6,5)));
 c=empty();c[rc(6,5)]=1;c[rc(6,4)]=-8;ok('rat on bank captures elephant',mv(c,rc(6,5)).some(x=>x.t===rc(6,4)));
 sel(sq(5,1),Z);c=empty();c[rc(5,6)]=5;ok('croc rank 6 in marsh',E.effRank(c,rc(5,6))===6);c=empty();c[rc(6,6)]=5;ok('croc rank 3 on bank',E.effRank(c,rc(6,6))===3);
 c=empty();c[rc(5,6)]=5;c[rc(5,5)]=-3;ok('croc in marsh ambushes wolf on bank',E.genMoves(c,1).some(x=>((x>>14)&15)===6));
