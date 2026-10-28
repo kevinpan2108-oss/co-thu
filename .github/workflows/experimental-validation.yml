@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - exp/chatgpt-followup-20261028
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
   pull_request:
     branches:
       - main
