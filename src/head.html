@@ -166,6 +166,9 @@ button{font-family:inherit}
 .rank{position:absolute;right:-6%;bottom:-6%;width:36%;height:36%;border-radius:50%;background:#fff;color:var(--ink);border:2px solid var(--ink);font:800 max(9px,calc(100cqw / var(--cols) * .2))/1 var(--font-display);display:grid;place-items:center;box-shadow:0 1px 2px rgba(0,0,0,.4)}
 .rank.buff{background:#B8F5B0}
 .rank.nerf{background:#FFB3C0}
+.rank.buff::after,.rank.nerf::after{position:absolute;top:-34%;left:50%;transform:translateX(-50%);font-size:.7em;line-height:1}
+.rank.buff::after{content:'▲';color:#1B7A2E}
+.rank.nerf::after{content:'▼';color:#C42B4A}
 .piece.sel{z-index:8}
 .piece.sel .face{animation:selbob .55s ease-in-out infinite alternate;box-shadow:0 0 0 4px var(--sun),0 3px 0 4px var(--ink),0 10px 10px rgba(0,0,0,.3)}
 .piece.in-water .face{animation:float 1.7s ease-in-out infinite}

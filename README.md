@@ -15,9 +15,16 @@ Trò chơi Cờ Thú một file HTML, bàn 9×9, có AI 5 cấp (chạy trong We
 python3 build.py
 node tests/rules_real.js     # 144 bài kiểm luật với engine thật
 node tests/t16.js            # 20 bài: hồi chiêu tiền đồn, thắng, hết nước đi (hòa)
+node tests/terrain.js        # 104 kiểm tra tương tác địa hình (đầm lầy, sông, cầu, Cá sấu, Sư tử, ...), chạy cho cả hai phe
+node tests/ai.js             # 6 kiểm tra chiến thuật AI + bất biến nước đi hợp lệ
 cd tests && npm i playwright && npx playwright install chromium
 node pw11.js                 # 14 kiểm tra giao diện: bước thưởng, bỏ qua, hoàn tác, AI, hòa, thắng
 node pw12.js                 # bot ngẫu nhiên chơi 3 ván qua giao diện + tải lại trang
+node pw14.js                 # 11 kiểm tra hiển thị bậc hiệu lực (Sói, Lợn rừng, Chó, Gấu, Cá sấu)
+
+# Mô phỏng (chậm, chạy nền): AI mới so AI cũ, và cân bằng 6 cặp quân
+node match.js 20 150 7 [mask] [depth]   # mask AI thử nghiệm: 1 đe dọa, 2 đường vòng, 4 cầu/tiền đồn
+node balance.js 2,3,4,5,6,7 8 100 501   # đổi phe, thống kê thắng/số nước/tuyến
 ```
 
 ## Luật chính (bản hiện tại)

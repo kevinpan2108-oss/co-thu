@@ -172,6 +172,8 @@ function movesFrom(cells,i,out){
       continue;
     }
     if(stepOK(cells,i,t,0)) out.push(i|(t<<7));
+    /* Ca sau trong dam lay cung la 'o duoi nuoc': quan tren can bac >= 6 danh tu xa nhu voi ca sau duoi ho. */
+    if(!CLASSIC&&TERR&&!lock&&MARSH[t]&&cells[t]===-s*5&&HK[cells[t]+9]==='croc'&&!inW(cells,i)&&effRank(cells,i)>=6) out.push(i|(t<<7)|(6<<14));
     if(CLASSIC||lock) continue;
     if(K==='cat'){
       if(cells[t]!==0){
@@ -202,7 +204,7 @@ function movesFrom(cells,i,out){
     }else if(K==='mon'){
       if(cells[SL+6+a]===0&&cells[t]!==0&&!DEN[t]&&!DEN[i]&&!isTur(cells[t])&&!(TERR&&BRIDGE[i]&&HK[cells[t]+9]==='ele')) out.push(i|(t<<7)|(5<<14));
     }else if(K==='croc'){
-      if(inW(cells,i)&&cells[t]*s<0&&!DEN[t]&&(!TERR||!BUSH[t])&&!isTur(cells[t])&&effRank(cells,t)<=4) out.push(i|(t<<7)|(6<<14));
+      if(inW(cells,i)&&cells[t]*s<0&&!DEN[t]&&(!TERR||(!BUSH[t]&&!MARSH[t]))&&!isTur(cells[t])&&effRank(cells,t)<=4) out.push(i|(t<<7)|(6<<14));
     }
   }
   if(!CLASSIC&&!lock&&K==='leo'){
@@ -404,6 +406,33 @@ function contested(cells,i,p){
   }
   return false;
 }
+/* ---------- AI v2: tinh hieu qua thuc su cua cac moi de doa va duong vong ---------- */
+var AI2=0; /* bit 1: de doa hop le, bit 2: duong vong, bit 4: giu cau/tien don; 0 = AI cu */
+/* Quan o i (ben p) co bi quan dich bat HOP LE khong (tinh ca ky nang: vo, phuc kich, ban, lao, va dia hinh). */
+function threatened(cells,i,p){
+  var s=p?-1:1, ir=(i/COLS)|0, ic=i%COLS, j, c, tmp, q, m, d;
+  for(j=0;j<N;j++){
+    c=cells[j]; if(c*s<=0) continue;
+    d=Math.abs(((j/COLS)|0)-ir)+Math.abs(j%COLS-ic); if(d>3) continue;
+    tmp=[]; movesFrom(cells,j,tmp);
+    for(q=0;q<tmp.length;q++){ m=tmp[q]; if(((m>>7)&127)===i&&((m>>14)&15)!==5) return true; }
+  }
+  return false;
+}
+/* Chi phi duong vong: neu moi o tien gan hang hon deu bi chan (quan ta hoac quan dich khong an duoc) thi phai di vong. */
+function detourCost(cells,i,k,p,dd){
+  var w=p?0:1, s=p?1:-1, d, n, dn, c, free=false, blockedEnemy=false;
+  if(k==='tig'||k==='eagle'||k==='leo'||k==='rat'||k==='croc'||k==='fox'||k==='bison'||k==='mon') return 0;
+  for(d=0;d<4;d++){
+    n=ADJ[i*4+d]; if(n<0) continue;
+    dn=pieceDist(k,w,n); if(dn>=dd) continue;
+    c=cells[n];
+    if(c===0){ free=true; break; }
+    if(c*s<0){ if(canCap(cells,i,n,0)){ free=true; break; } blockedEnemy=true; }
+  }
+  if(free) return 0;
+  return blockedEnemy?2:1;
+}
 /* ---------- Evaluation (diem cho ben duoi, +) ---------- */
 var VALK={rat:300,cat:230,fox:245,wolf:340,boar:350,dog:410,bear:425,leo:470,croc:440,tig:640,eagle:620,lio:660,bison:650,ele:760,mon:150,tur:230};
 function evaluate(cells){
@@ -420,12 +449,13 @@ function evaluate(cells){
     trapped=TRAP[i]===(p?-1:1);
     if(k!=='tur'){
       dd=pieceDist(k,p?0:1,i);
+      if((AI2&2)&&dd>1&&dd<=7) dd+=detourCost(cells,i,k,p,dd);
       if(dd>12) dd=12;
       v+=(12-dd)*6;
       if(dd<=4){
         bonus=(5-dd)*(5-dd)*16;
         if(trapped) bonus*=.45;
-        if(dd<=3&&contested(cells,i,p)) bonus*=.4;
+        if(dd<=3&&((AI2&1)?threatened(cells,i,p):contested(cells,i,p))) bonus*=.4;
         v+=bonus;
       }
       if(trapped&&r!==9) v-=(r===8?70:v*.6);
@@ -438,6 +468,20 @@ function evaluate(cells){
   }
   if(eP&&ratF) sc-=170;
   if(eF&&ratP) sc+=170;
+  if((AI2&4)&&!CLASSIC&&TERR){
+    var d2,n2,c2,gB=[0,0],gO=[0,0],ri;
+    for(i=0;i<N;i++){
+      if(!BRIDGE[i]&&!(OUTPOST[i]&&cells[i]===0)) continue;
+      gB[0]=gB[1]=0; gO[0]=gO[1]=0;
+      for(d2=0;d2<4;d2++){
+        n2=ADJ[i*4+d2]; if(n2<0) continue; c2=cells[n2]; if(!c2||isTur(c2)||c2===9||c2===-9) continue;
+        p=c2>0; ri=(n2/COLS)|0;
+        if(BRIDGE[i]&&(p?ri>4:ri<4)&&effRank(cells,n2)>=4) gB[p?0:1]=1;
+        if(OUTPOST[i]&&cells[SL+(p?8:9)]===0&&effRank(cells,n2)>=2) gO[p?0:1]=1;
+      }
+      sc+=10*(gB[0]-gB[1])+12*(gO[0]-gO[1]);
+    }
+  }
   return sc;
 }
 
@@ -637,8 +681,8 @@ function counts(cells){ probe(cells,1); return [NTP,NTF]; }
 return {
   COLS:COLS,ROWS:ROWS,N:N,SL:SL,ST:ST,DENME:DENME,DENFOE:DENFOE,MAPROWS:MAPROWS,STARTS:STARTS,EXTRA:EXTRA,ROCK:ROCK,BUSH:BUSH,BRIDGE:BRIDGE,WATER:WATER,TRAP:TRAP,DEN:DEN,ADJ:ADJ,SQ:SQ,HK:HK,LEVELS:LEVELS,
   isClassic:function(){return CLASSIC;},setClassic:setClassic,setKeys:setKeys,initialCells:initialCells,genMoves:genMoves,movesFrom:movesFrom,
-  make:make,unmake:unmake,commit:commit,makeM:makeM,unmakeM:unmakeM,commitM:commitM,bonusEligible:bonusEligible,bonusSteps:bonusSteps,commitBonus:commitBonus,outCd:function(c,s){return c[SL+(s>0?8:9)];},setOutCd:function(v){OUTCD=v|0;},setBonus:function(v){BONUS=!!v;},MARSH:MARSH,OUTPOST:OUTPOST,effRank:effRank,hashOf:hashOf,counts:counts,search:search,evaluate:evaluate,
-  hasMate:hasMate,nearWater:nearWater,advanced:advanced,guarding:guarding,isTur:isTur,
+  make:make,unmake:unmake,commit:commit,makeM:makeM,unmakeM:unmakeM,commitM:commitM,bonusEligible:bonusEligible,bonusSteps:bonusSteps,commitBonus:commitBonus,outCd:function(c,s){return c[SL+(s>0?8:9)];},setOutCd:function(v){OUTCD=v|0;},setBonus:function(v){BONUS=!!v;},setAI:function(v){AI2=(v===true)?7:(v===false)?0:(v|0);},MARSH:MARSH,OUTPOST:OUTPOST,effRank:effRank,hashOf:hashOf,counts:counts,search:search,evaluate:evaluate,
+  hasMate:hasMate,inW:inW,nearWater:nearWater,advanced:advanced,guarding:guarding,isTur:isTur,
   probe:probe,getH:function(){return H1;},
   negamax:function(c,s,d,a,b){nodes=0;aborted=false;deadline=Date.now()+1e9;return negamax(c,s,d,a,b,0);},
   setTerr:function(v){TERR=!!v;},setQ:function(v){useQ=v;},setTT:function(v){useTT=v;},clearTT:function(){ttDepth.fill(-1);}

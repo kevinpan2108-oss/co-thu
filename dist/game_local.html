@@ -166,6 +166,9 @@ button{font-family:inherit}
 .rank{position:absolute;right:-6%;bottom:-6%;width:36%;height:36%;border-radius:50%;background:#fff;color:var(--ink);border:2px solid var(--ink);font:800 max(9px,calc(100cqw / var(--cols) * .2))/1 var(--font-display);display:grid;place-items:center;box-shadow:0 1px 2px rgba(0,0,0,.4)}
 .rank.buff{background:#B8F5B0}
 .rank.nerf{background:#FFB3C0}
+.rank.buff::after,.rank.nerf::after{position:absolute;top:-34%;left:50%;transform:translateX(-50%);font-size:.7em;line-height:1}
+.rank.buff::after{content:'▲';color:#1B7A2E}
+.rank.nerf::after{content:'▼';color:#C42B4A}
 .piece.sel{z-index:8}
 .piece.sel .face{animation:selbob .55s ease-in-out infinite alternate;box-shadow:0 0 0 4px var(--sun),0 3px 0 4px var(--ink),0 10px 10px rgba(0,0,0,.3)}
 .piece.in-water .face{animation:float 1.7s ease-in-out infinite}
@@ -646,6 +649,8 @@ function movesFrom(cells,i,out){
       continue;
     }
     if(stepOK(cells,i,t,0)) out.push(i|(t<<7));
+    /* Ca sau trong dam lay cung la 'o duoi nuoc': quan tren can bac >= 6 danh tu xa nhu voi ca sau duoi ho. */
+    if(!CLASSIC&&TERR&&!lock&&MARSH[t]&&cells[t]===-s*5&&HK[cells[t]+9]==='croc'&&!inW(cells,i)&&effRank(cells,i)>=6) out.push(i|(t<<7)|(6<<14));
     if(CLASSIC||lock) continue;
     if(K==='cat'){
       if(cells[t]!==0){
@@ -676,7 +681,7 @@ function movesFrom(cells,i,out){
     }else if(K==='mon'){
       if(cells[SL+6+a]===0&&cells[t]!==0&&!DEN[t]&&!DEN[i]&&!isTur(cells[t])&&!(TERR&&BRIDGE[i]&&HK[cells[t]+9]==='ele')) out.push(i|(t<<7)|(5<<14));
     }else if(K==='croc'){
-      if(inW(cells,i)&&cells[t]*s<0&&!DEN[t]&&(!TERR||!BUSH[t])&&!isTur(cells[t])&&effRank(cells,t)<=4) out.push(i|(t<<7)|(6<<14));
+      if(inW(cells,i)&&cells[t]*s<0&&!DEN[t]&&(!TERR||(!BUSH[t]&&!MARSH[t]))&&!isTur(cells[t])&&effRank(cells,t)<=4) out.push(i|(t<<7)|(6<<14));
     }
   }
   if(!CLASSIC&&!lock&&K==='leo'){
@@ -878,6 +883,33 @@ function contested(cells,i,p){
   }
   return false;
 }
+/* ---------- AI v2: tinh hieu qua thuc su cua cac moi de doa va duong vong ---------- */
+var AI2=0; /* bit 1: de doa hop le, bit 2: duong vong, bit 4: giu cau/tien don; 0 = AI cu */
+/* Quan o i (ben p) co bi quan dich bat HOP LE khong (tinh ca ky nang: vo, phuc kich, ban, lao, va dia hinh). */
+function threatened(cells,i,p){
+  var s=p?-1:1, ir=(i/COLS)|0, ic=i%COLS, j, c, tmp, q, m, d;
+  for(j=0;j<N;j++){
+    c=cells[j]; if(c*s<=0) continue;
+    d=Math.abs(((j/COLS)|0)-ir)+Math.abs(j%COLS-ic); if(d>3) continue;
+    tmp=[]; movesFrom(cells,j,tmp);
+    for(q=0;q<tmp.length;q++){ m=tmp[q]; if(((m>>7)&127)===i&&((m>>14)&15)!==5) return true; }
+  }
+  return false;
+}
+/* Chi phi duong vong: neu moi o tien gan hang hon deu bi chan (quan ta hoac quan dich khong an duoc) thi phai di vong. */
+function detourCost(cells,i,k,p,dd){
+  var w=p?0:1, s=p?1:-1, d, n, dn, c, free=false, blockedEnemy=false;
+  if(k==='tig'||k==='eagle'||k==='leo'||k==='rat'||k==='croc'||k==='fox'||k==='bison'||k==='mon') return 0;
+  for(d=0;d<4;d++){
+    n=ADJ[i*4+d]; if(n<0) continue;
+    dn=pieceDist(k,w,n); if(dn>=dd) continue;
+    c=cells[n];
+    if(c===0){ free=true; break; }
+    if(c*s<0){ if(canCap(cells,i,n,0)){ free=true; break; } blockedEnemy=true; }
+  }
+  if(free) return 0;
+  return blockedEnemy?2:1;
+}
 /* ---------- Evaluation (diem cho ben duoi, +) ---------- */
 var VALK={rat:300,cat:230,fox:245,wolf:340,boar:350,dog:410,bear:425,leo:470,croc:440,tig:640,eagle:620,lio:660,bison:650,ele:760,mon:150,tur:230};
 function evaluate(cells){
@@ -894,12 +926,13 @@ function evaluate(cells){
     trapped=TRAP[i]===(p?-1:1);
     if(k!=='tur'){
       dd=pieceDist(k,p?0:1,i);
+      if((AI2&2)&&dd>1&&dd<=7) dd+=detourCost(cells,i,k,p,dd);
       if(dd>12) dd=12;
       v+=(12-dd)*6;
       if(dd<=4){
         bonus=(5-dd)*(5-dd)*16;
         if(trapped) bonus*=.45;
-        if(dd<=3&&contested(cells,i,p)) bonus*=.4;
+        if(dd<=3&&((AI2&1)?threatened(cells,i,p):contested(cells,i,p))) bonus*=.4;
         v+=bonus;
       }
       if(trapped&&r!==9) v-=(r===8?70:v*.6);
@@ -912,6 +945,20 @@ function evaluate(cells){
   }
   if(eP&&ratF) sc-=170;
   if(eF&&ratP) sc+=170;
+  if((AI2&4)&&!CLASSIC&&TERR){
+    var d2,n2,c2,gB=[0,0],gO=[0,0],ri;
+    for(i=0;i<N;i++){
+      if(!BRIDGE[i]&&!(OUTPOST[i]&&cells[i]===0)) continue;
+      gB[0]=gB[1]=0; gO[0]=gO[1]=0;
+      for(d2=0;d2<4;d2++){
+        n2=ADJ[i*4+d2]; if(n2<0) continue; c2=cells[n2]; if(!c2||isTur(c2)||c2===9||c2===-9) continue;
+        p=c2>0; ri=(n2/COLS)|0;
+        if(BRIDGE[i]&&(p?ri>4:ri<4)&&effRank(cells,n2)>=4) gB[p?0:1]=1;
+        if(OUTPOST[i]&&cells[SL+(p?8:9)]===0&&effRank(cells,n2)>=2) gO[p?0:1]=1;
+      }
+      sc+=10*(gB[0]-gB[1])+12*(gO[0]-gO[1]);
+    }
+  }
   return sc;
 }
 
@@ -1111,8 +1158,8 @@ function counts(cells){ probe(cells,1); return [NTP,NTF]; }
 return {
   COLS:COLS,ROWS:ROWS,N:N,SL:SL,ST:ST,DENME:DENME,DENFOE:DENFOE,MAPROWS:MAPROWS,STARTS:STARTS,EXTRA:EXTRA,ROCK:ROCK,BUSH:BUSH,BRIDGE:BRIDGE,WATER:WATER,TRAP:TRAP,DEN:DEN,ADJ:ADJ,SQ:SQ,HK:HK,LEVELS:LEVELS,
   isClassic:function(){return CLASSIC;},setClassic:setClassic,setKeys:setKeys,initialCells:initialCells,genMoves:genMoves,movesFrom:movesFrom,
-  make:make,unmake:unmake,commit:commit,makeM:makeM,unmakeM:unmakeM,commitM:commitM,bonusEligible:bonusEligible,bonusSteps:bonusSteps,commitBonus:commitBonus,outCd:function(c,s){return c[SL+(s>0?8:9)];},setOutCd:function(v){OUTCD=v|0;},setBonus:function(v){BONUS=!!v;},MARSH:MARSH,OUTPOST:OUTPOST,effRank:effRank,hashOf:hashOf,counts:counts,search:search,evaluate:evaluate,
-  hasMate:hasMate,nearWater:nearWater,advanced:advanced,guarding:guarding,isTur:isTur,
+  make:make,unmake:unmake,commit:commit,makeM:makeM,unmakeM:unmakeM,commitM:commitM,bonusEligible:bonusEligible,bonusSteps:bonusSteps,commitBonus:commitBonus,outCd:function(c,s){return c[SL+(s>0?8:9)];},setOutCd:function(v){OUTCD=v|0;},setBonus:function(v){BONUS=!!v;},setAI:function(v){AI2=(v===true)?7:(v===false)?0:(v|0);},MARSH:MARSH,OUTPOST:OUTPOST,effRank:effRank,hashOf:hashOf,counts:counts,search:search,evaluate:evaluate,
+  hasMate:hasMate,inW:inW,nearWater:nearWater,advanced:advanced,guarding:guarding,isTur:isTur,
   probe:probe,getH:function(){return H1;},
   negamax:function(c,s,d,a,b){nodes=0;aborted=false;deadline=Date.now()+1e9;return negamax(c,s,d,a,b,0);},
   setTerr:function(v){TERR=!!v;},setQ:function(v){useQ=v;},setTT:function(v){useTT=v;},clearTT:function(){ttDepth.fill(-1);}
@@ -1665,6 +1712,7 @@ function syncPieces(){
       rEl.textContent=er; rEl.className='rank'+(er>base?' buff':er<base?' nerf':'');
       el.classList.toggle('buff',er>base);
       el.classList.toggle('trapped',er===0&&TRAP[i2]===(code>0?-1:1));
+      el.title=rankWhy(code,i2)||'';
     }
     el.classList.toggle('turtle',K==='tur');
     el.classList.toggle('in-water',!!WATER[i2]);
@@ -1763,6 +1811,21 @@ function diagram(K,rk,emo){
   }
   return '<div class="mv"><div class="mvgrid">'+h+'</div><div class="mvkey">'+key+'</div></div>';
 }
+/* Giai thich bac hieu luc cua Soi, Lon rung, Cho, Gau, Ca sau (rong: quan khac hoac che do Co dien). */
+function rankWhy(code,i){
+  var s=code>0?1:-1, K=HK[code+9], cl=EN.isClassic(), er;
+  if(cl||i<0||TRAP[i]===-s) return '';
+  er=effRank(cells,i);
+  if(K==='wolf') return EN.hasMate(cells,i)?'bậc 4: có đồng đội (bậc ≥ 2) đứng kề':'bậc 3: đi lẻ, chưa có đồng đội kề';
+  if(K==='boar') return EN.nearWater(i)?'bậc 4: đứng kề hồ':'bậc 3: chưa kề hồ';
+  if(K==='dog') return EN.guarding(i,s)?'bậc 5: ở khu hang nhà (trong 2 ô quanh hang), khóa chiêu quân địch kề':'bậc 4: xa hang nhà';
+  if(K==='bear') return EN.advanced(i,s)?'bậc 5: đã vào sân địch':'bậc 4: chưa qua giữa bàn';
+  if(K==='croc'){
+    if(WATER[i]) return 'bậc 6: đang dưới hồ';
+    return er===6?'bậc 6: đang trong đầm lầy (lợi thế dưới nước)':'bậc 3: lên cạn nên tụt bậc';
+  }
+  return '';
+}
 function nowNote(code){
   var i, er, rk=Math.abs(code), s=code>0?1:-1, a=s>0?0:1, parts=[], out='', K=HK[code+9], cl=EN.isClassic();
   for(i=0;i<N;i++) if(cells[i]===code) break;
@@ -1773,16 +1836,12 @@ function nowNote(code){
     return '<p class="now">Đang sa bẫy nên tạm mất hết sức mạnh.</p>';
   }
   if(!cl){
-    if(K==='wolf') parts.push(EN.hasMate(cells,i)?'+1 nhờ đồng đội kề bên':'đi lẻ nên bậc 3');
-    if(K==='boar'&&EN.nearWater(i)) parts.push('+1 nhờ đứng kề hồ');
-    if(K==='dog'&&EN.guarding(i,s)) parts.push('+1 nhờ ở khu hang nhà, đang khóa chiêu quân địch kề bên');
-    if(K==='bear'&&EN.advanced(i,s)) parts.push('+1 vì đã vào sân địch');
-    if(K==='croc') parts.push(WATER[i]?'bậc 6 dưới nước':'tụt bậc 3 vì lên cạn');
-    if(K==='tig'&&cells[SL+a]===1) parts.push('bậc 7 sau cú nhảy, cho tới nước đi kế');
+    var why=rankWhy(code,i);
+    if(why) out+='<p class="now"><b>Bậc hiện tại '+er+'</b> (gốc '+nominal(code)+') · '+why+'.</p>';
+    if(K==='tig'&&cells[SL+a]===1) out+='<p class="now">Bậc 7 sau cú nhảy, cho tới nước đi kế.</p>';
     if(K==='lio'&&cells[SL+2+a]>0) out+='<p class="now">Sư tử đang hồi chiêu, còn '+cells[SL+2+a]+' lượt chưa vồ được.</p>';
     if(K==='bison'&&cells[SL+4+a]>0) out+='<p class="now">Bò rừng vừa lao, lượt này chưa lao hoặc húc được.</p>';
   }
-  if(parts.length) out+='<p class="now">Bậc hiện tại '+er+': '+parts.join(', ')+'.</p>';
   return out;
 }
 function eatsList(r,side,K){
@@ -1806,10 +1865,14 @@ function updateInfo(){
     el.innerHTML='<p class="hint-empty">Chạm vào một quân trên bàn cờ hoặc một dòng trong Sổ tay thú để xem sức mạnh và cách đi của loài đó.</p>';
     return;
   }
-  var rankTxt=r===9?'–':r;
+  var rankTxt=r===9?'–':r, rcls='', subRank=r===9?'quân ngoài bậc':'bậc gốc '+r, ip=-1, ie, k2;
+  if(!previewHero&&inspectCode&&r!==9){
+    for(k2=0;k2<N;k2++) if(cells[k2]===inspectCode){ip=k2;break;}
+    if(ip>=0){ ie=effRank(cells,ip); rankTxt=ie; rcls=ie>nominal(inspectCode)?' buff':ie<nominal(inspectCode)?' nerf':''; if(ie!==r) subRank='bậc gốc '+nominal(inspectCode)+' · hiện tại '+ie; }
+  }
   var lis=hh.t.map(function(t){return '<li class="'+t[0]+'">'+t[1]+'</li>';}).join('');
-  el.innerHTML='<div class="info-head"><div class="info-token '+cls+'">'+hh.e+'<span class="rank">'+rankTxt+'</span></div>'+
-    '<div><h3>'+hh.n+'<em>'+hh.ep+'</em></h3><small>'+label+' · '+(r===9?'quân ngoài bậc':'bậc gốc '+r)+'</small></div></div>'+
+  el.innerHTML='<div class="info-head"><div class="info-token '+cls+'">'+hh.e+'<span class="rank'+rcls+'">'+rankTxt+'</span></div>'+
+    '<div><h3>'+hh.n+'<em>'+hh.ep+'</em></h3><small>'+label+' · '+subRank+'</small></div></div>'+
     '<p class="eats"><span>Ăn được</span> '+eatsList(r,side,hh.k)+'</p>'+extra+
     '<div class="info-body"><ul class="traits">'+lis+'</ul>'+diagram(hh.k,r,hh.e)+'</div>'+
     (!previewHero&&selected>=0&&inspectCode*turn>0&&humanTurn()?'<p><b>'+legal.length+'</b> nước đi hợp lệ</p>':'');
@@ -2167,7 +2230,7 @@ function markChal(){
   renderChal();
 }
 function begin(me,foe,ch){
-  SQ[0]=me.slice(); SQ[1]=foe.slice(); setKeys(); syncHeroes();
+  SQ[0]=me.slice(); SQ[1]=foe.slice(); setKeys(); EN.clearTT(); syncHeroes();
   curLevel=(ch&&ch.lvl)||level;
   token++; cancelThink(); clearHint();
   cells=initialCells();

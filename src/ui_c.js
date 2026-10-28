@@ -35,6 +35,7 @@ function syncPieces(){
       rEl.textContent=er; rEl.className='rank'+(er>base?' buff':er<base?' nerf':'');
       el.classList.toggle('buff',er>base);
       el.classList.toggle('trapped',er===0&&TRAP[i2]===(code>0?-1:1));
+      el.title=rankWhy(code,i2)||'';
     }
     el.classList.toggle('turtle',K==='tur');
     el.classList.toggle('in-water',!!WATER[i2]);
@@ -133,6 +134,21 @@ function diagram(K,rk,emo){
   }
   return '<div class="mv"><div class="mvgrid">'+h+'</div><div class="mvkey">'+key+'</div></div>';
 }
+/* Giai thich bac hieu luc cua Soi, Lon rung, Cho, Gau, Ca sau (rong: quan khac hoac che do Co dien). */
+function rankWhy(code,i){
+  var s=code>0?1:-1, K=HK[code+9], cl=EN.isClassic(), er;
+  if(cl||i<0||TRAP[i]===-s) return '';
+  er=effRank(cells,i);
+  if(K==='wolf') return EN.hasMate(cells,i)?'bậc 4: có đồng đội (bậc ≥ 2) đứng kề':'bậc 3: đi lẻ, chưa có đồng đội kề';
+  if(K==='boar') return EN.nearWater(i)?'bậc 4: đứng kề hồ':'bậc 3: chưa kề hồ';
+  if(K==='dog') return EN.guarding(i,s)?'bậc 5: ở khu hang nhà (trong 2 ô quanh hang), khóa chiêu quân địch kề':'bậc 4: xa hang nhà';
+  if(K==='bear') return EN.advanced(i,s)?'bậc 5: đã vào sân địch':'bậc 4: chưa qua giữa bàn';
+  if(K==='croc'){
+    if(WATER[i]) return 'bậc 6: đang dưới hồ';
+    return er===6?'bậc 6: đang trong đầm lầy (lợi thế dưới nước)':'bậc 3: lên cạn nên tụt bậc';
+  }
+  return '';
+}
 function nowNote(code){
   var i, er, rk=Math.abs(code), s=code>0?1:-1, a=s>0?0:1, parts=[], out='', K=HK[code+9], cl=EN.isClassic();
   for(i=0;i<N;i++) if(cells[i]===code) break;
@@ -143,16 +159,12 @@ function nowNote(code){
     return '<p class="now">Đang sa bẫy nên tạm mất hết sức mạnh.</p>';
   }
   if(!cl){
-    if(K==='wolf') parts.push(EN.hasMate(cells,i)?'+1 nhờ đồng đội kề bên':'đi lẻ nên bậc 3');
-    if(K==='boar'&&EN.nearWater(i)) parts.push('+1 nhờ đứng kề hồ');
-    if(K==='dog'&&EN.guarding(i,s)) parts.push('+1 nhờ ở khu hang nhà, đang khóa chiêu quân địch kề bên');
-    if(K==='bear'&&EN.advanced(i,s)) parts.push('+1 vì đã vào sân địch');
-    if(K==='croc') parts.push(WATER[i]?'bậc 6 dưới nước':'tụt bậc 3 vì lên cạn');
-    if(K==='tig'&&cells[SL+a]===1) parts.push('bậc 7 sau cú nhảy, cho tới nước đi kế');
+    var why=rankWhy(code,i);
+    if(why) out+='<p class="now"><b>Bậc hiện tại '+er+'</b> (gốc '+nominal(code)+') · '+why+'.</p>';
+    if(K==='tig'&&cells[SL+a]===1) out+='<p class="now">Bậc 7 sau cú nhảy, cho tới nước đi kế.</p>';
     if(K==='lio'&&cells[SL+2+a]>0) out+='<p class="now">Sư tử đang hồi chiêu, còn '+cells[SL+2+a]+' lượt chưa vồ được.</p>';
     if(K==='bison'&&cells[SL+4+a]>0) out+='<p class="now">Bò rừng vừa lao, lượt này chưa lao hoặc húc được.</p>';
   }
-  if(parts.length) out+='<p class="now">Bậc hiện tại '+er+': '+parts.join(', ')+'.</p>';
   return out;
 }
 function eatsList(r,side,K){
@@ -176,10 +188,14 @@ function updateInfo(){
     el.innerHTML='<p class="hint-empty">Chạm vào một quân trên bàn cờ hoặc một dòng trong Sổ tay thú để xem sức mạnh và cách đi của loài đó.</p>';
     return;
   }
-  var rankTxt=r===9?'–':r;
+  var rankTxt=r===9?'–':r, rcls='', subRank=r===9?'quân ngoài bậc':'bậc gốc '+r, ip=-1, ie, k2;
+  if(!previewHero&&inspectCode&&r!==9){
+    for(k2=0;k2<N;k2++) if(cells[k2]===inspectCode){ip=k2;break;}
+    if(ip>=0){ ie=effRank(cells,ip); rankTxt=ie; rcls=ie>nominal(inspectCode)?' buff':ie<nominal(inspectCode)?' nerf':''; if(ie!==r) subRank='bậc gốc '+nominal(inspectCode)+' · hiện tại '+ie; }
+  }
   var lis=hh.t.map(function(t){return '<li class="'+t[0]+'">'+t[1]+'</li>';}).join('');
-  el.innerHTML='<div class="info-head"><div class="info-token '+cls+'">'+hh.e+'<span class="rank">'+rankTxt+'</span></div>'+
-    '<div><h3>'+hh.n+'<em>'+hh.ep+'</em></h3><small>'+label+' · '+(r===9?'quân ngoài bậc':'bậc gốc '+r)+'</small></div></div>'+
+  el.innerHTML='<div class="info-head"><div class="info-token '+cls+'">'+hh.e+'<span class="rank'+rcls+'">'+rankTxt+'</span></div>'+
+    '<div><h3>'+hh.n+'<em>'+hh.ep+'</em></h3><small>'+label+' · '+subRank+'</small></div></div>'+
     '<p class="eats"><span>Ăn được</span> '+eatsList(r,side,hh.k)+'</p>'+extra+
     '<div class="info-body"><ul class="traits">'+lis+'</ul>'+diagram(hh.k,r,hh.e)+'</div>'+
     (!previewHero&&selected>=0&&inspectCode*turn>0&&humanTurn()?'<p><b>'+legal.length+'</b> nước đi hợp lệ</p>':'');

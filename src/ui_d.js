@@ -261,7 +261,7 @@ function markChal(){
   renderChal();
 }
 function begin(me,foe,ch){
-  SQ[0]=me.slice(); SQ[1]=foe.slice(); setKeys(); syncHeroes();
+  SQ[0]=me.slice(); SQ[1]=foe.slice(); setKeys(); EN.clearTT(); syncHeroes();
   curLevel=(ch&&ch.lvl)||level;
   token++; cancelThink(); clearHint();
   cells=initialCells();
