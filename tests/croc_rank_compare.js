@@ -1,6 +1,9 @@
-/* Paired-seed crocodile effective-rank experiment.
-   Compare current land rank 3 / water rank 6 against land rank 4 / water rank 6, using the full experimental AI flags (7).
-   Each randomized squad is played twice with sides swapped; AI settings are identical.
+/* Paired-seed crocodile effective-rank rule experiment.
+   Compare two GLOBAL rulesets: current land rank 3 / water rank 6 vs
+   land rank 4 / water rank 6. Every game uses one rule set for both sides.
+   Each seed is played with both starting sides under each rule, using the full
+   experimental AI flags (7) and matched random seeds. This measures game outcomes,
+   crocodile captures and survival; it is not a head-to-head match between rule sets.
    Usage: node tests/croc_rank_compare.js [seedPairs=25] [ms=25] [seed=2026102808] [plyCap=140]
 */
 const fs=require('fs'),path=require('path');
@@ -10,7 +13,10 @@ if(originalSource.split(rankRule).length!==2) throw new Error('Expected exactly 
 const rank4Source=originalSource.replace(rankRule,"if(k==='croc') return inW(cells,i)?6:4;");
 const make=source=>new Function(source+';return makeEngine();')();
 const current=make(originalSource), rank4=make(rank4Source);
-for(const E of [current,rank4]) { E.setClassic(false); E.setAI(true); E.SQ[0][5]=1; E.SQ[1][5]=1; E.setKeys(); }
+for(const E of [current,rank4]) {
+  E.setClassic(false); E.setAI(true);
+  E.SQ[0][5]=1; E.SQ[1][5]=1; E.setKeys();
+}
 function checkRanks(){
   let land=null,water=null;
   for(let i=0;i<current.N;i++){
@@ -22,35 +28,53 @@ function checkRanks(){
   return {landRank3to4:land!==null,waterRankRemains6:water!==null};
 }
 const rankCheck=checkRanks();
-if(!rankCheck.landRank3to4||!rankCheck.waterRankRemains6) throw new Error('Crocodile rank variant sanity check failed: '+JSON.stringify(rankCheck));
+if(!rankCheck.landRank3to4||!rankCheck.waterRankRemains6)
+  throw new Error('Crocodile rank variant sanity check failed: '+JSON.stringify(rankCheck));
 const pairs=Math.max(1,+process.argv[2]||25), ms=Math.max(1,+process.argv[3]||25);
-let seed=+process.argv[4]||2026102808;
-const cap=Math.max(1,+process.argv[5]||140);
-for(const E of [current,rank4]) { E.LEVELS[3].ms=ms; E.clearTT(); }
+const initialSeed=(+process.argv[4]||2026102808)>>>0, cap=Math.max(1,+process.argv[5]||140);
+for(const E of [current,rank4]) E.LEVELS[3].ms=ms;
 const {COLS,N,DEN}=current;
 const ZERO=[0,0,0,0,0,0,0,0,0,0], originalRandom=Math.random;
-const rnd=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
-const stats=()=>({left:0,center:0,right:0,totalMoves:0,crocCaptures:0,crocDeaths:0,crocAliveSamples:0,crocAliveAtGameEnd:0});
-const out={seedPairs:pairs,games:0,ms,plyCap:cap,rankCheck,currentWins:0,rank4Wins:0,draws:0,totalPlies:0,endReasons:{},current:stats(),rank4:stats()};
-function crocPresent(cells,side,squad){
-  if(squad[5]!==1)return false;
+function rng(seed){
+  let value=seed>>>0;
+  return ()=>{value=(Math.imul(value,1664525)+1013904223)>>>0;return value/4294967296;};
+}
+const stats=()=>({
+  games:0,firstWins:0,secondWins:0,plusWins:0,minusWins:0,draws:0,
+  totalPlies:0,endReasons:{},crocCaptures:0,
+  plusCrocAlivePlySamples:0,minusCrocAlivePlySamples:0,
+  plusCrocAliveAtEnd:0,minusCrocAliveAtEnd:0
+});
+const out={
+  seedPairs:pairs,games:0,gamesPerRule:pairs*2,ms,plyCap:cap,aiMask:7,
+  initialSeed,rankCheck,current:stats(),rank4:stats()
+};
+function crocPresent(cells,side){
   for(let i=0;i<N;i++)if(cells[i]*side>0&&Math.abs(cells[i])===5)return true;
   return false;
 }
-function sample(cells,rank4Side,squad){
-  if(crocPresent(cells,-rank4Side,squad))out.current.crocAliveSamples++;
-  if(crocPresent(cells,rank4Side,squad))out.rank4.crocAliveSamples++;
-}
-function play(squad,rank4Side){
-  for(const E of [current,rank4]){
-    E.setClassic(false);E.SQ[0]=squad.slice();E.SQ[1]=squad.slice();E.setKeys();E.clearTT();
+function finish(st,winner,n,why,startSide,cells){
+  st.games++;out.games++;st.totalPlies+=n;
+  st.endReasons[why]=(st.endReasons[why]||0)+1;
+  if(winner===0)st.draws++;
+  else {
+    if(winner===startSide)st.firstWins++;else st.secondWins++;
+    if(winner>0)st.plusWins++;else st.minusWins++;
   }
-  const cells=current.initialCells();let side=1,n=0,history=[current.hashOf(cells,1)];
+  if(crocPresent(cells,1))st.plusCrocAliveAtEnd++;
+  if(crocPresent(cells,-1))st.minusCrocAliveAtEnd++;
+  return {winner,n,why};
+}
+function play(E,squad,startSide,st,searchSeed){
+  E.setClassic(false);E.setAI(true);
+  E.SQ[0]=squad.slice();E.SQ[1]=squad.slice();E.setKeys();E.clearTT();
+  E.LEVELS[3].ms=ms;
+  Math.random=rng(searchSeed);
+  const cells=E.initialCells();
+  let side=startSide,n=0,history=[E.hashOf(cells,side)];
   while(n<cap){
-    const usesRank4=side===rank4Side,E=usesRank4?rank4:current;
-    const st=usesRank4?out.rank4:out.current;
     const moves=E.genMoves(cells,side);
-    if(!moves.length)return finish(0,n,'stalemate',cells,squad,rank4Side);
+    if(!moves.length)return finish(st,0,n,'stalemate',startSide,cells);
     const banned=moves.filter(m=>{
       const k=(m>>14)&15,t=(m>>7)&127;
       if(k===0&&DEN[t]===-side&&((m>>18)&127)===((m>>25)&127))return false;
@@ -58,50 +82,38 @@ function play(squad,rank4Side){
       const hash=E.hashOf(next,-side);
       return history.filter(h=>h===hash).length>=2;
     });
-    if(banned.length===moves.length)return finish(0,n,'repeat',cells,squad,rank4Side);
+    if(banned.length===moves.length)return finish(st,0,n,'repeat',startSide,cells);
     const result=E.search(cells,side,3,history.slice(-14),banned);
-    if(!result)return finish(0,n,'null',cells,squad,rank4Side);
-    const to=result.t,col=to%COLS;
-    if(col<=2)st.left++;else if(col>=6)st.right++;else st.center++;
-    st.totalMoves++;
-    const target=cells[to];
-    if(squad[5]===1&&target*side<0&&Math.abs(target)===5){
-      st.crocCaptures++;
-      if(target*rank4Side>0)out.rank4.crocDeaths++;else out.current.crocDeaths++;
-    }
+    if(!result)return finish(st,0,n,'null',startSide,cells);
+    const to=result.t;
+    if(cells[to]*side<0&&Math.abs(cells[to])===5)st.crocCaptures++;
     E.commitM(cells,result.m);
-    sample(cells,rank4Side,squad);
-    if(DEN[to]===-side&&result.k===0)return finish(side,n+1,'den',cells,squad,rank4Side);
+    if(crocPresent(cells,1))st.plusCrocAlivePlySamples++;
+    if(crocPresent(cells,-1))st.minusCrocAlivePlySamples++;
+    if(DEN[to]===-side&&result.k===0)return finish(st,side,n+1,'den',startSide,cells);
     const counts=E.counts(cells);
-    if((side>0&&counts[1]===0)||(side<0&&counts[0]===0))return finish(side,n+1,'wipe',cells,squad,rank4Side);
+    if((side>0&&counts[1]===0)||(side<0&&counts[0]===0))
+      return finish(st,side,n+1,'wipe',startSide,cells);
     side=-side;n++;history.push(E.hashOf(cells,side));
   }
-  return finish(0,n,'cap',cells,squad,rank4Side);
-}
-function finish(winner,n,why,cells,squad,rank4Side){
-  out.totalPlies+=n;
-  out.endReasons[why]=(out.endReasons[why]||0)+1;
-  if(winner===0)out.draws++;
-  else if(winner===rank4Side)out.rank4Wins++;
-  else out.currentWins++;
-  if(crocPresent(cells,rank4Side,squad))out.rank4.crocAliveAtGameEnd++;
-  if(crocPresent(cells,-rank4Side,squad))out.current.crocAliveAtGameEnd++;
-  return {winner,n,why};
+  return finish(st,0,n,'cap',startSide,cells);
 }
 const started=Date.now();
-Math.random=()=>rnd();
 try{
+  const master=rng(initialSeed);
   for(let g=0;g<pairs;g++){
     const squad=ZERO.slice();
-    for(let r=2;r<=7;r++)squad[r]=rnd()<0.5?0:1;
-    squad[5]=1; // Ensure both teams actually use the crocodile for this rule comparison.
-    squad[9]=rnd()<0.33?0:(rnd()<0.5?1:2);
-    for(const rank4Side of [1,-1]){
-      play(squad,rank4Side);
-      out.games++;
+    for(let r=2;r<=7;r++)squad[r]=master()<0.5?0:1;
+    squad[5]=1; // Use a crocodile on both sides in every game.
+    squad[9]=master()<0.33?0:(master()<0.5?1:2);
+    for(const [E,st] of [[current,out.current],[rank4,out.rank4]]){
+      for(const startSide of [1,-1]){
+        const searchSeed=(initialSeed ^ Math.imul(g+1,0x9e3779b1) ^ (startSide>0?0xa341316c:0xc8013ea4))>>>0;
+        play(E,squad,startSide,st,searchSeed);
+      }
     }
   }
 }finally{Math.random=originalRandom;}
-out.avgPlies=+(out.totalPlies/out.games).toFixed(1);
+for(const st of [out.current,out.rank4])st.avgPlies=+(st.totalPlies/st.games).toFixed(1);
 out.runtimeSeconds=+((Date.now()-started)/1000).toFixed(1);
 console.log(JSON.stringify(out));
