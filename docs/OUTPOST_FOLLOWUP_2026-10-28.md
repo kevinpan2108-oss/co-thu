@@ -1,52 +1,56 @@
 # ChatGPT follow-up: outpost-control investigation (2026-10-28)
 
-## Scope
-This branch is based on `main`. It does not contain Claude's unpushed `exp/croc-outpost` work or the scratchpad JSON outputs. No changes were made to `main` or the release artifact.
+## Scope and safety
+This branch is based on `main` and is separate from the release branch. Claude's `exp/croc-outpost` work and private scratchpad JSON were not present on GitHub, so this is a reproducible follow-up from the public `main` source, not a restoration of the missing scratchpad.
+No changes were made to `main` or `dist/game.html`.
 
-## Test hardening
-`tests/rules_real.js` had four weak assertions:
-- A marsh-entry test used `length >= 0`, which is always true.
-- A bank-to-marsh capture test used `length === 0 || true`, which is always true.
-- A Bison dash test used `... || true`, which is always true.
-- A rat-on-bank capture test used `... || true`, which is always true.
+## Changes on this branch
+- Strengthened four vacuous assertions in `tests/rules_real.js`; each now checks a real move condition. In particular, the Bison test now checks its intended allowed dash into marsh when the midpoint is clear.
+- Added `tests/outpost_ai.js` to ensure the AI's outpost heuristic rewards safe occupation, penalizes the opponent holding an outpost, gives a smaller reward for approaching an empty outpost, and discounts a threatened holder.
+- Updated the experimental AI evaluation in `src/engine.js` for AI mask bit 4:
+  - reward an occupied outpost (+28, plus 8 for effective rank >= 5);
+  - reduce that holding reward by 20 when the piece is threatened;
+  - retain a smaller approach reward (+8) for a friendly piece adjacent to an empty outpost;
+  - retain the existing bridge-control term.
+- Added `tests/outpost_compare.js`, a paired-seed simulator that swaps the AI sides and reports lane usage, outpost entries, bonus steps, outpost occupancy/adjacency samples, wins, draws and end reasons.
+- Updated this report with findings.
 
-On this branch, the assertions were changed to verify actual legal moves:
-- Dog can enter the marsh from (6,6) to (5,6).
-- The bank-to-marsh capture test checks that the generated move actually targets the marsh occupant.
-- The Bison test checks an ordinary legal step beside the marsh instead of the vacuous dash assertion.
-- Rat-on-bank capture checks that the generated move targets the elephant.
+## Logic test results
+The following scripts were run from the GitHub source in an in-memory JavaScript harness. This validates engine/test behavior, but is not the same as running all tests on a real local Node.js plus Chromium installation.
 
-## Focused test result
-The strengthened `tests/rules_real.js` ran against the current `src/engine.js` and reported `pass 144 fail 0` in the temporary test harness.
+- `tests/rules_real.js`: 144 pass, 0 fail (rerun after the final assertion correction).
+- `tests/t16.js`: 20 pass, 0 fail.
+- `tests/terrain.js`: 104 pass, 0 fail.
+- `tests/ai.js`: 6 pass, 0 fail.
+- `tests/outpost_ai.js`: 6 pass, 0 fail.
 
-## Provisional AI simulations
-These are low-budget, exploratory runs, not release-quality benchmarks.
+Total: 280 reported assertions passed across these five test scripts. Browser/Playwright suites have not been run in this environment.
 
-### Outpost heuristic
-Six games, AI with the outpost heuristic enabled versus baseline AI, both at a deliberately reduced 8 ms search budget and a 100-ply cap:
-- Wins: 0
-- Losses: 0
-- Draws: 6 (all hit the ply cap)
-- Average plies: 100
-- Outpost-heuristic AI move counts: left 46, center 151, right 113; landed on an outpost 12 times; used bonus step 10 times.
-- Baseline AI move counts: left 40, center 162, right 104; landed on an outpost 9 times; used bonus step 6 times.
-- Side-adjacent outpost zone presence samples: heuristic AI 327, baseline AI 89. Occupied-outpost samples were similar (44 vs 47).
+## Paired-seed outpost heuristic simulation
+A 12-game exploratory comparison was run using the same rules and squad seed in both conditions, with the sides swapped for each pair. Both AI variants used a reduced 10 ms search budget; each game had a 120-ply cap.
 
-Interpretation: the heuristic appeared to increase proximity to outpost zones but did not clearly increase actual outpost occupation. The sample is too small and all games drew, so it does not establish a win-rate benefit.
+Results:
+- Improved heuristic: 3 wins.
+- Baseline heuristic: 3 wins.
+- Draws: 6 (six games reached the cap; six games ended by den entry).
+- Average game length: 102.1 plies.
+- Moves to the left / center / right lanes: improved 83 / 342 / 188; baseline 48 / 377 / 187.
+- Outpost entries: improved 30; baseline 7.
+- Bonus steps: improved 26; baseline 7.
+- Board-state samples with an outpost occupied by that strategy: improved 764; baseline 115.
+- Samples with that strategy adjacent to an outpost: improved 91; baseline 24.
+- No position in this small sample had both sides adjacent to the same outpost at once.
 
-### Crocodile marsh-attack rule
-Six matched exploratory games, comparing current `main` (land pieces of effective rank >= 6 can attack a crocodile in marsh) against a variant with that special attack removed, with sides swapped:
-- Current rule variant wins: 1
-- No-special-attack variant wins: 2
-- Draws: 3
-- Average plies: 119.5 (140-ply cap)
-- The special attack was available in 2 sampled positions and selected twice.
+Interpretation: the new evaluator clearly increases engagement with outposts in this small run and shifts more moves toward the left lane where the outposts are located. It did not improve the measured win count in this 12-game sample. These results are directional only: low search budget, limited seeds, a ply cap and no contested-outpost positions mean they do not establish a real balance or win-rate advantage.
 
-Interpretation: too few games and too low a search budget to draw a balance conclusion. This only confirms the current engine exposes and uses the special move in this small sample.
+A smoke test of `tests/outpost_compare.js` (one seed pair, 8 ms, 35-ply cap) completed and emitted valid JSON.
 
-## Next recommended work
-1. Run larger paired-seed simulations with both colors swapped and normal AI budgets.
-2. Track actual outpost entry, turns held, cooldown, bonus-step conversion, lane use, den wins, captures, and draw rate.
-3. Compare the existing heuristic against a candidate that values *occupying* an outpost and holding it safely, not merely standing adjacent to it.
-4. Run browser tests (Playwright) against `dist/game_local.html` in a proper Node/browser environment.
-5. Review and strengthen other tests, but keep each assertion tied to an intended rule and a known-good expected outcome.
+## Crocodile-in-marsh rule check
+A separate six-game exploratory comparison of the current special attack (land piece with effective rank >= 6 can attack a crocodile in marsh) against a variant without that attack ended with 1 current-rule win, 2 variant wins and 3 draws (140-ply cap). The move was available in two sampled positions and used twice. This is far too small to infer balance.
+
+## Recommended next steps
+1. Run `node tests/outpost_compare.js 20 100 2026102807 140` on a local Node.js environment for a larger, higher-budget comparison. It may take several minutes because it runs paired full games.
+2. Run the Playwright suites after building `dist/game_local.html` in a real Node/browser environment.
+3. Review whether bonus-step use, actual hold duration and successful defence of outposts correlate with wins; the current quick sample shows more outpost use, not a proven strength advantage.
+4. Keep the heuristic behind the experimental AI flag until higher-budget paired-seed results show it is useful.
+5. Only merge by pull request after reviewing the diff and full test suite.
