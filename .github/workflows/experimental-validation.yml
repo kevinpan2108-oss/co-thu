@@ -1,0 +1,78 @@
+name: Experimental branch validation
+
+on:
+  push:
+    branches:
+      - exp/chatgpt-followup-20261028
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  engine-and-browser-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Build game files
+        run: python3 build.py
+
+      - name: Run engine and heuristic tests
+        run: |
+          node tests/rules_real.js
+          node tests/t16.js
+          node tests/terrain.js
+          node tests/ai.js
+          node tests/outpost_ai.js
+
+      - name: Run paired-seed outpost simulation
+        run: |
+          set -o pipefail
+          node tests/outpost_compare.js 50 25 2026102807 120 | tee outpost-simulation.json
+
+      - name: Run paired-seed crocodile rank 3 vs 4 simulation
+        run: |
+          set -o pipefail
+          node tests/croc_rank_compare.js 25 25 2026102808 140 | tee croc-rank-simulation.json
+
+      - name: Install Chromium for Playwright
+        working-directory: tests
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: Run browser tests
+        working-directory: tests
+        run: |
+          node pw11.js
+          node pw12.js
+          node pw14.js
+
+      - name: Upload paired simulation results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: paired-simulation-results
+          path: |
+            outpost-simulation.json
+            croc-rank-simulation.json
+          if-no-files-found: ignore

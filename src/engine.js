@@ -469,17 +469,30 @@ function evaluate(cells){
   if(eP&&ratF) sc-=170;
   if(eF&&ratP) sc+=170;
   if((AI2&4)&&!CLASSIC&&TERR){
-    var d2,n2,c2,gB=[0,0],gO=[0,0],ri;
+    var d2,n2,c2,gB=[0,0],gO=[0,0],ri,hold,owner,rankNow;
     for(i=0;i<N;i++){
-      if(!BRIDGE[i]&&!(OUTPOST[i]&&cells[i]===0)) continue;
+      if(!BRIDGE[i]&&!OUTPOST[i]) continue;
       gB[0]=gB[1]=0; gO[0]=gO[1]=0;
       for(d2=0;d2<4;d2++){
-        n2=ADJ[i*4+d2]; if(n2<0) continue; c2=cells[n2]; if(!c2||isTur(c2)||c2===9||c2===-9) continue;
+        n2=ADJ[i*4+d2]; if(n2<0) continue; c2=cells[n2];
+        if(!c2||isTur(c2)||c2===9||c2===-9) continue;
         p=c2>0; ri=(n2/COLS)|0;
         if(BRIDGE[i]&&(p?ri>4:ri<4)&&effRank(cells,n2)>=4) gB[p?0:1]=1;
-        if(OUTPOST[i]&&cells[SL+(p?8:9)]===0&&effRank(cells,n2)>=2) gO[p?0:1]=1;
+        if(OUTPOST[i]&&cells[i]===0&&cells[SL+(p?8:9)]===0&&effRank(cells,n2)>=2) gO[p?0:1]=1;
       }
-      sc+=10*(gB[0]-gB[1])+12*(gO[0]-gO[1]);
+      if(BRIDGE[i]) sc+=10*(gB[0]-gB[1]);
+      if(OUTPOST[i]){
+        if(cells[i]!==0&&!isTur(cells[i])){
+          owner=cells[i]>0?0:1;
+          rankNow=effRank(cells,i);
+          hold=28+(rankNow>=5?8:0);
+          if(threatened(cells,i,cells[i]>0)) hold-=20;
+          sc+=(owner===0?hold:-hold);
+        }else if(cells[i]===0){
+          /* Approaching a free outpost has value, but less than occupying it. */
+          sc+=8*(gO[0]-gO[1]);
+        }
+      }
     }
   }
   return sc;

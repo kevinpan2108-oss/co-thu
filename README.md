@@ -17,6 +17,8 @@ node tests/rules_real.js     # 144 bài kiểm luật với engine thật
 node tests/t16.js            # 20 bài: hồi chiêu tiền đồn, thắng, hết nước đi (hòa)
 node tests/terrain.js        # 104 kiểm tra tương tác địa hình (đầm lầy, sông, cầu, Cá sấu, Sư tử, ...), chạy cho cả hai phe
 node tests/ai.js             # 6 kiểm tra chiến thuật AI + bất biến nước đi hợp lệ
+node tests/outpost_ai.js     # 6 kiểm tra heuristic giữ/tiếp cận tiền đồn
+node tests/outpost_compare.js 6 10 2026102807 120  # mô phỏng ghép cặp AI giữ tiền đồn
 cd tests && npm i playwright && npx playwright install chromium
 node pw11.js                 # 14 kiểm tra giao diện: bước thưởng, bỏ qua, hoàn tác, AI, hòa, thắng
 node pw12.js                 # bot ngẫu nhiên chơi 3 ván qua giao diện + tải lại trang
