@@ -1,5 +1,5 @@
 /* Paired-seed crocodile effective-rank experiment.
-   Compare current land rank 3 / water rank 6 against land rank 4 / water rank 6.
+   Compare current land rank 3 / water rank 6 against land rank 4 / water rank 6, using the full experimental AI flags (7).
    Each randomized squad is played twice with sides swapped; AI settings are identical.
    Usage: node tests/croc_rank_compare.js [seedPairs=25] [ms=25] [seed=2026102808] [plyCap=140]
 */
@@ -10,7 +10,7 @@ if(originalSource.split(rankRule).length!==2) throw new Error('Expected exactly 
 const rank4Source=originalSource.replace(rankRule,"if(k==='croc') return inW(cells,i)?6:4;");
 const make=source=>new Function(source+';return makeEngine();')();
 const current=make(originalSource), rank4=make(rank4Source);
-for(const E of [current,rank4]) { E.setClassic(false); E.setAI(false); }
+for(const E of [current,rank4]) { E.setClassic(false); E.setAI(true); E.SQ[0][5]=1; E.SQ[1][5]=1; E.setKeys(); }
 function checkRanks(){
   let land=null,water=null;
   for(let i=0;i<current.N;i++){
