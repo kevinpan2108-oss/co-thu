@@ -37,9 +37,9 @@ function crocPresent(cells,side,squad){
   for(let i=0;i<N;i++)if(cells[i]*side>0&&Math.abs(cells[i])===5)return true;
   return false;
 }
-function sample(cells,currentSide,squad){
-  if(crocPresent(cells,currentSide,squad))out.current.crocAliveSamples++;
-  if(crocPresent(cells,-currentSide,squad))out.rank4.crocAliveSamples++;
+function sample(cells,rank4Side,squad){
+  if(crocPresent(cells,-rank4Side,squad))out.current.crocAliveSamples++;
+  if(crocPresent(cells,rank4Side,squad))out.rank4.crocAliveSamples++;
 }
 function play(squad,rank4Side){
   for(const E of [current,rank4]){
