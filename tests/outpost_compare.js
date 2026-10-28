@@ -14,7 +14,7 @@ for(const E of [base,improved]){E.LEVELS[3].ms=ms;E.clearTT();}
 const {COLS,N,OUTPOST,ADJ,DEN}=improved;
 const Z=[0,0,0,0,0,0,0,0,0,0], originalRandom=Math.random;
 const rnd=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
-const stats=()=>({left:0,center:0,right:0,totalMoves:0,enteredOutpost:0,bonusSteps:0,occupiedOutpostPly:0,adjacentOutpostPly:0,contestedOutpostPly:0});
+const stats=()=>({left:0,center:0,right:0,totalMoves:0,enteredOutpost:0,bonusSteps:0,occupiedOutpostPly:0,adjacentOutpostPly:0,contestedOutpostPly:0,outpostOwnTurns:0,outpostHoldRuns:0,maxConsecutiveOutpostTurns:0});
 const out={seedPairs:pairs,games:0,ms,plyCap:cap,baseWins:0,improvedWins:0,draws:0,totalPlies:0,endReasons:{},base:stats(),improved:stats()};
 const outposts=[];for(let i=0;i<N;i++)if(OUTPOST[i])outposts.push(i);
 function samplePosition(cells,side,st){
@@ -31,11 +31,22 @@ function samplePosition(cells,side,st){
     if(own&&foe)st.contestedOutpostPly++;
   }
 }
+function trackOutpostHold(cells,side,st,movedSide,streak){
+  const held=outposts.some(o=>cells[o]*side>0&&Math.abs(cells[o])!==9);
+  if(!held){streak.value=0;return;}
+  if(movedSide===side){
+    st.outpostOwnTurns++;
+    if(streak.value===0)st.outpostHoldRuns++;
+    streak.value++;
+    if(streak.value>st.maxConsecutiveOutpostTurns)st.maxConsecutiveOutpostTurns=streak.value;
+  }
+}
 function play(squad,improvedSide){
   for(const E of [base,improved]){
     E.setClassic(false);E.SQ[0]=squad.slice();E.SQ[1]=squad.slice();E.setKeys();E.clearTT();
   }
   const cells=base.initialCells();let side=1,n=0,history=[base.hashOf(cells,1)];
+  const holdStreak={base:{value:0},improved:{value:0}};
   while(n<cap){
     const useImproved=side===improvedSide,E=useImproved?improved:base;
     const st=useImproved?out.improved:out.base;
@@ -57,6 +68,8 @@ function play(squad,improvedSide){
     if(OUTPOST[to]&&cells[to]*side<=0)st.enteredOutpost++;
     if(result.bf!==result.bt)st.bonusSteps++;
     E.commitM(cells,result.m);
+    trackOutpostHold(cells,improvedSide,out.improved,side,holdStreak.improved);
+    trackOutpostHold(cells,-improvedSide,out.base,side,holdStreak.base);
     samplePosition(cells,improvedSide,out.improved);
     samplePosition(cells,-improvedSide,out.base);
     if(DEN[to]===-side&&result.k===0)return{winner:side,n:n+1,why:'den'};
