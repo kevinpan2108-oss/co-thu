@@ -18,7 +18,7 @@ permissions:
 jobs:
   engine-and-browser-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -47,10 +47,10 @@ jobs:
           node tests/outpost_ai.js
 
       - name: Compare starting formations
-        run: node tests/opening_positions.js 8 8 2026102901 110
+        run: node tests/opening_positions.js 16 30 2026102901 120
 
       - name: Screen rank variants
-        run: node tests/balance.js 2,3,4,5,6,7 6 8 2026102902
+        run: node tests/balance.js 2,3,4,5,6,7 8 30 2026102902
 
       - name: Run paired-seed outpost simulation
         run: |
