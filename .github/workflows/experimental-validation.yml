@@ -46,6 +46,9 @@ jobs:
           node tests/bison.js
           node tests/outpost_ai.js
 
+      - name: Compare starting formations
+        run: node tests/opening_positions.js 8 8 2026102901 110
+
       - name: Run paired-seed outpost simulation
         run: |
           set -o pipefail
