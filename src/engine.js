@@ -42,8 +42,8 @@ var WATER=new Uint8Array(N), TRAP=new Int8Array(N), DEN=new Int8Array(N), ROCK=n
   }
 })();
 /* cells[0..N-1] la ban co. Cac o N..N+7 la trang thai:
-   N+a: Ho vua nhay (a=0 ben duoi, 1 ben tren); N+2+a: hoi chieu Su tu;
-   N+4+a: hoi chieu Bo rung; N+6+a: hoi chieu Khi. */
+   N+a: Ho giu bac 7 sau cu nhay den khi chinh no di chuyen (a=0 ben duoi, 1 ben tren);
+   N+2+a: hoi chieu Su tu; N+4+a: hoi chieu Bo rung; N+6+a: hoi chieu Khi. */
 var SL=N, ST=10, OUTCD=2, BONUS=true;
 var CLASSIC=false, TERR=true;
 var HK=new Array(19).fill('');
@@ -255,8 +255,13 @@ function make(cells,f,t,k,bonus){
   var c=cells[f], a=c>0?0:1, o=sp*ST, j, cap=0, d, e, b;
   for(j=0;j<ST;j++) stk[o+j]=cells[SL+j];
   sp++;
-  if(bonus){ cells[t]=c; cells[f]=0; return 0; }
-  cells[SL+a]=0;
+  if(bonus){
+    /* Buoc thuong van la mot nuoc di cua chinh quan di them; neu la Ho thi ket thuc hieu ung cu nhay. */
+    if(!CLASSIC&&HK[c+9]==='tig') cells[SL+a]=0;
+    cells[t]=c; cells[f]=0; return 0;
+  }
+  /* Hieu ung tang bac cua Ho chi het khi chinh Ho di; Co dien giu hanh vi cu. */
+  if(CLASSIC||HK[c+9]==='tig') cells[SL+a]=0;
   if(cells[SL+8+a]>0) cells[SL+8+a]--;
   if(cells[SL+2+a]>0) cells[SL+2+a]--;
   if(cells[SL+4+a]>0) cells[SL+4+a]--;
@@ -270,6 +275,8 @@ function make(cells,f,t,k,bonus){
     if(k===1&&HK[c+9]==='tig') cells[SL+a]=1;
     else if(k===8) cells[SL+4+a]=1;
   }
+  /* Neu Ho dang duoc tang bac bi an, xoa trang thai cua phe no. Doi cho bang Khi khong phai an quan. */
+  if(k!==5&&cap&&HK[cap+9]==='tig') cells[SL+(cap>0?0:1)]=0;
   return cap;
 }
 function unmake(cells,f,t,k,cap){
@@ -315,9 +322,11 @@ function bonusSteps(cells,s){
 }
 /* Di that buoc thuong: khong tru hoi chieu cua cac quan, bat dau hoi chieu tien don. */
 function commitBonus(cells,f,t){
-  var a=cells[f]>0?0:1;
+  var c=cells[f], a=c>0?0:1;
+  /* Buoc thuong tien don cung tinh la Ho da tu di chuyen. */
+  if(HK[c+9]==='tig') cells[SL+a]=0;
   if(OUTCD>0) cells[SL+8+a]=OUTCD;
-  cells[t]=cells[f]; cells[f]=0;
+  cells[t]=c; cells[f]=0;
 }
 /* Dung cho giao dien: di that, khong can unmake. */
 function commit(cells,f,t,k){ var s0=sp, cap=make(cells,f,t,k); sp=s0; return cap; }

@@ -139,6 +139,7 @@ function rankWhy(code,i){
   var s=code>0?1:-1, K=HK[code+9], cl=EN.isClassic(), er;
   if(cl||i<0||TRAP[i]===-s) return '';
   er=effRank(cells,i);
+  if(K==='tig'&&cells[SL+(s>0?0:1)]===1) return 'bậc 7: giữ hiệu ứng sau cú nhảy tới khi chính Hổ di chuyển';
   if(K==='wolf') return EN.hasMate(cells,i)?'bậc 4: có đồng đội (bậc ≥ 2) đứng kề':'bậc 3: đi lẻ, chưa có đồng đội kề';
   if(K==='boar') return EN.nearWater(i)?'bậc 4: đứng kề hồ':'bậc 3: chưa kề hồ';
   if(K==='dog') return EN.guarding(i,s)?'bậc 5: ở khu hang nhà (trong 2 ô quanh hang), khóa chiêu quân địch kề':'bậc 4: xa hang nhà';
@@ -161,7 +162,6 @@ function nowNote(code){
   if(!cl){
     var why=rankWhy(code,i);
     if(why) out+='<p class="now"><b>Bậc hiện tại '+er+'</b> (gốc '+nominal(code)+') · '+why+'.</p>';
-    if(K==='tig'&&cells[SL+a]===1) out+='<p class="now">Bậc 7 sau cú nhảy, cho tới nước đi kế.</p>';
     if(K==='lio'&&cells[SL+2+a]>0) out+='<p class="now">Sư tử đang hồi chiêu, còn '+cells[SL+2+a]+' lượt chưa vồ được.</p>';
     if(K==='bison'&&cells[SL+4+a]>0) out+='<p class="now">Bò rừng vừa lao, lượt này chưa lao hoặc húc được.</p>';
   }
@@ -256,7 +256,7 @@ function renderRules(){
     L.push('🌉 Cầu gỗ hẹp (hai bên rìa) không chịu nổi Voi. Voi chỉ qua sông bằng bãi cạn ở giữa bàn cờ.');
     L.push('Mỗi bậc 2 đến 7 có hai tướng để chọn, mỗi tướng một tuyệt kỹ. Chuột và Voi luôn có mặt. Mỗi bên có thể thêm 1 quân ngoài bậc: Khỉ, Rùa hoặc không dùng.');
     L.push('Khi chọn quân, ★ là chiêu đặc biệt, ≈ nhảy hồ, ⇄ đổi chỗ, 🎯 vồ xa hoặc bắt mồi, 💢 húc Voi vào bẫy. Chạm vào ô Voi địch để húc.');
-    L.push('Số trên huy hiệu là bậc hiện tại. Xanh là đang được cộng bậc, hồng là đang bị trừ. ⚡ là Hổ vừa nhảy, quân mờ là đang hồi chiêu.');
+    L.push('Số trên huy hiệu là bậc hiện tại. Xanh là đang được cộng bậc, hồng là đang bị trừ. ⚡ là Hổ đang giữ bậc 7 sau cú nhảy cho đến khi chính Hổ di chuyển; quân mờ là đang hồi chiêu.');
   }
   L.push('🔁 Lặp thế: nước đi làm một thế cờ y hệt xuất hiện lần thứ 3 thì bị cấm, phải đổi nước khác. Hết nước hợp lệ thì ván hòa.');
   if(pvp()) L.push('Chế độ 2 người: hai người thay nhau chạm vào bàn cờ trên cùng một thiết bị. Người 1 ở phía dưới.');

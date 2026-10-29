@@ -5,6 +5,7 @@ const Z=[0,0,0,0,0,0,0,0,0,0];
 function sel(a,b,cl){E.setClassic(false);E.SQ[0]=a.slice();E.SQ[1]=b.slice();E.setClassic(!!cl);}
 const empty=()=>new Int8Array(N+ST);
 const mv=(c,i)=>{const o=[];E.movesFrom(c,i,o);return o.map(m=>({t:(m>>7)&127,k:(m>>14)&15}));};
+const moveOf=(c,s,f,t,k)=>E.genMoves(c,s).find(m=>(m&127)===f&&((m>>7)&127)===t&&((m>>14)&15)===k&&((m>>18)&127)===((m>>25)&127));
 let fails=0,pass=0;const ok=(n,c)=>{if(c)pass++;else{fails++;console.log('FAIL',n);}};
 const sq=(r,v)=>{const a=Z.slice();a[r]=v;return a;};
 // ---- terrain data
@@ -46,6 +47,96 @@ sel(sq(6,0),Z);c=empty();c[rc(3,3)]=6;ok('tiger jumps river (3,3)->(5,3)',mv(c,r
 c=empty();c[rc(3,5)]=6;ok('tiger walks into marsh (3,6)',mv(c,rc(3,5)).some(x=>x.k===0&&x.t===rc(3,6)));
 c=empty();c[rc(3,5)]=6;ok('tiger no longer jumps marsh',!mv(c,rc(3,5)).some(x=>x.k===1));
 sel(sq(6,1),Z);c=empty();c[rc(3,3)]=6;c[rc(4,3)]=0;ok('eagle jumps river',mv(c,rc(3,3)).some(x=>x.k===1&&x.t===rc(5,3)));
+
+// ---- tiger boost lasts until Tiger itself moves
+{
+  sel(sq(6,0),Z);
+  let b=empty();
+  b[rc(3,3)]=6; b[rc(7,7)]=3; b[rc(1,7)]=-3;
+  const jump=moveOf(b,1,rc(3,3),rc(5,3),1);
+  ok('tiger persistence: jump is legal',jump!==undefined);
+  if(jump!==undefined) E.commitM(b,jump);
+  ok('tiger is rank 7 after jumping',b[SL]===1&&E.effRank(b,rc(5,3))===7);
+
+  const friend=moveOf(b,1,rc(7,7),rc(7,6),0);
+  ok('another friendly piece can move',friend!==undefined);
+  if(friend!==undefined) E.commitM(b,friend);
+  ok('tiger boost survives a different friendly move',b[SL]===1&&E.effRank(b,rc(5,3))===7);
+
+  const enemy=moveOf(b,-1,rc(1,7),rc(1,6),0);
+  ok('opponent can make a reply',enemy!==undefined);
+  if(enemy!==undefined) E.commitM(b,enemy);
+  ok('tiger boost survives the opponent reply',b[SL]===1&&E.effRank(b,rc(5,3))===7);
+
+  const tigerStep=moveOf(b,1,rc(5,3),rc(5,4),0);
+  ok('tiger can make its next normal move',tigerStep!==undefined);
+  if(tigerStep!==undefined) E.commitM(b,tigerStep);
+  ok('tiger boost ends after Tiger itself moves',b[SL]===0&&E.effRank(b,rc(5,4))===6);
+}
+
+// Re-jumping refreshes the boost; the AI make/unmake path must preserve it exactly.
+{
+  sel(sq(6,0),Z);
+  let b=empty(); b[rc(5,3)]=6; b[SL]=1;
+  const backJump=moveOf(b,1,rc(5,3),rc(3,3),1);
+  ok('boosted tiger can jump again',backJump!==undefined);
+  if(backJump!==undefined) E.commitM(b,backJump);
+  ok('jumping again keeps Tiger at rank 7',b[SL]===1&&E.effRank(b,rc(3,3))===7);
+
+  b=empty(); b[rc(3,3)]=6; b[rc(7,7)]=3; b[SL]=1;
+  const friend=moveOf(b,1,rc(7,7),rc(7,6),0);
+  ok('make/unmake test move exists',friend!==undefined);
+  if(friend!==undefined){
+    const snap=Int8Array.from(b), cap=E.makeM(b,friend);
+    ok('AI make keeps Tiger boost while another piece moves',b[SL]===1&&E.effRank(b,rc(3,3))===7);
+    E.unmakeM(b,friend,cap);
+    ok('AI unmake restores Tiger position and status',snap.every((v,i)=>v===b[i]));
+  }
+}
+
+// A captured Tiger loses its status; Tiger moving as the outpost bonus piece does too.
+{
+  sel(sq(6,0),Z);
+  let b=empty(); b[rc(5,3)]=6; b[rc(5,4)]=-8; b[SL]=1;
+  const captured=moveOf(b,-1,rc(5,4),rc(5,3),0);
+  ok('Voi can capture a boosted Tiger',captured!==undefined);
+  if(captured!==undefined) E.commitM(b,captured);
+  ok('captured Tiger clears its boost state',b[SL]===0&&b[rc(5,3)]===-8);
+
+  b=empty(); b[rc(5,0)]=6; b[SL]=1;
+  const bonusTiger=moveOf(b,1,rc(5,0),rc(6,0),0);
+  ok('Tiger bonus-step destination is a legal ordinary step',bonusTiger!==undefined);
+  if(bonusTiger!==undefined) E.commitBonus(b,rc(5,0),rc(6,0));
+  ok('UI bonus step ends Tiger boost when Tiger itself moves',b[SL]===0&&E.effRank(b,rc(6,0))===6);
+}
+
+// The compound AI move path must also expire the boost when Tiger is the bonus mover.
+{
+  sel(sq(6,0),Z);
+  let b=empty(); b[rc(4,1)]=4; b[rc(5,0)]=6; b[SL]=1;
+  const combo=E.genMoves(b,1).find(m=>(m&127)===rc(4,1)&&((m>>7)&127)===rc(5,1)&&((m>>14)&15)===0&&((m>>18)&127)===rc(5,0)&&((m>>25)&127)===rc(6,0));
+  ok('outpost compound move can use Tiger as bonus mover',combo!==undefined);
+  if(combo!==undefined){
+    const snap=Int8Array.from(b), cap=E.makeM(b,combo);
+    ok('AI compound move expires Tiger boost on bonus step',b[SL]===0&&E.effRank(b,rc(6,0))===6);
+    E.unmakeM(b,combo,cap);
+    ok('AI compound unmake restores Tiger boost',snap.every((v,i)=>v===b[i]));
+  }
+}
+
+// Keep the old no-rank-boost semantics in Classic mode.
+{
+  sel(sq(6,0),Z,true);
+  let b=empty(); b[rc(3,3)]=6; b[rc(7,7)]=3;
+  const jump=moveOf(b,1,rc(3,3),rc(5,3),1);
+  ok('Classic Tiger jump exists',jump!==undefined);
+  if(jump!==undefined) E.commitM(b,jump);
+  const friend=moveOf(b,1,rc(7,7),rc(7,6),0);
+  if(friend!==undefined) E.commitM(b,friend);
+  ok('Classic mode does not retain a gameplay Tiger boost',b[SL]===0&&E.effRank(b,rc(5,3))===6);
+  sel(Z,Z,false);
+}
+
 // ---- outposts: bonus step
 const mvs=(c,s)=>E.genMoves(c,s);
 const comp=(ms)=>ms.filter(m=>((m>>18)&127)!==((m>>25)&127));
