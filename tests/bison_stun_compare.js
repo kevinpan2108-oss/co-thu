@@ -80,7 +80,7 @@ function makeExperimentalEngine() {
     '    cells[t]=c; cells[f]=0; return 0;',
     '  }'
   ].join('\n');
-  source = replaceOnce(source, bonusBlock, bonusBlock + '\n  /* Stun lasts until this side completes its next own turn; a bonus step is the same turn. */\n  cells[SL+12+a]=0;', 'expire stun after own move');
+  source = replaceOnce(source, bonusBlock, bonusBlock, 'defer stun expiry until the entire move, including bonus step, completes');
 
   const makeStart = source.indexOf('function make(cells,f,t,k,bonus){');
   const makeEnd = source.indexOf('function unmake(cells,f,t,k,cap){', makeStart);
@@ -98,6 +98,26 @@ function makeExperimentalEngine() {
     '  if(k!==5&&k!==9&&cap!==0){ var capturedSide=cap>0?0:1; if(cells[SL+12+capturedSide]===t+1) cells[SL+12+capturedSide]=0; }\n  return cap;\n}\n',
     'clear stun marker when stunned piece is captured');
   source = source.slice(0, makeStart) + makeBody + source.slice(makeEnd);
+
+  /* Expire a prior stun after the whole compound move, not before its optional bonus step. */
+  const originalMakeM = [
+    'function makeM(cells,m){',
+    '  var f=m&127,t=(m>>7)&127,k=(m>>14)&15,bf=(m>>18)&127,bt=(m>>25)&127,cap=make(cells,f,t,k),a;',
+    '  if(bf!==bt){ a=cells[bf]>0?0:1; if(OUTCD>0) cells[SL+8+a]=OUTCD; make(cells,bf,bt,0,true); }',
+    '  return cap;',
+    '}'
+  ].join('\n');
+  const correctedMakeM = [
+    'function makeM(cells,m){',
+    '  var f=m&127,t=(m>>7)&127,k=(m>>14)&15,bf=(m>>18)&127,bt=(m>>25)&127,actor=cells[f],sideSlot=SL+12+(actor>0?0:1),oldStun=cells[sideSlot],cap=make(cells,f,t,k),a;',
+    '  if(bf!==bt){ a=cells[bf]>0?0:1; if(OUTCD>0) cells[SL+8+a]=OUTCD; make(cells,bf,bt,0,true); }',
+    '  if(oldStun) cells[sideSlot]=0;',
+    '  if(k!==5&&k!==9&&cap!==0){ var capturedSide=cap>0?0:1; if(cells[SL+12+capturedSide]===t+1) cells[SL+12+capturedSide]=0; }',
+    '  return cap;',
+    '}'
+  ].join('\n');
+  source = replaceOnce(source, originalMakeM, correctedMakeM, 'expire stun only after completed move');
+
 
   source = source.replace(/new Int32Array\(ST\*4\)/g, 'new Int32Array(ST*(N+1))');
   if ((source.match(/new Int32Array\(ST\*\(N\+1\)\)/g) || []).length !== 2) {
