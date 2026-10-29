@@ -1,4 +1,5 @@
 <title>Cờ Thú</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap">
 <style>
@@ -353,4 +354,62 @@ select.sel{width:100%;padding:8px;border-radius:12px;border:3px solid var(--edge
 .stunned .face{filter:grayscale(.85) brightness(.9)}
 .stunned::after{content:"💫";position:absolute;left:50%;top:-4px;transform:translateX(-50%);font-size:18px;pointer-events:none}
 .lake.swamp{opacity:.5}
+
+/* Mobile: prioritize the board, keep controls and animal details compact. */
+@media (max-width:900px){
+  body{padding-block:10px 28px;padding-left:max(6px,env(safe-area-inset-left,0px));padding-right:max(6px,env(safe-area-inset-right,0px));}
+  .app,.app.big{max-width:700px;gap:10px;}
+  .layout,.app.big .layout{grid-template-columns:minmax(0,1fr);gap:10px;width:100%;}
+  .play,.side{gap:8px;}
+  .frame{padding:6px;border-width:3px;border-radius:17px;}
+  .board{border-radius:9px;}
+  .status{gap:6px;}
+  .pill{padding:5px 9px;border-width:2px;font-size:13px;}
+  .bubble{flex:1 1 150px;padding:6px 9px;font-size:12px;border-radius:12px;}
+  .team{gap:6px;}
+  .team .who{min-width:auto;gap:4px;font-size:13px;}
+  .team .who small{font-size:11px;}
+  .strip{gap:2px;}
+  .mini{width:23px;height:23px;font-size:12px;border-width:1.5px;}
+  .oc{font-size:10.5px;padding:1px 6px;}
+  .card{padding:9px 10px;border-width:2px;border-radius:15px;gap:7px;}
+  .card h2,details.card summary{font-size:16px;}
+  .info{min-height:0;gap:7px;}
+  .info-head{gap:9px;}
+  .info-token{width:46px;height:46px;border-width:2px;font-size:25px;}
+  .info-token .rank{width:20px;height:20px;font-size:10px;}
+  .info h3{font-size:16px;}
+  .info h3 em{font-size:11px;margin-left:4px;}
+  .info small{font-size:11px;}
+  .info p{font-size:12px;line-height:1.3;}
+  .info .now{padding:4px 7px;}
+  .info-body{gap:7px;align-items:center;}
+  .traits{font-size:12px;line-height:1.25;gap:4px;flex:1 1 165px;}
+  .traits li{grid-template-columns:15px minmax(0,1fr);gap:5px;}
+  .traits li::before{width:15px;height:15px;font-size:11px;}
+  .mv{width:91px;gap:3px;}
+  .mvgrid{grid-template-columns:repeat(7,11px);grid-auto-rows:11px;gap:1px;padding:3px;border-width:1px;}
+  .mvgrid i.s::after,.mvgrid i.x::after,.mvgrid i.j::after{width:6px;height:6px;border-width:1px;}
+  .mvkey{font-size:9px;line-height:1.2;}
+  .row{gap:7px;padding:4px 6px;border-radius:11px;}
+  .row .mini{width:29px;height:29px;font-size:17px;}
+  .row b{font-size:13px;}
+  .row small{font-size:11px;}
+  .btns{gap:6px;}
+  .btn{padding:9px 11px;border-width:2px;font-size:13px;}
+  .seg{gap:4px;}
+  .seg label{padding:7px 4px;border-width:2px;font-size:12px;}
+  .field-label{font-size:11px;}
+  .mode-desc,.lvl-note{font-size:11.5px;}
+  .rules{font-size:12px;}
+  .ladder .mini{width:27px;height:27px;font-size:15px;}
+}
+@media (max-width:380px){
+  .team .mini{width:20px;height:20px;font-size:11px;}
+  .info-body{align-items:flex-start;}
+  .traits{flex-basis:145px;font-size:11.5px;}
+  .mv{width:83px;}
+  .mvgrid{grid-template-columns:repeat(7,10px);grid-auto-rows:10px;}
+}
+
 </style>
