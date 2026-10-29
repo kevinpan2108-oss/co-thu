@@ -75,6 +75,7 @@ var CH=[null,
     ['g','Nhảy qua hồ, ăn quân trừ Voi.'],['b','Không ăn được Voi.']]),
   H('ele','Voi','🐘','Pa-ôm!','Khối núi biết đi','Mạnh nhất, sợ Chuột',[
     ['g','Ăn mọi quân trừ Chuột.'],['b','Chuột trên bờ ăn được Voi.']])
+];
 
 function hero(c){
   var r=c<0?-c:c;
