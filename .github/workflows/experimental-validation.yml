@@ -43,6 +43,7 @@ jobs:
           node tests/terrain.js
           node tests/ai.js
           node tests/ai_tactics.js
+          node tests/bison.js
           node tests/outpost_ai.js
 
       - name: Run paired-seed outpost simulation
@@ -67,6 +68,7 @@ jobs:
           node pw11.js
           node pw12.js
           node pw14.js
+          node pw16.js
 
       - name: Upload paired simulation results
         if: always()

@@ -41,7 +41,8 @@ function syncPieces(){
     el.classList.toggle('in-water',!!WATER[i2]);
     el.classList.toggle('sel',i2===selected);
     el.classList.toggle('charged',K==='tig'&&cells[SL+a]===1&&!EN.isClassic());
-    el.classList.toggle('cool',!EN.isClassic()&&((K==='lio'&&cells[SL+2+a]>0)||(K==='bison'&&cells[SL+4+a]>0)||(K==='mon'&&cells[SL+6+a]>0)));
+    el.classList.toggle('cool',!EN.isClassic()&&((K==='lio'&&cells[SL+2+a]>0)||(K==='bison'&&cells[SL+4+a]>0&&cells[SL+10+a]>0)||(K==='mon'&&cells[SL+6+a]>0)));
+    el.classList.toggle('stunned',!EN.isClassic()&&cells[SL+12+a]===i2+1);
   }
 }
 var bonusFrom={};
@@ -121,7 +122,7 @@ function diagram(K,rk,emo){
     if(K==='cat') two('trèo qua quân kề');
     else if(K==='fox') two('nước rút');
     else if(K==='lio') two('vồ xa');
-    else if(K==='bison') two('lao / húc');
+    else if(K==='bison') two('lao / húc đẩy lùi');
     else if(K==='leo'){[[-1,-1],[-1,1],[1,-1],[1,1]].forEach(function(d){map[d[0]+','+d[1]]='x';}); key+=' <span>★ đi chéo</span>';}
     else if(K==='mon'){dirs.forEach(function(d){map[d[0]+','+d[1]]='x';}); key+=' <span>⇄ đổi chỗ quân kề</span>';}
     else if(K==='croc') key+=' <span>🎯 bắt mồi ở bờ sát hồ</span>';
@@ -163,7 +164,13 @@ function nowNote(code){
     var why=rankWhy(code,i);
     if(why) out+='<p class="now"><b>Bậc hiện tại '+er+'</b> (gốc '+nominal(code)+') · '+why+'.</p>';
     if(K==='lio'&&cells[SL+2+a]>0) out+='<p class="now">Sư tử đang hồi chiêu, còn '+cells[SL+2+a]+' lượt chưa vồ được.</p>';
-    if(K==='bison'&&cells[SL+4+a]>0) out+='<p class="now">Bò rừng vừa lao, lượt này chưa lao hoặc húc được.</p>';
+    if(K==='bison'){
+      var cdL=cells[SL+4+a], cdH=cells[SL+10+a];
+      if(cdL>0&&cdH>0) out+='<p class="now">Bò rừng đang hồi chiêu cả hai: lao còn '+cdL+' lượt, húc còn '+cdH+' lượt.</p>';
+      else if(cdL>0) out+='<p class="now">Lao đang hồi chiêu, còn '+cdL+' lượt. Húc vẫn dùng được.</p>';
+      else if(cdH>0) out+='<p class="now">Húc đang hồi chiêu, còn '+cdH+' lượt. Lao vẫn dùng được.</p>';
+    }
+    if(cells[SL+12+a]===i+1) out+='<p class="now">💫 Đang choáng vì bị Bò rừng húc: không đi được trong lượt tới của phe này.</p>';
   }
   return out;
 }
@@ -255,8 +262,8 @@ function renderRules(){
     L.push('🚩 Tiền đồn (ô có cờ ở rìa trái): chiếm bằng bất kỳ nước đi nào thì được đi thêm 1 ô thường. Bước thưởng không ăn quân, không vào hang, bỏ qua cũng được. Nhận thưởng xong, phe đó hồi 2 lượt mới nhận lại được. Hai phe hồi riêng.');
     L.push('🌉 Cầu gỗ hẹp (hai bên rìa) không chịu nổi Voi. Voi chỉ qua sông bằng bãi cạn ở giữa bàn cờ.');
     L.push('Mỗi bậc 2 đến 7 có hai tướng để chọn, mỗi tướng một tuyệt kỹ. Chuột và Voi luôn có mặt. Mỗi bên có thể thêm 1 quân ngoài bậc: Khỉ, Rùa hoặc không dùng.');
-    L.push('Khi chọn quân, ★ là chiêu đặc biệt, ≈ nhảy hồ, ⇄ đổi chỗ, 🎯 vồ xa hoặc bắt mồi, 💢 húc Voi vào bẫy. Chạm vào ô Voi địch để húc.');
-    L.push('Số trên huy hiệu là bậc hiện tại. Xanh là đang được cộng bậc, hồng là đang bị trừ. ⚡ là Hổ đang giữ bậc 7 sau cú nhảy cho đến khi chính Hổ di chuyển; quân mờ là đang hồi chiêu.');
+    L.push('Khi chọn quân, ★ là chiêu đặc biệt, ≈ nhảy hồ, ⇄ đổi chỗ, 🎯 vồ xa hoặc bắt mồi, 💢 húc đẩy lùi quân địch ăn không được (Voi) và làm nó choáng 1 lượt. Chạm vào quân đó cách 2 ô để húc; quân ăn được thì dùng Lao.');
+    L.push('Số trên huy hiệu là bậc hiện tại. Xanh là đang được cộng bậc, hồng là đang bị trừ. ⚡ là Hổ đang giữ bậc 7 sau cú nhảy cho đến khi chính Hổ di chuyển; 💫 là quân bị Bò rừng húc choáng; quân mờ là đang hồi chiêu.');
   }
   L.push('🔁 Lặp thế: nước đi làm một thế cờ y hệt xuất hiện lần thứ 3 thì bị cấm, phải đổi nước khác. Hết nước hợp lệ thì ván hòa.');
   if(pvp()) L.push('Chế độ 2 người: hai người thay nhau chạm vào bàn cờ trên cùng một thiết bị. Người 1 ở phía dưới.');
@@ -271,7 +278,10 @@ function describe(f,t,code,tcode,k){
   if(k===5) return {emo:emo,text:snd+' '+who+' đổi chỗ với '+th+(tcode*s>0?'':' của '+foeName)+'.'};
   if(k===6) return {emo:emo,text:snd+' '+who+' '+(K==='croc'?'bắt mồi':'tấn công từ bờ')+', ăn '+th+' của '+foeName+' mà không rời chỗ.'};
   if(k===7) return {emo:emo,text:snd+' '+who+' vồ xa, ăn '+th+' của '+foeName+' mà không rời chỗ.'};
-  if(k===9) return {emo:emo,text:snd+' '+who+' húc '+th+' của '+foeName+' rơi thẳng vào bẫy!'};
+  if(k===9){
+    var mid9=(f+t)>>1, d9=0, b9; while(d9<3&&ADJ[f*4+d9]!==mid9) d9++; b9=ADJ[t*4+d9]; var trapped=b9>=0&&TRAP[b9]===s;
+    return {emo:emo,text:snd+' '+who+' húc '+th+' của '+foeName+' lùi 1 ô'+(trapped?' vào bẫy, mất bậc':'')+' và làm nó choáng: lượt tới không đi được!'};
+  }
   if(k===8) return tcode?{emo:emo,text:snd+' '+who+' lao tới ăn '+th+' của '+foeName+'.'}:{emo:emo,text:snd+' '+who+' lao thẳng 2 ô.'};
   if(tcode){
     var verb=k===1?'nhảy qua hồ và ăn':k===2?'trèo qua rồi ăn':k===3?'lao tới ăn':k===4?'phóng chéo ăn':'ăn';
