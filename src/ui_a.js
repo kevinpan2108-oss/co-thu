@@ -3,6 +3,15 @@ var COLS=EN.COLS, ROWS=EN.ROWS, N=EN.N, SL=EN.SL, DENME=EN.DENME, DENFOE=EN.DENF
 var WATER=EN.WATER, TRAP=EN.TRAP, DEN=EN.DEN, ADJ=EN.ADJ, SQ=EN.SQ, HK=EN.HK;
 var genMoves=EN.genMoves, movesFrom=EN.movesFrom, commit=EN.commit, effRank=EN.effRank, initialCells=EN.initialCells, setKeys=EN.setKeys, setClassic=EN.setClassic;
 var engineSrc=makeEngine.toString();
+/* Cong tac THU NGHIEM (chi bat khi them tham so vao duong dan, vd ?outpost=control&croc=4&ai=15). Mac dinh: luat chinh thuc. */
+var EXP=[];
+(function(){
+  var q=''; try{ q=location.search||''; }catch(e){}
+  var m;
+  if((m=/[?&]outpost=control(?:&|$)/.exec(q))){ EN.setOutMode(1); EXP.push('tiền đồn kiểm soát'); }
+  if((m=/[?&]croc=(\d)/.exec(q))&&+m[1]>=3&&+m[1]<=5){ EN.setCrocLand(+m[1]); if(+m[1]!==3) EXP.push('Cá sấu bậc '+m[1]+' trên cạn'); }
+  if((m=/[?&]ai=(\d+)/.exec(q))&&+m[1]>0){ EN.setAI(+m[1]); EXP.push('AI thử nghiệm'); }
+})();
 
 /* ---------- Du lieu quan co ---------- */
 function H(k,n,e,s,ep,br,t){return {k:k,n:n,e:e,s:s,ep:ep,br:br,t:t};}

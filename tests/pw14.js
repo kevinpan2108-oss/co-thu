@@ -3,7 +3,7 @@ const { chromium } = require('playwright'); const path=require('path');
 (async()=>{
   const b=await chromium.launch(); const p=await b.newPage({viewport:{width:1100,height:1000}}); const errs=[];
   p.on('pageerror',e=>errs.push(e.message)); p.on('console',m=>{if(m.type()==='error'&&!/ERR_|fonts/.test(m.text()))errs.push(m.text())});
-  await p.goto('file://'+path.join(__dirname,'..','dist','game_local.html')); await p.waitForTimeout(500);
+  await p.goto('file://'+path.join(__dirname,'..',process.env.DIST||'dist','game_local.html')); await p.waitForTimeout(500);
   await p.click('#draft-go'); await p.waitForTimeout(700);
   const ev=(fn,arg)=>p.evaluate(([src,a])=>window.__E('('+src+')')(a),[fn.toString(),arg]);
   let ok=0,bad=0;const chk=(n,c)=>{if(c)ok++;else{bad++;console.log('FAIL',n);}};

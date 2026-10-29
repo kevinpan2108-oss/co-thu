@@ -2,7 +2,7 @@
 """Ghép src/ thành dist/game.html (bản phát hành) và dist/game_local.html (bản có hook kiểm thử).
 Chạy: python3 build.py"""
 import os
-D=os.path.dirname(os.path.abspath(__file__)); S=os.path.join(D,'src'); O=os.path.join(D,'dist')
+D=os.path.dirname(os.path.abspath(__file__)); S=os.path.join(D,'src'); O=os.path.join(D,os.environ.get('OUT','dist'))
 os.makedirs(O,exist_ok=True)
 rd=lambda f:open(os.path.join(S,f),encoding='utf8').read()
 h=rd('head.html'); body=rd('body.html')

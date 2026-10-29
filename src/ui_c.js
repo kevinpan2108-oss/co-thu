@@ -79,19 +79,40 @@ function updateStrips(){
   $('cnt-foe').textContent=nf+'/'+startCnt[1];
 }
 function setOc(id,side){
-  var el=$(id), cd;
+  var el=$(id), cd, ctl, prog;
   if(EN.isClassic()){ el.textContent=''; return; }
+  if(EN.outMode()===1){
+    ctl=EN.controls(cells,side); prog=EN.ctlProgress(cells,side);
+    el.textContent=ctl?('🚩 Giữ chốt '+prog+'/2'+(prog===1?' · lượt sau nhận thưởng':'')):'🚩 Chưa giữ chốt';
+    el.className='oc '+(ctl?'ready':'cool');
+    el.title='Giữ một quân trên tiền đồn đến hết lượt của mình. Sau 2 lượt liền còn giữ, nhận 1 bước thưởng cho quân ở cột 0–2. Mất chốt thì tiến trình về 0.';
+    return;
+  }
   cd=EN.outCd(cells,side);
   el.textContent=cd>0?'🚩 Thưởng hồi '+cd+' lượt':'🚩 Thưởng tiền đồn: sẵn sàng';
   el.className='oc '+(cd>0?'cool':'ready');
   el.title='Chiếm tiền đồn thì được đi thêm 1 ô. Sau khi nhận thưởng, phe đó hồi 2 lượt.';
 }
+var ctlSeen=[false,false];
+function ctlNotice(){
+  if(EN.outMode()!==1||EN.isClassic()) return;
+  var now=[EN.controls(cells,1),EN.controls(cells,-1)];
+  if(ctlSeen[0]&&!now[0]) setBubble('🚩',(pvp()?pn(1):'Bạn')+' mất tiền đồn: tiến trình giữ chốt về 0.');
+  else if(ctlSeen[1]&&!now[1]) setBubble('🚩',pn(-1)+' mất tiền đồn: tiến trình giữ chốt về 0.');
+}
 function updateOutposts(){
-  var i, cl=EN.isClassic(), cd=cl?0:EN.outCd(cells,turn), el;
+  var i, cl=EN.isClassic(), cd=cl?0:EN.outCd(cells,turn), el, ctlm=EN.outMode()===1, oc;
   gridEl.classList.toggle('no-out',cl);
+  if(ctlm) ctlSeen=[EN.controls(cells,1),EN.controls(cells,-1)];
   for(i=0;i<N;i++){
     if(!OUTPOST[i]) continue;
     el=gridEl.children[i]; if(!el) continue;
+    if(ctlm){
+      oc=cells[i];
+      el.classList.toggle('held-me',oc>0&&!EN.isTur(oc)); el.classList.toggle('held-foe',oc<0&&!EN.isTur(oc));
+      el.classList.toggle('ready',!cl&&oc===0); el.classList.remove('cool');
+      continue;
+    }
     el.classList.toggle('ready',!cl&&cd===0); el.classList.toggle('cool',!cl&&cd>0);
   }
 }
@@ -252,7 +273,7 @@ function renderRules(){
   if(!cl){
     L.push('🌳 Bụi rậm và lau sậy là ô đi bình thường, nhưng chiêu đi thẳng của Cáo, Sư tử, Bò rừng không băng qua được ô bụi (đáp xuống bụi thì được). Quân đứng trong bụi không bị Sư tử vồ xa và không bị Cá sấu rình.');
     L.push('🪷 Đầm lầy (rìa phải) mọi quân đều đi vào được. Cáo, Sư tử, Bò rừng không lao hay vồ xuyên qua đầm lầy. Quân đứng trong đầm lầy không bị Sư tử vồ xa hay Cá sấu rình nhưng vẫn bị ăn bằng đòn thường. Chuột và Cá sấu trong đầm lầy giữ lợi thế như dưới nước.');
-    L.push('🚩 Tiền đồn (ô có cờ ở rìa trái): chiếm bằng bất kỳ nước đi nào thì được đi thêm 1 ô thường. Bước thưởng không ăn quân, không vào hang, bỏ qua cũng được. Nhận thưởng xong, phe đó hồi 2 lượt mới nhận lại được. Hai phe hồi riêng.');
+    L.push(EN.outMode()===1?'🚩 [THỬ NGHIỆM] Tiền đồn (ô có cờ ở rìa trái): giữ một quân trên tiền đồn đến hết lượt của mình. Sau 2 lượt liền còn giữ, nhận 1 bước thưởng: một quân ở cột 0–2 đi thêm 1 ô thường (không ăn quân, không vào hang, không dùng chiêu). Mất chốt thì tiến trình về 0, thưởng không cộng dồn, chạm rồi rời đi không được thưởng.':'🚩 Tiền đồn (ô có cờ ở rìa trái): chiếm bằng bất kỳ nước đi nào thì được đi thêm 1 ô thường. Bước thưởng không ăn quân, không vào hang, bỏ qua cũng được. Nhận thưởng xong, phe đó hồi 2 lượt mới nhận lại được. Hai phe hồi riêng.');
     L.push('🌉 Cầu gỗ hẹp (hai bên rìa) không chịu nổi Voi. Voi chỉ qua sông bằng bãi cạn ở giữa bàn cờ.');
     L.push('Mỗi bậc 2 đến 7 có hai tướng để chọn, mỗi tướng một tuyệt kỹ. Chuột và Voi luôn có mặt. Mỗi bên có thể thêm 1 quân ngoài bậc: Khỉ, Rùa hoặc không dùng.');
     L.push('Khi chọn quân, ★ là chiêu đặc biệt, ≈ nhảy hồ, ⇄ đổi chỗ, 🎯 vồ xa hoặc bắt mồi, 💢 húc Voi vào bẫy. Chạm vào ô Voi địch để húc.');

@@ -3,7 +3,7 @@
 const fs=require('fs'),path=require('path');
 const src=fs.readFileSync(path.join(__dirname,'..','src','engine.js'),'utf8')+';return makeEngine();';
 const G=+process.argv[2]||10, MS=+process.argv[3]||150; let seed=+process.argv[4]||7;
-const A=new Function(src)(), B=new Function(src)(); const MASK=process.argv[5]===undefined?true:+process.argv[5]; A.setAI(MASK); B.setAI(false);
+const A=new Function(src)(), B=new Function(src)(); const MASK=process.argv[5]===undefined?true:+process.argv[5]; A.setAI(MASK); B.setAI(false); if(process.env.FIXNOISE) A.setFixNoise(true);
 const DEP=+process.argv[6]||0; [A,B].forEach(E=>{E.LEVELS[3].ms=DEP?60000:MS; if(DEP)E.LEVELS[3].depth=DEP;});
 const {COLS}=A; const Z=[0,0,0,0,0,0,0,0,0,0];
 const R=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};

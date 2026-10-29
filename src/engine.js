@@ -18,6 +18,7 @@ var MAPROWS=[
 /* Vi tri xuat phat cua phe duoi: bac -> [hang,cot]; phe tren la anh guong qua hang giua. Quan ngoai bac: EXTRA. */
 var STARTS={8:[6,4],7:[8,1],6:[7,7],5:[6,6],4:[7,3],3:[6,5],2:[7,1],1:[6,7]}, EXTRA=[7,5];
 var ROWS=MAPROWS.length, COLS=MAPROWS[0].length, N=ROWS*COLS, DENME=-1, DENFOE=-1;
+var OUTLIST=[];
 var WATER=new Uint8Array(N), TRAP=new Int8Array(N), DEN=new Int8Array(N), ROCK=new Uint8Array(N), BUSH=new Uint8Array(N), BRIDGE=new Uint8Array(N), MARSH=new Uint8Array(N), OUTPOST=new Uint8Array(N), ADJ=new Int16Array(N*4).fill(-1);
 (function(){
   var r,c,k,ch,d,n;
@@ -36,6 +37,7 @@ var WATER=new Uint8Array(N), TRAP=new Int8Array(N), DEN=new Int8Array(N), ROCK=n
     if(c>0)ADJ[k*4+2]=k-1;
     if(c<COLS-1)ADJ[k*4+3]=k+1;
   }
+  for(k=0;k<N;k++) if(OUTPOST[k]) OUTLIST.push(k);
   /* Nui da: go bo moi ket noi de khong ai di qua, khong chieu nao xuyen qua. */
   for(k=0;k<N;k++){
     for(d=0;d<4;d++){ n=ADJ[k*4+d]; if(ROCK[k]||(n>=0&&ROCK[n])) ADJ[k*4+d]=-1; }
@@ -45,6 +47,9 @@ var WATER=new Uint8Array(N), TRAP=new Int8Array(N), DEN=new Int8Array(N), ROCK=n
    N+a: Ho vua nhay (a=0 ben duoi, 1 ben tren); N+2+a: hoi chieu Su tu;
    N+4+a: hoi chieu Bo rung; N+6+a: hoi chieu Khi. */
 var SL=N, ST=10, OUTCD=2, BONUS=true;
+/* Co che tien don: OUTMODE 0 = chinh thuc (chiem o -> 1 buoc thuong, hoi 2 luot); 1 = THU NGHIEM 'kiem soat':
+   giu mot quan tren tien don qua cuoi luot cua minh; sau 2 luot lien tiep con kiem soat thi nhan 1 buoc thuong (chi quan cot 0-2). */
+var OUTMODE=0;
 var CLASSIC=false, TERR=true;
 var HK=new Array(19).fill('');
 var SLOTKEYS=[null,['rat'],['cat','fox'],['wolf','boar'],['dog','bear'],['leo','croc'],['tig','eagle'],['lio','bison'],['ele'],['','mon','tur']];
@@ -94,7 +99,7 @@ function effRank(cells,i){
   if(k==='boar') return nearWater(i)?4:3;
   if(k==='dog') return guarding(i,s)?5:4;
   if(k==='bear') return advanced(i,s)?5:4;
-  if(k==='croc') return inW(cells,i)?6:3;
+  if(k==='croc') return inW(cells,i)?6:CROCLAND;
   if(k==='tig') return cells[SL+(s>0?0:1)]===1?7:6;
   return r;
 }
@@ -226,7 +231,7 @@ function genMoves(cells,s){
     movesFrom(cells,i,out);
   }
   /* Tien don: chiem duoc o tien don thi duoc them 1 buoc thuong (khong an quan, khong vao hang). */
-  if(BONUS&&!CLASSIC&&TERR&&cells[SL+8+a]===0){
+  if(BONUS&&!CLASSIC&&TERR&&OUTMODE===0&&cells[SL+8+a]===0){
     n=out.length;
     for(j=0;j<n;j++){
       m=out[j]; f=m&127; t=(m>>7)&127; k=(m>>14)&15;
@@ -245,19 +250,46 @@ function genMoves(cells,s){
       }
       unmake(cells,f,t,k,cap);
     }
+  }else if(BONUS&&!CLASSIC&&TERR&&OUTMODE===1&&cells[SL+8+a]===1){
+    /* Che do kiem soat: nuoc di chinh ma cuoi luot van kiem soat tien don -> duoc them 1 buoc thuong cua quan o cot 0-2. */
+    n=out.length;
+    for(j=0;j<n;j++){
+      m=out[j]; f=m&127; t=(m>>7)&127; k=(m>>14)&15;
+      cap=make(cells,f,t,k);
+      if(controls(cells,s)){
+        for(i=0;i<N;i++){
+          if(cells[i]*s<=0||(i%COLS)>2) continue;
+          tmp=[]; movesFrom(cells,i,tmp);
+          for(q=0;q<tmp.length;q++){
+            x=tmp[q];
+            if(((x>>14)&15)!==0) continue;
+            if(cells[(x>>7)&127]!==0||DEN[(x>>7)&127]) continue;
+            out.push(m|(i<<18)|(((x>>7)&127)<<25));
+          }
+        }
+      }
+      unmake(cells,f,t,k,cap);
+    }
   }
   return out;
 }
 
 /* ---------- Make / unmake (co ngan xep trang thai) ---------- */
 var stk=new Int8Array(ST*1024), sp=0;
+function controls(cells,s){ var i, c; for(i=0;i<OUTLIST.length;i++){ c=cells[OUTLIST[i]]; if(c*s>0&&!isTur(c)) return true; } return false; }
+/* Cuoi luot cua phe a (0 duoi,1 tren): cap nhat tien trinh kiem soat. Phe kia chi bi dat lai neu vua mat kiem soat. */
+function ctlUpdate(cells,a){
+  var s=a===0?1:-1, mine=controls(cells,s), prev=cells[SL+8+a];
+  cells[SL+8+a]=mine?(prev>=1?0:1):0;
+  if(!controls(cells,-s)) cells[SL+8+(1-a)]=0;
+}
 function make(cells,f,t,k,bonus){
   var c=cells[f], a=c>0?0:1, o=sp*ST, j, cap=0, d, e, b;
   for(j=0;j<ST;j++) stk[o+j]=cells[SL+j];
   sp++;
   if(bonus){ cells[t]=c; cells[f]=0; return 0; }
   cells[SL+a]=0;
-  if(cells[SL+8+a]>0) cells[SL+8+a]--;
+  if(OUTMODE===0&&cells[SL+8+a]>0) cells[SL+8+a]--;
   if(cells[SL+2+a]>0) cells[SL+2+a]--;
   if(cells[SL+4+a]>0) cells[SL+4+a]--;
   if(cells[SL+6+a]>0) cells[SL+6+a]--;
@@ -270,6 +302,7 @@ function make(cells,f,t,k,bonus){
     if(k===1&&HK[c+9]==='tig') cells[SL+a]=1;
     else if(k===8) cells[SL+4+a]=1;
   }
+  if(OUTMODE===1&&BONUS&&!CLASSIC&&TERR) ctlUpdate(cells,a);
   return cap;
 }
 function unmake(cells,f,t,k,cap){
@@ -284,7 +317,7 @@ function unmake(cells,f,t,k,cap){
 /* Nuoc kep: buoc chinh | (f2<<18) | (t2<<25): sau khi chiem tien don duoc them 1 buoc thuong (khong an, khong vao hang). */
 function makeM(cells,m){
   var f=m&127,t=(m>>7)&127,k=(m>>14)&15,bf=(m>>18)&127,bt=(m>>25)&127,cap=make(cells,f,t,k),a;
-  if(bf!==bt){ a=cells[bf]>0?0:1; if(OUTCD>0) cells[SL+8+a]=OUTCD; make(cells,bf,bt,0,true); }
+  if(bf!==bt){ a=cells[bf]>0?0:1; if(OUTMODE===0&&OUTCD>0) cells[SL+8+a]=OUTCD; make(cells,bf,bt,0,true); }
   return cap;
 }
 function unmakeM(cells,m,cap){
@@ -295,14 +328,18 @@ function unmakeM(cells,m,cap){
 function commitM(cells,m){ var s0=sp, cap=makeM(cells,m); sp=s0; return cap; }
 /* Tien don: kiem tra truoc khi di (cells chua di) xem nuoc (f,t,k) co duoc thuong khong. */
 function bonusEligible(cells,s,f,t,k){
-  var a=s>0?0:1, dst=(k===9)?((f+t)>>1):((k===6||k===7)?-1:t);
+  var a=s>0?0:1, dst=(k===9)?((f+t)>>1):((k===6||k===7)?-1:t), ok, cap;
+  if(OUTMODE===1){
+    if(!(BONUS&&!CLASSIC&&TERR)||cells[SL+8+a]!==1) return false;
+    cap=make(cells,f,t,k); ok=controls(cells,s); unmake(cells,f,t,k,cap); return ok;
+  }
   return BONUS&&!CLASSIC&&TERR&&cells[SL+8+a]===0&&dst>=0&&OUTPOST[dst]===1&&OUTPOST[f]!==1;
 }
 /* Cac buoc thuong hien co cua ben s (sau khi da di nuoc chinh): f | t<<7, chi buoc thuong vao o trong, khong vao hang. */
 function bonusSteps(cells,s){
   var out=[], i, q, x, tmp;
   for(i=0;i<N;i++){
-    if(cells[i]*s<=0) continue;
+    if(cells[i]*s<=0||(OUTMODE===1&&(i%COLS)>2)) continue;
     tmp=[]; movesFrom(cells,i,tmp);
     for(q=0;q<tmp.length;q++){
       x=tmp[q];
@@ -316,7 +353,7 @@ function bonusSteps(cells,s){
 /* Di that buoc thuong: khong tru hoi chieu cua cac quan, bat dau hoi chieu tien don. */
 function commitBonus(cells,f,t){
   var a=cells[f]>0?0:1;
-  if(OUTCD>0) cells[SL+8+a]=OUTCD;
+  if(OUTMODE===0&&OUTCD>0) cells[SL+8+a]=OUTCD;
   cells[t]=cells[f]; cells[f]=0;
 }
 /* Dung cho giao dien: di that, khong can unmake. */
@@ -407,6 +444,8 @@ function contested(cells,i,p){
   return false;
 }
 /* ---------- AI v2: tinh hieu qua thuc su cua cac moi de doa va duong vong ---------- */
+var CROCLAND=3; /* bac Ca sau tren can (luat chinh thuc = 3; 4 chi de thu nghiem) */
+var FIXNOISE=false; /* THU NGHIEM: sua loi nhieu cong vao gia tri can tren o goc tim kiem */
 var AI2=0; /* bit 1: de doa hop le, bit 2: duong vong, bit 4: giu cau/tien don; 0 = AI cu */
 /* Quan o i (ben p) co bi quan dich bat HOP LE khong (tinh ca ky nang: vo, phuc kich, ban, lao, va dia hinh). */
 function threatened(cells,i,p){
@@ -480,6 +519,27 @@ function evaluate(cells){
         if(OUTPOST[i]&&cells[SL+(p?8:9)]===0&&effRank(cells,n2)>=2) gO[p?0:1]=1;
       }
       sc+=10*(gB[0]-gB[1])+12*(gO[0]-gO[1]);
+    }
+  }
+  if((AI2&8)&&OUTMODE===1&&!CLASSIC&&TERR){
+    /* Che do kiem soat tien don (thu nghiem): giu chot, ap luc len quan giu chot, bao ve, tranh chiem o trong. */
+    var oi, oc, op, od, on, oq;
+    for(oi=0;oi<OUTLIST.length;oi++){
+      i=OUTLIST[oi]; oc=cells[i];
+      if(oc&&!isTur(oc)){
+        op=oc>0;
+        sc+=(op?1:-1)*(22+18*cells[SL+(op?8:9)]);
+        for(od=0;od<4;od++){
+          on=ADJ[i*4+od]; if(on<0) continue; oq=cells[on]; if(!oq||isTur(oq)) continue;
+          if((oq>0)!==op){ if(canCap(cells,on,i,0)) sc+=(op?-1:1)*14; }
+          else sc+=(op?1:-1)*5;
+        }
+      }else{
+        for(od=0;od<4;od++){
+          on=ADJ[i*4+od]; if(on<0) continue; oq=cells[on]; if(!oq||isTur(oq)) continue;
+          sc+=(oq>0?6:-6);
+        }
+      }
     }
   }
   return sc;
@@ -659,9 +719,11 @@ function search(cells0,side,level,recent,ban){
       cap=makeM(cells,m);
       probe(cells,-side);
       if(side>0?NTF===0:NTP===0) v=WIN;
-      else v=-negamax(cells,-side,d-1,-Infinity,L.full?Infinity:-alpha,1);
+      else v=-negamax(cells,-side,d-1,-Infinity,L.full?Infinity:-(alpha-(FIXNOISE?2*(L.noise||0):0)),1);
       unmakeM(cells,m,cap);
       if(aborted){complete=false;break;}
+      /* Gia tri <= can duoi (alpha - 2*noise) chi la CAN TREN (nuoc di te hon), khong cong nhieu: neu khong, nhieu +-noise co the dua nuoc te thanh 'tot nhat'. */
+      if(FIXNOISE&&!L.full&&alpha>-Infinity&&v<=alpha-2*(L.noise||0)) continue;
       v-=rep[m]||0;
       v+=L.noise?(Math.random()-.5)*2*L.noise:Math.random()*2;
       if(v>curScore){curScore=v;curBest=m;}
@@ -681,7 +743,7 @@ function counts(cells){ probe(cells,1); return [NTP,NTF]; }
 return {
   COLS:COLS,ROWS:ROWS,N:N,SL:SL,ST:ST,DENME:DENME,DENFOE:DENFOE,MAPROWS:MAPROWS,STARTS:STARTS,EXTRA:EXTRA,ROCK:ROCK,BUSH:BUSH,BRIDGE:BRIDGE,WATER:WATER,TRAP:TRAP,DEN:DEN,ADJ:ADJ,SQ:SQ,HK:HK,LEVELS:LEVELS,
   isClassic:function(){return CLASSIC;},setClassic:setClassic,setKeys:setKeys,initialCells:initialCells,genMoves:genMoves,movesFrom:movesFrom,
-  make:make,unmake:unmake,commit:commit,makeM:makeM,unmakeM:unmakeM,commitM:commitM,bonusEligible:bonusEligible,bonusSteps:bonusSteps,commitBonus:commitBonus,outCd:function(c,s){return c[SL+(s>0?8:9)];},setOutCd:function(v){OUTCD=v|0;},setBonus:function(v){BONUS=!!v;},setAI:function(v){AI2=(v===true)?7:(v===false)?0:(v|0);},MARSH:MARSH,OUTPOST:OUTPOST,effRank:effRank,hashOf:hashOf,counts:counts,search:search,evaluate:evaluate,
+  make:make,unmake:unmake,commit:commit,makeM:makeM,unmakeM:unmakeM,commitM:commitM,bonusEligible:bonusEligible,bonusSteps:bonusSteps,commitBonus:commitBonus,outCd:function(c,s){return c[SL+(s>0?8:9)];},setOutCd:function(v){OUTCD=v|0;},setBonus:function(v){BONUS=!!v;},setOutMode:function(v){OUTMODE=v|0;},outMode:function(){return OUTMODE;},controls:controls,outCtl:function(c,s){return c[SL+(s>0?8:9)];},setCrocLand:function(v){CROCLAND=v|0;},setCrocLand:function(v){CROCLAND=v|0;},setOutMode:function(v){OUTMODE=v|0;},crocLand:function(){return CROCLAND;},outMode:function(){return OUTMODE;},aiMask:function(){return AI2;},ctlProgress:function(c,side){return c[SL+(side>0?8:9)];},controls:controls,setFixNoise:function(v){FIXNOISE=!!v;},setAI:function(v){AI2=(v===true)?7:(v===false)?0:(v|0);},MARSH:MARSH,OUTPOST:OUTPOST,effRank:effRank,hashOf:hashOf,counts:counts,search:search,evaluate:evaluate,
   hasMate:hasMate,inW:inW,nearWater:nearWater,advanced:advanced,guarding:guarding,isTur:isTur,
   probe:probe,getH:function(){return H1;},
   negamax:function(c,s,d,a,b){nodes=0;aborted=false;deadline=Date.now()+1e9;return negamax(c,s,d,a,b,0);},

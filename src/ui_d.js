@@ -32,7 +32,7 @@ function hasLegal(side){
 var worker=null, workerBad=false, wId=0, wCb=null, wPending=null;
 function mkWorker(){
   try{
-    var src='(function(){var E=('+engineSrc+')();onmessage=function(ev){var d=ev.data;E.SQ[0]=d.sq0;E.SQ[1]=d.sq1;E.setClassic(d.classic);var r=E.search(new Int8Array(d.cells),d.side,d.level,d.recent,d.ban);postMessage({id:d.id,mv:r});};})();';
+    var src='(function(){var E=('+engineSrc+')();onmessage=function(ev){var d=ev.data;E.SQ[0]=d.sq0;E.SQ[1]=d.sq1;E.setClassic(d.classic);E.setOutMode(d.om|0);E.setCrocLand(d.cl||3);E.setAI(d.ai|0);var r=E.search(new Int8Array(d.cells),d.side,d.level,d.recent,d.ban);postMessage({id:d.id,mv:r});};})();';
     var w=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));
     w.onmessage=function(ev){ if(wCb&&ev.data.id===wId){var cb=wCb;wCb=null;wPending=null;cb(ev.data.mv);} };
     w.onerror=function(){
@@ -43,7 +43,7 @@ function mkWorker(){
   }catch(e){ workerBad=true; return null; }
 }
 function think(side,lv,done){
-  var id=++wId, payload={id:id,cells:Array.from(cells),side:side,level:lv,recent:posHist.slice(-14),ban:banList(side),sq0:SQ[0].slice(),sq1:SQ[1].slice(),classic:EN.isClassic()};
+  var id=++wId, payload={id:id,cells:Array.from(cells),side:side,level:lv,recent:posHist.slice(-14),ban:banList(side),sq0:SQ[0].slice(),sq1:SQ[1].slice(),classic:EN.isClassic(),om:EN.outMode(),cl:EN.crocLand(),ai:EN.aiMask()};
   wCb=done; wPending=payload;
   if(!worker&&!workerBad) worker=mkWorker();
   if(worker){ try{ worker.postMessage(payload); return; }catch(e){ workerBad=true; worker=null; } }
@@ -94,7 +94,7 @@ function applyMove(f,t,k,mv){
       var st=bonusStepsFor(s);
       if(st.steps.length){
         bonus={side:s,steps:st.steps,skipOK:st.skipOK}; thinking=false; deselect();
-        refresh(); setBubble('🚩','Chiếm tiền đồn! Chọn một quân đi thêm 1 ô'+(st.skipOK?', hoặc bấm Bỏ qua thưởng.':'.'));
+        refresh(); setBubble('🚩',(EN.outMode()===1?'Giữ chốt đủ 2 lượt! Chọn một quân ở cột 0–2 đi thêm 1 ô':'Chiếm tiền đồn! Chọn một quân đi thêm 1 ô')+(st.skipOK?', hoặc bấm Bỏ qua thưởng.':'.'));
         return;
       }
     }else if(mv&&mv.bf!==undefined&&mv.bf!==mv.bt){
@@ -138,6 +138,7 @@ function endTurn(s,code){
   if(!hasLegal(-s)){ refresh(); finishDraw(-s,'rep'); return; }
   turn=-s;
   posHist.push(EN.hashOf(cells,turn));
+  ctlNotice();
   refresh();
   if(turn===-1&&!pvp()) scheduleAI();
 }
@@ -432,6 +433,7 @@ function snapshotState(){ return {mode:modeKey}; }
 try{ if(window.claude&&window.claude.hot&&window.claude.hot.snapshot) window.claude.hot.snapshot(snapshotState); }catch(e){}
 function start(data){
   layoutBoard();
+  if(EXP.length){ var xb=$('exp-badge'); xb.hidden=false; xb.textContent='THỬ NGHIỆM: '+EXP.join(' · '); }
   applyLevel(level); applyOpp(oppKey); renderRoster(); renderRules(); scheduleGround();
   newGame();
   requestAnimationFrame(function(){requestAnimationFrame(function(){boardEl.classList.add('ready');});});
