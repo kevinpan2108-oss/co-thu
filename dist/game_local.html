@@ -412,6 +412,69 @@ select.sel{width:100%;padding:8px;border-radius:12px;border:3px solid var(--edge
   .mvgrid{grid-template-columns:repeat(7,10px);grid-auto-rows:10px;}
 }
 
+
+/* Extra mobile pass: let the board use the whole phone width. */
+@media (max-width:600px){
+  html,body{width:100%;min-width:0;max-width:100%;overflow-x:hidden}
+  body{padding:6px 0 22px!important}
+  .app,.app.big{display:block;width:100%;max-width:none;margin:0;padding:0 3px;gap:0}
+  .top{padding:0 4px;margin-bottom:7px;gap:6px 10px;align-items:center}
+  .brand{gap:3px}
+  .logo{font-size:clamp(30px,8vw,40px);gap:4px}
+  .tag{font-size:11px;line-height:1.2;max-width:32ch}
+  .score{gap:4px;font-size:12px}
+  .score span{padding:3px 7px;border-width:2px}
+  .layout,.app.big .layout{display:flex;flex-flow:column nowrap;align-items:stretch;justify-content:flex-start;width:100%;max-width:none;min-width:0;gap:7px;margin:0}
+  .play,.side{display:grid;grid-template-columns:minmax(0,1fr);width:100%;max-width:none;min-width:0;gap:5px}
+  .status{gap:5px}
+  .pill{font-size:12px;padding:4px 7px;gap:5px}
+  .bubble{font-size:11px;line-height:1.2;flex:1 1 130px;padding:5px 7px;gap:5px}
+  .bubble .b-emo{font-size:1.1em}
+  .team{width:100%;min-width:0;gap:4px;flex-wrap:nowrap}
+  .team .who{flex:0 0 auto;min-width:0;font-size:11px;gap:3px}
+  .team .who small{font-size:10px}
+  .strip{flex:1 1 auto;min-width:0;gap:2px;flex-wrap:nowrap}
+  .mini{width:clamp(17px,5.1vw,22px);height:clamp(17px,5.1vw,22px);font-size:clamp(10px,3vw,12px);border-width:1px;flex:0 0 auto}
+  .oc{font-size:9px;padding:1px 4px;margin-left:auto;max-width:44%;overflow:hidden;text-overflow:ellipsis}
+  .frame{display:block;width:100%;max-width:none;margin:0;padding:3px;border-width:2px;border-radius:12px}
+  .board{display:block;width:100%;max-width:none;height:auto;aspect-ratio:1/1;border-radius:8px}
+  .card{padding:8px 9px;border-width:2px;border-radius:13px;gap:6px}
+  .card h2,details.card summary{font-size:15px}
+  .info{min-height:0;gap:6px}
+  .info-head{gap:8px}
+  .info-token{width:40px;height:40px;font-size:22px;border-width:2px}
+  .info-token .rank{width:18px;height:18px;font-size:9px}
+  .info h3{font-size:15px}
+  .info h3 em{font-size:10px}
+  .info small{font-size:10px;line-height:1.2}
+  .info p{font-size:11px;line-height:1.25}
+  .info .now{padding:4px 6px;font-size:10.5px}
+  .info-body{display:block}
+  .traits{display:grid;gap:3px;font-size:11px;line-height:1.2}
+  .traits li{grid-template-columns:13px minmax(0,1fr);gap:4px}
+  .traits li::before{width:13px;height:13px;font-size:10px}
+  .traits li:nth-child(n+3){display:none}
+  .mv{display:none}
+  .row{gap:6px;padding:4px 5px;border-radius:10px}
+  .row .mini{width:26px;height:26px;font-size:15px}
+  .row b{font-size:12px}
+  .row small{font-size:10px}
+  .btns{gap:5px}
+  .btn{padding:8px 9px;font-size:12px;border-width:2px}
+  .seg{gap:4px}
+  .seg label{padding:6px 3px;font-size:11px;border-width:2px}
+  .field-label{font-size:10px}
+  .mode-desc,.lvl-note{font-size:10.5px}
+  .rules{font-size:11px}
+  .ladder .mini{width:24px;height:24px;font-size:13px}
+}
+@media (max-width:360px){
+  .team .who{font-size:10px}
+  .team .mini{width:17px;height:17px;font-size:9px}
+  .score{font-size:11px}
+  .info .eats{font-size:10.5px}
+}
+
 </style>
 
 
@@ -1279,82 +1342,75 @@ var engineSrc=makeEngine.toString();
 function H(k,n,e,s,ep,br,t){return {k:k,n:n,e:e,s:s,ep:ep,br:br,t:t};}
 var HEROES=[null,
  [H('rat','Chuột','🐭','Chít chít!','Thợ lặn','Bơi hồ · ăn Voi trên bờ',[
-   ['g','Bơi qua hồ; quân trên bờ không ăn được Chuột.'],
-   ['g','Trên bờ có thể ăn Voi.'],
-   ['b','Bậc 1, dễ bị ăn; Cá sấu ăn được Chuột đang bơi.']])],
+   ['g','Bơi hồ; trên bờ ăn được Voi.'],
+   ['b','Bậc 1; Cá sấu bắt được Chuột khi bơi.']])],
  [H('cat','Mèo','🐱','Meo!','Dân leo trèo','Trèo qua 1 quân kề bên',[
-   ['g','Nhảy qua 1 quân kề bên, đáp xuống ô ngay sau.'],
+   ['g','Nhảy qua 1 quân kề, đáp xuống ngay sau.'],
    ['b','Không nhảy vào hồ/hang hoặc qua quân dưới nước.']]),
   H('fox','Cáo','🦊','Ăng ẳng!','Kẻ tinh quái','Nước rút 2 ô thẳng',[
-   ['g','Lao thẳng 2 ô; ô giữa phải trống.'],
-   ['b','Không lao vào hang; bậc 2 dễ bị ăn.']])],
+   ['g','Lao thẳng 2 ô khi ô giữa trống.'],
+   ['b','Không lao vào hang; bậc 2.']])],
  [H('wolf','Sói','🐺','Ú uuu!','Thủ lĩnh bầy','Có đồng đội kề: bậc 4',[
    ['g','Có đồng đội bậc ≥ 2 kề bên: lên bậc 4.'],
-   ['b','Đi một mình: bậc 3.']]),
+   ['b','Đi lẻ: bậc 3.']]),
   H('boar','Lợn rừng','🐗','Ụt ịt!','Kẻ húc đầu','Sát hồ: bậc 4',[
-   ['g','Đứng sát hồ: lên bậc 4.'],
-   ['b','Rời hồ: bậc 3.']])],
+   ['g','Đứng sát hồ: bậc 4.'],
+   ['b','Xa hồ: bậc 3.']])],
  [H('dog','Chó','🐶','Gâu gâu!','Cún canh hang','Khu hang nhà: bậc 5 · khóa chiêu',[
    ['g','Ở vùng hang nhà: lên bậc 5.'],
-   ['g','Khóa tuyệt kỹ của quân địch đứng kề.'],
-   ['b','Ra khỏi vùng hang: bậc 4, hết khóa.']]),
+   ['b','Khóa chiêu địch kề bên; ra ngoài còn bậc 4.']]),
   H('bear','Gấu','🐻','Gừ gừ!','Kẻ xâm lược','Sân địch: bậc 5',[
-   ['g','Vào nửa sân địch: lên bậc 5.'],
-   ['g','Không bị Chó khóa tuyệt kỹ.'],
-   ['b','Ở nửa sân nhà: bậc 4.']])],
+   ['g','Sang nửa sân địch: lên bậc 5.'],
+   ['b','Sân nhà bậc 4; không bị Chó khóa.']])],
  [H('leo','Báo','🐆','Grừ!','Kẻ rình mồi','Đi chéo · ăn chéo bậc 6',[
-   ['g','Đi chéo 1 ô.'],
-   ['g','Khi ăn chéo: lên bậc 6, ăn được Hổ.'],
-   ['b','Không đi chéo vào hồ hoặc hang.']]),
+   ['g','Đi chéo 1 ô; ăn chéo lên bậc 6.'],
+   ['b','Không đi chéo vào hồ/hang.']]),
   H('croc','Cá sấu','🐊','Ngoạp!','Chúa đầm lầy','Lội hồ bậc 6 · bắt mồi',[
-   ['g','Dưới hồ: bậc 6.'],
-   ['g','Dưới nước, bắt quân bậc 1–4 trên bờ sát hồ mà không rời chỗ.'],
-   ['g','Chặn đường Hổ nhảy hồ như Chuột.'],
-   ['b','Không bắt mồi đang ẩn trong bụi/lau sậy.'],
-   ['g','Đứng trên bờ vẫn ăn được Chuột đang bơi.'],
-   ['b','Dưới hồ vẫn bị quân bằng hoặc cao bậc hơn tấn công.'],
-   ['b','Lên cạn: bậc 3.']])],
+   ['g','Dưới hồ bậc 6; bắt quân bậc 1–4 sát bờ.'],
+   ['b','Chặn Hổ nhảy hồ; lên cạn bậc 3.']])],
  [H('tig','Hổ','🐯','Grào!','Chúa vồ mồi','Nhảy hồ · đáp xuống bậc 7',[
-   ['g','Nhảy thẳng qua hồ; đáp xuống đạt bậc 7 và giữ đến khi Hổ tự đi tiếp.'],
-   ['b','Bị chặn bởi Chuột/Cá sấu địch trên đường nhảy.']]),
+   ['g','Nhảy qua hồ, đáp xuống đạt bậc 7.'],
+   ['b','Giữ bậc 7 đến khi Hổ tự đi; Chuột/Cá sấu chặn đường.']]),
   H('eagle','Đại bàng','🦅','Éc éc!','Chúa bầu trời','Bay qua hồ không bị chặn',[
    ['g','Bay qua hồ; Chuột/Cá sấu không chặn được.'],
    ['b','Đáp xuống bậc 6, không có bước thưởng.']])],
  [H('lio','Sư tử','🦁','Gầm!','Vua rừng xanh','Vồ xa 2 ô',[
-   ['g','Vồ quân cách đúng 2 ô thẳng; ô giữa trống, không rời chỗ.'],
-   ['b','Hồi chiêu 2 lượt; không nhảy hồ hay vồ quân trong bụi.']]),
+   ['g','Vồ quân cách 2 ô thẳng khi ô giữa trống.'],
+   ['b','Hồi chiêu 2 lượt; không vồ quân trong bụi/hồ.']]),
   H('bison','Bò rừng','🦬','Ùm bò!','Xe húc','Lao 2 ô · húc đẩy lùi quân địch',[
-   ['g','Lao thẳng 2 ô qua ô trống; có thể ăn quân bậc ≤ 7.'],
-   ['g','Húc quân không thể ăn bằng Lao (chủ yếu là Voi): đẩy lùi 1 ô và làm choáng 1 lượt. Rùa miễn nhiễm.'],
-   ['b','Lao hồi chiêu 1 lượt, Húc 2 lượt; hồi chiêu riêng. Không nhảy hồ/vồ xa; bị Chó khóa.']])],
+   ['g','Lao thẳng 2 ô; ăn quân bậc ≤ 7 (hồi 1 lượt).'],
+   ['b','Húc đẩy lùi, choáng 1 lượt (hồi 2; Rùa miễn nhiễm).']])],
  [H('ele','Voi','🐘','Pa-ôm!','Khối núi biết đi','Ăn mọi quân trừ Chuột',[
    ['g','Ăn mọi quân trừ Chuột.'],
-   ['g','Vào bẫy địch vẫn giữ bậc 4.'],
-   ['b','Chuột trên bờ ăn được Voi; Voi không ăn được Chuột.'],
-   ['b','Không đi qua cầu gỗ hẹp.']])]
-];
-var H_MON=H('mon','Khỉ','🐒','Khẹc khẹc!','Kẻ tinh nghịch','Đổi chỗ với quân kề bên',[
-   ['g','Đổi chỗ với 1 quân kề bên; quân vào bẫy chịu luật bẫy bình thường.'],
-   ['b','Không có bậc, không ăn được quân khác.'],
-   ['b','Hồi chiêu 1 lượt; không đổi quân dưới nước, vào hồ/hang. Bị Chó khóa.']]);
-var H_TUR=H('tur','Rùa','🐢','Rùa rùa!','Tường thành','Mai cứng · không thể bị ăn',[
-   ['g','Không thể bị ăn; miễn nhiễm Khỉ đổi chỗ và Bò rừng húc.'],
-   ['g','Chặn đường, giữ cửa hang hoặc mép hồ.'],
-   ['g','Đi 1 ô ngang/dọc như bình thường.'],
-   ['b','Không ăn quân, không vào hang/hồ.'],
-   ['b','Bên chỉ còn Rùa sẽ thua.']]);
-var EXTRAS=[null,H_MON,H_TUR];
+   ['b','Vào bẫy địch vẫn bậc 4; không qua cầu gỗ hẹp.']])]
+ ];
+ var H_MON=H('mon','Khỉ','🐒','Khẹc khẹc!','Kẻ tinh nghịch','Đổi chỗ với quân kề bên',[
+   ['g','Đổi chỗ với quân kề; không ăn quân khác.'],
+   ['b','Hồi chiêu 1 lượt; không đổi quân dưới nước/hồ/hang; bị Chó khóa.']]);
+ var H_TUR=H('tur','Rùa','🐢','Rùa rùa!','Tường thành','Mai cứng · không thể bị ăn',[
+   ['g','Không thể bị ăn, đổi chỗ hay húc.'],
+   ['b','Đi 1 ô ngang/dọc; bên chỉ còn Rùa sẽ thua.']]);
+ var EXTRAS=[null,H_MON,H_TUR];
 /* Cổ điển: không tuyệt kỹ */
 var CH=[null,
- H('rat','Chuột','🐭','Chít chít!','Thợ lặn','Bơi hồ · hạ được Voi',[['g','Lội xuống hồ, bơi giữa hồ.'],['g','Hạ được Voi khi đứng trên bờ.'],['b','Bậc thấp nhất, hầu hết quân đều ăn được.']]),
- H('cat','Mèo','🐱','Meo!','Dân leo trèo','Bậc 2',[['g','Ăn được Chuột.'],['b','Bậc 2, dễ bị quân mạnh hơn ăn.']]),
- H('wolf','Sói','🐺','Ú uuu!','Thủ lĩnh bầy','Bậc 3',[['g','Bậc 3, ăn được Mèo/Chuột.'],['b','Thua Chó và quân bậc cao hơn.']]),
- H('dog','Chó','🐶','Gâu gâu!','Cún canh hang','Bậc 4',[['g','Bậc 4, ăn được quân bậc 1–3.'],['b','Thua Báo, Hổ, Sư tử, Voi.']]),
- H('leo','Báo','🐆','Grừ!','Kẻ rình mồi','Bậc 5',[['g','Bậc 5, ăn quân bậc thấp hơn.'],['b','Thua Hổ, Sư tử, Voi.']]),
- H('tig','Hổ','🐯','Grào!','Chúa vồ mồi','Nhảy qua hồ',[['g','Nhảy qua hồ nếu không có Chuột chắn giữa.'],['b','Thua Sư tử và Voi.']]),
- H('lio','Sư tử','🦁','Gầm!','Vua rừng xanh','Nhảy qua hồ',[['g','Nhảy qua hồ như Hổ.'],['g','Ăn mọi quân trừ Voi.'],['b','Không ăn được Voi.']]),
- H('ele','Voi','🐘','Pa-ôm!','Khối núi biết đi','Mạnh nhất, sợ Chuột',[['g','Bậc cao nhất, ăn được mọi quân trừ Chuột.'],['b','Sợ Chuột: Chuột đứng trên bờ ăn được Voi.'],['b','Sa bẫy cũng mất hết sức mạnh như mọi quân khác.']])
+  H('rat','Chuột','🐭','Chít chít!','Thợ lặn','Bơi hồ · hạ Voi',[
+    ['g','Bơi hồ; trên bờ ăn được Voi.'],['b','Bậc 1, dễ bị ăn.']]),
+  H('cat','Mèo','🐱','Meo!','Dân leo trèo','Bậc 2',[
+    ['g','Bậc 2, ăn được Chuột.'],['b','Dễ bị quân bậc cao hơn ăn.']]),
+  H('wolf','Sói','🐺','Ú uuu!','Thủ lĩnh bầy','Bậc 3',[
+    ['g','Bậc 3, ăn Mèo/Chuột.'],['b','Thua Chó và quân bậc cao hơn.']]),
+  H('dog','Chó','🐶','Gâu gâu!','Cún canh hang','Bậc 4',[
+    ['g','Bậc 4, ăn quân bậc 1–3.'],['b','Thua Báo, Hổ, Sư tử, Voi.']]),
+  H('leo','Báo','🐆','Grừ!','Kẻ rình mồi','Bậc 5',[
+    ['g','Bậc 5, ăn quân bậc thấp hơn.'],['b','Thua Hổ, Sư tử, Voi.']]),
+  H('tig','Hổ','🐯','Grào!','Chúa vồ mồi','Nhảy qua hồ',[
+    ['g','Nhảy qua hồ theo hàng thẳng.'],['b','Không nhảy nếu có Chuột chắn đường.']]),
+  H('lio','Sư tử','🦁','Gầm!','Vua rừng xanh','Nhảy hồ · bậc 6',[
+    ['g','Nhảy qua hồ, ăn quân trừ Voi.'],['b','Không ăn được Voi.']]),
+  H('ele','Voi','🐘','Pa-ôm!','Khối núi biết đi','Mạnh nhất, sợ Chuột',[
+    ['g','Ăn mọi quân trừ Chuột.'],['b','Chuột trên bờ ăn được Voi.']])
 ];
+
 function hero(c){
   var r=c<0?-c:c;
   if(EN.isClassic()) return CH[r]||H_MON;
@@ -1920,14 +1976,14 @@ function rankWhy(code,i){
   var s=code>0?1:-1, K=HK[code+9], cl=EN.isClassic(), er;
   if(cl||i<0||TRAP[i]===-s) return '';
   er=effRank(cells,i);
-  if(K==='tig'&&cells[SL+(s>0?0:1)]===1) return 'bậc 7: giữ hiệu ứng sau cú nhảy tới khi chính Hổ di chuyển';
-  if(K==='wolf') return EN.hasMate(cells,i)?'bậc 4: có đồng đội (bậc ≥ 2) đứng kề':'bậc 3: đi lẻ, chưa có đồng đội kề';
-  if(K==='boar') return EN.nearWater(i)?'bậc 4: đứng kề hồ':'bậc 3: chưa kề hồ';
-  if(K==='dog') return EN.guarding(i,s)?'bậc 5: ở khu hang nhà (trong 2 ô quanh hang), khóa chiêu quân địch kề':'bậc 4: xa hang nhà';
-  if(K==='bear') return EN.advanced(i,s)?'bậc 5: đã vào sân địch':'bậc 4: chưa qua giữa bàn';
+  if(K==='tig'&&cells[SL+(s>0?0:1)]===1) return 'bậc 7 sau khi nhảy, đến khi Hổ tự đi';
+  if(K==='wolf') return EN.hasMate(cells,i)?'bậc 4 khi có đồng đội bậc ≥ 2 kề':'bậc 3 khi đi lẻ';
+  if(K==='boar') return EN.nearWater(i)?'bậc 4 khi sát hồ':'bậc 3 khi xa hồ';
+  if(K==='dog') return EN.guarding(i,s)?'bậc 5 trong vùng hang nhà, khóa chiêu địch kề':'bậc 4 ngoài vùng hang';
+  if(K==='bear') return EN.advanced(i,s)?'bậc 5 ở nửa sân địch':'bậc 4 ở sân nhà';
   if(K==='croc'){
     if(WATER[i]) return 'bậc 6: đang dưới hồ';
-    return er===6?'bậc 6: đang trong đầm lầy (lợi thế dưới nước)':'bậc 3: lên cạn nên tụt bậc';
+    return er===6?'bậc 6 trong đầm lầy':'bậc 3: lên cạn nên tụt bậc';
   }
   return '';
 }
@@ -1937,20 +1993,20 @@ function nowNote(code){
   if(i>=N||rk===9) return '';
   er=effRank(cells,i);
   if(TRAP[i]===-s){
-    if(rk===8&&!cl) return '<p class="now">Voi da dày: vào bẫy vẫn còn bậc 4.</p>';
-    return '<p class="now">Đang sa bẫy nên tạm mất hết sức mạnh.</p>';
+    if(rk===8&&!cl) return '<p class="now">Voi vào bẫy địch vẫn bậc 4.</p>';
+    return '<p class="now">Đang trong bẫy: mất sức mạnh.</p>';
   }
   if(!cl){
     var why=rankWhy(code,i);
     if(why) out+='<p class="now"><b>Bậc hiện tại '+er+'</b> (gốc '+nominal(code)+') · '+why+'.</p>';
-    if(K==='lio'&&cells[SL+2+a]>0) out+='<p class="now">Sư tử đang hồi chiêu, còn '+cells[SL+2+a]+' lượt chưa vồ được.</p>';
+    if(K==='lio'&&cells[SL+2+a]>0) out+='<p class="now">Vồ còn hồi chiêu: '+cells[SL+2+a]+' lượt.</p>';
     if(K==='bison'){
       var cdL=cells[SL+4+a], cdH=cells[SL+10+a];
-      if(cdL>0&&cdH>0) out+='<p class="now">Bò rừng đang hồi chiêu cả hai: lao còn '+cdL+' lượt, húc còn '+cdH+' lượt.</p>';
-      else if(cdL>0) out+='<p class="now">Lao đang hồi chiêu, còn '+cdL+' lượt. Húc vẫn dùng được.</p>';
-      else if(cdH>0) out+='<p class="now">Húc đang hồi chiêu, còn '+cdH+' lượt. Lao vẫn dùng được.</p>';
+      if(cdL>0&&cdH>0) out+='<p class="now">Hồi chiêu: Lao '+cdL+' lượt · Húc '+cdH+' lượt.</p>';
+      else if(cdL>0) out+='<p class="now">Lao hồi chiêu: '+cdL+' lượt; Húc sẵn sàng.</p>';
+      else if(cdH>0) out+='<p class="now">Húc hồi chiêu: '+cdH+' lượt; Lao sẵn sàng.</p>';
     }
-    if(cells[SL+12+a]===i+1) out+='<p class="now">💫 Đang choáng vì bị Bò rừng húc: không đi được trong lượt tới của phe này.</p>';
+    if(cells[SL+12+a]===i+1) out+='<p class="now">💫 Choáng: bỏ lượt đi kế tiếp.</p>';
   }
   return out;
 }
