@@ -140,14 +140,14 @@ function rankWhy(code,i){
   var s=code>0?1:-1, K=HK[code+9], cl=EN.isClassic(), er;
   if(cl||i<0||TRAP[i]===-s) return '';
   er=effRank(cells,i);
-  if(K==='tig'&&cells[SL+(s>0?0:1)]===1) return 'bậc 7: giữ hiệu ứng sau cú nhảy tới khi chính Hổ di chuyển';
-  if(K==='wolf') return EN.hasMate(cells,i)?'bậc 4: có đồng đội (bậc ≥ 2) đứng kề':'bậc 3: đi lẻ, chưa có đồng đội kề';
-  if(K==='boar') return EN.nearWater(i)?'bậc 4: đứng kề hồ':'bậc 3: chưa kề hồ';
-  if(K==='dog') return EN.guarding(i,s)?'bậc 5: ở khu hang nhà (trong 2 ô quanh hang), khóa chiêu quân địch kề':'bậc 4: xa hang nhà';
-  if(K==='bear') return EN.advanced(i,s)?'bậc 5: đã vào sân địch':'bậc 4: chưa qua giữa bàn';
+  if(K==='tig'&&cells[SL+(s>0?0:1)]===1) return 'bậc 7 sau khi nhảy, đến khi Hổ tự đi';
+  if(K==='wolf') return EN.hasMate(cells,i)?'bậc 4 khi có đồng đội bậc ≥ 2 kề':'bậc 3 khi đi lẻ';
+  if(K==='boar') return EN.nearWater(i)?'bậc 4 khi sát hồ':'bậc 3 khi xa hồ';
+  if(K==='dog') return EN.guarding(i,s)?'bậc 5 trong vùng hang nhà, khóa chiêu địch kề':'bậc 4 ngoài vùng hang';
+  if(K==='bear') return EN.advanced(i,s)?'bậc 5 ở nửa sân địch':'bậc 4 ở sân nhà';
   if(K==='croc'){
     if(WATER[i]) return 'bậc 6: đang dưới hồ';
-    return er===6?'bậc 6: đang trong đầm lầy (lợi thế dưới nước)':'bậc 3: lên cạn nên tụt bậc';
+    return er===6?'bậc 6 trong đầm lầy':'bậc 3: lên cạn nên tụt bậc';
   }
   return '';
 }
@@ -157,20 +157,20 @@ function nowNote(code){
   if(i>=N||rk===9) return '';
   er=effRank(cells,i);
   if(TRAP[i]===-s){
-    if(rk===8&&!cl) return '<p class="now">Voi da dày: vào bẫy vẫn còn bậc 4.</p>';
-    return '<p class="now">Đang sa bẫy nên tạm mất hết sức mạnh.</p>';
+    if(rk===8&&!cl) return '<p class="now">Voi vào bẫy địch vẫn bậc 4.</p>';
+    return '<p class="now">Đang trong bẫy: mất sức mạnh.</p>';
   }
   if(!cl){
     var why=rankWhy(code,i);
     if(why) out+='<p class="now"><b>Bậc hiện tại '+er+'</b> (gốc '+nominal(code)+') · '+why+'.</p>';
-    if(K==='lio'&&cells[SL+2+a]>0) out+='<p class="now">Sư tử đang hồi chiêu, còn '+cells[SL+2+a]+' lượt chưa vồ được.</p>';
+    if(K==='lio'&&cells[SL+2+a]>0) out+='<p class="now">Vồ còn hồi chiêu: '+cells[SL+2+a]+' lượt.</p>';
     if(K==='bison'){
       var cdL=cells[SL+4+a], cdH=cells[SL+10+a];
-      if(cdL>0&&cdH>0) out+='<p class="now">Bò rừng đang hồi chiêu cả hai: lao còn '+cdL+' lượt, húc còn '+cdH+' lượt.</p>';
-      else if(cdL>0) out+='<p class="now">Lao đang hồi chiêu, còn '+cdL+' lượt. Húc vẫn dùng được.</p>';
-      else if(cdH>0) out+='<p class="now">Húc đang hồi chiêu, còn '+cdH+' lượt. Lao vẫn dùng được.</p>';
+      if(cdL>0&&cdH>0) out+='<p class="now">Hồi chiêu: Lao '+cdL+' lượt · Húc '+cdH+' lượt.</p>';
+      else if(cdL>0) out+='<p class="now">Lao hồi chiêu: '+cdL+' lượt; Húc sẵn sàng.</p>';
+      else if(cdH>0) out+='<p class="now">Húc hồi chiêu: '+cdH+' lượt; Lao sẵn sàng.</p>';
     }
-    if(cells[SL+12+a]===i+1) out+='<p class="now">💫 Đang choáng vì bị Bò rừng húc: không đi được trong lượt tới của phe này.</p>';
+    if(cells[SL+12+a]===i+1) out+='<p class="now">💫 Choáng: bỏ lượt đi kế tiếp.</p>';
   }
   return out;
 }
