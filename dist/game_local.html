@@ -1,4 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box}body{margin:0;padding:0;font:14px -apple-system,sans-serif;background:#fff;color:#000}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body><title>Cờ Thú</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap">
 <style>
@@ -353,6 +354,64 @@ select.sel{width:100%;padding:8px;border-radius:12px;border:3px solid var(--edge
 .stunned .face{filter:grayscale(.85) brightness(.9)}
 .stunned::after{content:"💫";position:absolute;left:50%;top:-4px;transform:translateX(-50%);font-size:18px;pointer-events:none}
 .lake.swamp{opacity:.5}
+
+/* Mobile: prioritize the board, keep controls and animal details compact. */
+@media (max-width:900px){
+  body{padding-block:10px 28px;padding-left:max(6px,env(safe-area-inset-left,0px));padding-right:max(6px,env(safe-area-inset-right,0px));}
+  .app,.app.big{max-width:700px;gap:10px;}
+  .layout,.app.big .layout{grid-template-columns:minmax(0,1fr);gap:10px;width:100%;}
+  .play,.side{gap:8px;}
+  .frame{padding:6px;border-width:3px;border-radius:17px;}
+  .board{border-radius:9px;}
+  .status{gap:6px;}
+  .pill{padding:5px 9px;border-width:2px;font-size:13px;}
+  .bubble{flex:1 1 150px;padding:6px 9px;font-size:12px;border-radius:12px;}
+  .team{gap:6px;}
+  .team .who{min-width:auto;gap:4px;font-size:13px;}
+  .team .who small{font-size:11px;}
+  .strip{gap:2px;}
+  .mini{width:23px;height:23px;font-size:12px;border-width:1.5px;}
+  .oc{font-size:10.5px;padding:1px 6px;}
+  .card{padding:9px 10px;border-width:2px;border-radius:15px;gap:7px;}
+  .card h2,details.card summary{font-size:16px;}
+  .info{min-height:0;gap:7px;}
+  .info-head{gap:9px;}
+  .info-token{width:46px;height:46px;border-width:2px;font-size:25px;}
+  .info-token .rank{width:20px;height:20px;font-size:10px;}
+  .info h3{font-size:16px;}
+  .info h3 em{font-size:11px;margin-left:4px;}
+  .info small{font-size:11px;}
+  .info p{font-size:12px;line-height:1.3;}
+  .info .now{padding:4px 7px;}
+  .info-body{gap:7px;align-items:center;}
+  .traits{font-size:12px;line-height:1.25;gap:4px;flex:1 1 165px;}
+  .traits li{grid-template-columns:15px minmax(0,1fr);gap:5px;}
+  .traits li::before{width:15px;height:15px;font-size:11px;}
+  .mv{width:91px;gap:3px;}
+  .mvgrid{grid-template-columns:repeat(7,11px);grid-auto-rows:11px;gap:1px;padding:3px;border-width:1px;}
+  .mvgrid i.s::after,.mvgrid i.x::after,.mvgrid i.j::after{width:6px;height:6px;border-width:1px;}
+  .mvkey{font-size:9px;line-height:1.2;}
+  .row{gap:7px;padding:4px 6px;border-radius:11px;}
+  .row .mini{width:29px;height:29px;font-size:17px;}
+  .row b{font-size:13px;}
+  .row small{font-size:11px;}
+  .btns{gap:6px;}
+  .btn{padding:9px 11px;border-width:2px;font-size:13px;}
+  .seg{gap:4px;}
+  .seg label{padding:7px 4px;border-width:2px;font-size:12px;}
+  .field-label{font-size:11px;}
+  .mode-desc,.lvl-note{font-size:11.5px;}
+  .rules{font-size:12px;}
+  .ladder .mini{width:27px;height:27px;font-size:15px;}
+}
+@media (max-width:380px){
+  .team .mini{width:20px;height:20px;font-size:11px;}
+  .info-body{align-items:flex-start;}
+  .traits{flex-basis:145px;font-size:11.5px;}
+  .mv{width:83px;}
+  .mvgrid{grid-template-columns:repeat(7,10px);grid-auto-rows:10px;}
+}
+
 </style>
 
 
@@ -1220,80 +1279,80 @@ var engineSrc=makeEngine.toString();
 function H(k,n,e,s,ep,br,t){return {k:k,n:n,e:e,s:s,ep:ep,br:br,t:t};}
 var HEROES=[null,
  [H('rat','Chuột','🐭','Chít chít!','Thợ lặn','Bơi hồ · ăn Voi trên bờ',[
-   ['g','Bơi trong hồ, quân trên bờ không ăn được.'],
-   ['g','Đứng trên bờ ăn được Voi.'],
-   ['b','Bậc 1, dễ bị ăn. Cá sấu ăn được khi Chuột đang bơi.']])],
+   ['g','Bơi qua hồ; quân trên bờ không ăn được Chuột.'],
+   ['g','Trên bờ có thể ăn Voi.'],
+   ['b','Bậc 1, dễ bị ăn; Cá sấu ăn được Chuột đang bơi.']])],
  [H('cat','Mèo','🐱','Meo!','Dân leo trèo','Trèo qua 1 quân kề bên',[
-   ['g','Trèo qua 1 quân kề bên (của bất kỳ phe), đáp xuống ô thẳng ngay sau. Ô đáp trống hoặc có quân địch ăn được thì ăn.'],
-   ['b','Không trèo xuống hồ, vào hang, hay qua quân dưới nước.']]),
+   ['g','Nhảy qua 1 quân kề bên, đáp xuống ô ngay sau.'],
+   ['b','Không nhảy vào hồ/hang hoặc qua quân dưới nước.']]),
   H('fox','Cáo','🦊','Ăng ẳng!','Kẻ tinh quái','Nước rút 2 ô thẳng',[
-   ['g','Nước rút 2 ô thẳng: ô giữa trống, ô đáp trống hoặc có quân địch ăn được.'],
-   ['b','Không vào hang bằng nước rút. Bậc 2 mỏng manh.']])],
+   ['g','Lao thẳng 2 ô; ô giữa phải trống.'],
+   ['b','Không lao vào hang; bậc 2 dễ bị ăn.']])],
  [H('wolf','Sói','🐺','Ú uuu!','Thủ lĩnh bầy','Có đồng đội kề: bậc 4',[
-   ['g','Có đồng đội bậc ≥ 2 đứng kề bên thì lên bậc 4.'],
-   ['b','Đi lẻ chỉ bậc 3.']]),
+   ['g','Có đồng đội bậc ≥ 2 kề bên: lên bậc 4.'],
+   ['b','Đi một mình: bậc 3.']]),
   H('boar','Lợn rừng','🐗','Ụt ịt!','Kẻ húc đầu','Sát hồ: bậc 4',[
-   ['g','Đứng sát hồ (kề mép nước) thì lên bậc 4.'],
-   ['b','Rời hồ còn bậc 3.']])],
+   ['g','Đứng sát hồ: lên bậc 4.'],
+   ['b','Rời hồ: bậc 3.']])],
  [H('dog','Chó','🐶','Gâu gâu!','Cún canh hang','Khu hang nhà: bậc 5 · khóa chiêu',[
-   ['g','Trong khu hang nhà thì lên bậc 5.'],
-   ['g','Khi ở khu hang, quân địch kề bên chỉ được bước thường.'],
-   ['b','Ra khỏi khu hang: bậc 4 và hết khóa.']]),
+   ['g','Ở vùng hang nhà: lên bậc 5.'],
+   ['g','Khóa tuyệt kỹ của quân địch đứng kề.'],
+   ['b','Ra khỏi vùng hang: bậc 4, hết khóa.']]),
   H('bear','Gấu','🐻','Gừ gừ!','Kẻ xâm lược','Sân địch: bậc 5',[
-   ['g','Vào nửa sân địch thì lên bậc 5.'],
-   ['g','Không bị Chó khóa chiêu.'],
-   ['b','Ở nửa sân nhà bậc 4.']])],
+   ['g','Vào nửa sân địch: lên bậc 5.'],
+   ['g','Không bị Chó khóa tuyệt kỹ.'],
+   ['b','Ở nửa sân nhà: bậc 4.']])],
  [H('leo','Báo','🐆','Grừ!','Kẻ rình mồi','Đi chéo · ăn chéo bậc 6',[
-   ['g','Đi thêm 1 ô theo 4 đường chéo.'],
-   ['g','Khi ăn bằng nước đi chéo thì bậc 6 (ăn được Hổ).'],
-   ['b','Không đi chéo xuống hồ hay vào hang.']]),
+   ['g','Đi chéo 1 ô.'],
+   ['g','Khi ăn chéo: lên bậc 6, ăn được Hổ.'],
+   ['b','Không đi chéo vào hồ hoặc hang.']]),
   H('croc','Cá sấu','🐊','Ngoạp!','Chúa đầm lầy','Lội hồ bậc 6 · bắt mồi',[
-   ['g','Lội hồ, bậc 6 dưới nước.'],
-   ['g','Bắt mồi: khi đang dưới nước, ăn quân địch bậc 1-4 đứng trên bờ sát ô nước của mình, không rời chỗ. Không hồi chiêu.'],
-   ['g','Chặn Hổ nhảy hồ như Chuột.'],
-   ['b','Không rình được quân đang đứng trong bụi hoặc lau sậy.'],
-   ['g','Đứng trên bờ vẫn xuống hồ ăn được Chuột đang bơi.'],
-   ['b','Khi dưới hồ vẫn bị các quân bằng hoặc lớn bậc hơn tấn công.'],
-   ['b','Lên cạn còn bậc 3.']])],
+   ['g','Dưới hồ: bậc 6.'],
+   ['g','Dưới nước, bắt quân bậc 1–4 trên bờ sát hồ mà không rời chỗ.'],
+   ['g','Chặn đường Hổ nhảy hồ như Chuột.'],
+   ['b','Không bắt mồi đang ẩn trong bụi/lau sậy.'],
+   ['g','Đứng trên bờ vẫn ăn được Chuột đang bơi.'],
+   ['b','Dưới hồ vẫn bị quân bằng hoặc cao bậc hơn tấn công.'],
+   ['b','Lên cạn: bậc 3.']])],
  [H('tig','Hổ','🐯','Grào!','Chúa vồ mồi','Nhảy hồ · đáp xuống bậc 7',[
-   ['g','Nhảy qua hồ theo hàng thẳng đến bờ đối diện, đáp xuống bậc 7. Giữ bậc 7 cho đến khi chính Hổ di chuyển lần tiếp theo; di chuyển quân khác không làm mất hiệu ứng.'],
-   ['b','Bị chặn nếu có Chuột hoặc Cá sấu địch dưới nước trên đường nhảy.']]),
+   ['g','Nhảy thẳng qua hồ; đáp xuống đạt bậc 7 và giữ đến khi Hổ tự đi tiếp.'],
+   ['b','Bị chặn bởi Chuột/Cá sấu địch trên đường nhảy.']]),
   H('eagle','Đại bàng','🦅','Éc éc!','Chúa bầu trời','Bay qua hồ không bị chặn',[
-   ['g','Bay qua hồ theo hàng thẳng, Chuột hay Cá sấu không chặn được.'],
-   ['b','Đáp xuống vẫn bậc 6, không bonus.']])],
+   ['g','Bay qua hồ; Chuột/Cá sấu không chặn được.'],
+   ['b','Đáp xuống bậc 6, không có bước thưởng.']])],
  [H('lio','Sư tử','🦁','Gầm!','Vua rừng xanh','Vồ xa 2 ô',[
-   ['g','Vồ xa: ăn quân địch cách đúng 2 ô theo hàng thẳng (ô giữa trống, không phải mặt hồ), không rời chỗ.'],
-   ['b','Sau khi vồ, 2 lượt kế không vồ được. Không nhảy hồ. Không vồ được quân đang đứng trong bụi.']]),
+   ['g','Vồ quân cách đúng 2 ô thẳng; ô giữa trống, không rời chỗ.'],
+   ['b','Hồi chiêu 2 lượt; không nhảy hồ hay vồ quân trong bụi.']]),
   H('bison','Bò rừng','🦬','Ùm bò!','Xe húc','Lao 2 ô · húc đẩy lùi quân địch',[
-   ['g','Lao: đi thẳng 2 ô qua ô trống. Ô đáp trống hoặc có quân địch ăn được (bậc ≤ 7) thì ăn. Bậc vẫn 7 khi lao.'],
-   ['g','Húc: dành cho quân địch mà Bò rừng không ăn được bằng Lao (chủ yếu là Voi); quân ăn được thì phải Lao. Quân đó cách đúng 2 ô theo hàng thẳng, ô giữa trống, ô ngay sau nó phải trống. Bò rừng bước vào ô giữa và đẩy nó lùi 1 ô cùng hướng, không ăn quân. Quân bị húc choáng: không đi được trong lượt kế tiếp của phe nó (Bò rừng không bị choáng). Rơi vào bẫy phe Bò rừng thì mất bậc theo luật bẫy (Voi còn bậc 4). Không đẩy vào hang hay xuống hồ, Voi không bị đẩy lên cầu gỗ hẹp. Rùa miễn nhiễm.'],
-   ['b','Hai hồi chiêu riêng: lao xong lượt kế của phe mình chưa lao được; húc xong 2 lượt kế của phe mình chưa húc được. Đang hồi chiêu chiêu này thì vẫn dùng được chiêu kia. Không nhảy hồ, không vồ xa. Bị Chó khóa.']])],
+   ['g','Lao thẳng 2 ô qua ô trống; có thể ăn quân bậc ≤ 7.'],
+   ['g','Húc quân không thể ăn bằng Lao (chủ yếu là Voi): đẩy lùi 1 ô và làm choáng 1 lượt. Rùa miễn nhiễm.'],
+   ['b','Lao hồi chiêu 1 lượt, Húc 2 lượt; hồi chiêu riêng. Không nhảy hồ/vồ xa; bị Chó khóa.']])],
  [H('ele','Voi','🐘','Pa-ôm!','Khối núi biết đi','Ăn mọi quân trừ Chuột',[
-   ['g','Ăn được mọi quân trừ Chuột.'],
-   ['g','Da dày: vào bẫy địch chỉ còn bậc 4 (không về 0).'],
-   ['b','Chuột trên bờ ăn được Voi. Voi không ăn được Chuột.'],
-   ['b','Quá nặng: không bước lên cầu gỗ hẹp. Qua sông bằng bãi cạn ở giữa.']])]
+   ['g','Ăn mọi quân trừ Chuột.'],
+   ['g','Vào bẫy địch vẫn giữ bậc 4.'],
+   ['b','Chuột trên bờ ăn được Voi; Voi không ăn được Chuột.'],
+   ['b','Không đi qua cầu gỗ hẹp.']])]
 ];
 var H_MON=H('mon','Khỉ','🐒','Khẹc khẹc!','Kẻ tinh nghịch','Đổi chỗ với quân kề bên',[
-   ['g','Đổi chỗ: hoán đổi vị trí với 1 quân kề bên, đồng đội hay địch đều được. Quân bị đổi vào bẫy thì áp dụng luật bẫy bình thường (địch vào bẫy phe Khỉ về bậc 0, Voi còn 4).'],
-   ['b','Không có bậc: không ăn được ai, ai cũng ăn được Khỉ.'],
-   ['b','Hồi chiêu 1 lượt. Không đổi với quân dưới nước, không đổi vào hồ hay hang. Bị Chó khóa chiêu.']]);
+   ['g','Đổi chỗ với 1 quân kề bên; quân vào bẫy chịu luật bẫy bình thường.'],
+   ['b','Không có bậc, không ăn được quân khác.'],
+   ['b','Hồi chiêu 1 lượt; không đổi quân dưới nước, vào hồ/hang. Bị Chó khóa.']]);
 var H_TUR=H('tur','Rùa','🐢','Rùa rùa!','Tường thành','Mai cứng · không thể bị ăn',[
-   ['g','Mai cứng: không thể bị ăn, kể cả Chuột, kể cả khi đứng trong bẫy. Không bị Khỉ đổi chỗ hay Bò rừng húc.'],
-   ['g','Làm tường chặn đường, giữ chốt cửa hang hoặc mép hồ.'],
-   ['g','Rùa vẫn đi một ô ngang hoặc dọc như quân thông thường.'],
-   ['b','Không ăn được ai, không vào hang, không xuống hồ.'],
-   ['b','Nếu bên nào chỉ còn Rùa thì bên đó thua ngay, bất kể Rùa đang đứng ở đâu.']]);
+   ['g','Không thể bị ăn; miễn nhiễm Khỉ đổi chỗ và Bò rừng húc.'],
+   ['g','Chặn đường, giữ cửa hang hoặc mép hồ.'],
+   ['g','Đi 1 ô ngang/dọc như bình thường.'],
+   ['b','Không ăn quân, không vào hang/hồ.'],
+   ['b','Bên chỉ còn Rùa sẽ thua.']]);
 var EXTRAS=[null,H_MON,H_TUR];
 /* Cổ điển: không tuyệt kỹ */
 var CH=[null,
  H('rat','Chuột','🐭','Chít chít!','Thợ lặn','Bơi hồ · hạ được Voi',[['g','Lội xuống hồ, bơi giữa hồ.'],['g','Hạ được Voi khi đứng trên bờ.'],['b','Bậc thấp nhất, hầu hết quân đều ăn được.']]),
- H('cat','Mèo','🐱','Meo!','Dân leo trèo','Bậc 2',[['g','Nhỏ gọn, ăn được Chuột.'],['b','Chỉ có bậc 2, dễ bị mọi quân lớn hơn ăn.']]),
- H('wolf','Sói','🐺','Ú uuu!','Thủ lĩnh bầy','Bậc 3',[['g','Bậc 3, ăn được Mèo và Chuột.'],['b','Thua Chó và mọi quân phía trên.']]),
- H('dog','Chó','🐶','Gâu gâu!','Cún canh hang','Bậc 4',[['g','Bậc 4, ăn được Sói, Mèo và Chuột.'],['b','Thua Báo, Hổ, Sư tử và Voi.']]),
- H('leo','Báo','🐆','Grừ!','Kẻ rình mồi','Bậc 5',[['g','Bậc 5, ăn được Chó, Sói, Mèo và Chuột.'],['b','Thua Hổ, Sư tử và Voi.']]),
- H('tig','Hổ','🐯','Grào!','Chúa vồ mồi','Nhảy qua hồ',[['g','Nhảy qua hồ theo hàng ngang hoặc dọc, miễn không có Chuột chắn giữa.'],['b','Thua Sư tử và Voi.']]),
- H('lio','Sư tử','🦁','Gầm!','Vua rừng xanh','Nhảy qua hồ',[['g','Nhảy qua hồ như Hổ.'],['g','Ăn được mọi quân trừ Voi.'],['b','Thua Voi.']]),
+ H('cat','Mèo','🐱','Meo!','Dân leo trèo','Bậc 2',[['g','Ăn được Chuột.'],['b','Bậc 2, dễ bị quân mạnh hơn ăn.']]),
+ H('wolf','Sói','🐺','Ú uuu!','Thủ lĩnh bầy','Bậc 3',[['g','Bậc 3, ăn được Mèo/Chuột.'],['b','Thua Chó và quân bậc cao hơn.']]),
+ H('dog','Chó','🐶','Gâu gâu!','Cún canh hang','Bậc 4',[['g','Bậc 4, ăn được quân bậc 1–3.'],['b','Thua Báo, Hổ, Sư tử, Voi.']]),
+ H('leo','Báo','🐆','Grừ!','Kẻ rình mồi','Bậc 5',[['g','Bậc 5, ăn quân bậc thấp hơn.'],['b','Thua Hổ, Sư tử, Voi.']]),
+ H('tig','Hổ','🐯','Grào!','Chúa vồ mồi','Nhảy qua hồ',[['g','Nhảy qua hồ nếu không có Chuột chắn giữa.'],['b','Thua Sư tử và Voi.']]),
+ H('lio','Sư tử','🦁','Gầm!','Vua rừng xanh','Nhảy qua hồ',[['g','Nhảy qua hồ như Hổ.'],['g','Ăn mọi quân trừ Voi.'],['b','Không ăn được Voi.']]),
  H('ele','Voi','🐘','Pa-ôm!','Khối núi biết đi','Mạnh nhất, sợ Chuột',[['g','Bậc cao nhất, ăn được mọi quân trừ Chuột.'],['b','Sợ Chuột: Chuột đứng trên bờ ăn được Voi.'],['b','Sa bẫy cũng mất hết sức mạnh như mọi quân khác.']])
 ];
 function hero(c){
