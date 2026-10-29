@@ -36,7 +36,7 @@ function makeExperimentalEngine() {
     '  if(v*s>=0||isTur(v)||WATER[t2]||DEN[t2]||inW(cells,t2)) return false;',
     '  if(b<0||cells[b]!==0||WATER[b]||DEN[b]) return false;',
     '  k=HK[v+9];',
-    '  if(TERR&&MARSH[b]&&(k===\\'rat\\'||k===\\'croc\\')) return false;',
+    "  if(TERR&&MARSH[b]&&(k===\'rat\'||k===\'croc\')) return false;",
     '  return stepOK(cells,t2,b,0);',
     '}',
     ''
