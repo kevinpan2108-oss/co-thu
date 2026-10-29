@@ -31,6 +31,6 @@ node balance.js 2,3,4,5,6,7 8 100 501   # đổi phe, thống kê thắng/số n
 
 ## Luật chính (bản hiện tại)
 - Thắng: đưa quân vào hang địch, hoặc ăn hết quân chiến đấu của địch (chỉ còn Rùa là thua). Hết nước đi hoặc chỉ còn nước bị cấm do lặp thế = hòa.
-- Bản đồ: sông giữa bàn (cầu hẹp Voi không qua được, bãi cạn giữa), đầm lầy bên phải đi được, rừng bụi/đá bên trái. Hổ/Đại bàng chỉ nhảy qua nước thật; Cáo/Sư tử/Bò rừng không lao/vồ xuyên đầm lầy; quân trong đầm lầy miễn nhiễm Sư tử vồ và Cá sấu phục kích.
+- Bản đồ: sông giữa bàn (cầu hẹp Voi không qua được, bãi cạn giữa), đầm lầy bên phải đi được, rừng bụi/đá bên trái. Hổ/Đại bàng chỉ nhảy qua nước thật; Hổ giữ bậc 7 sau khi nhảy cho đến khi chính Hổ di chuyển lần tiếp theo; Cáo/Sư tử/Bò rừng không lao/vồ xuyên đầm lầy; quân trong đầm lầy miễn nhiễm Sư tử vồ và Cá sấu phục kích.
 - Tiền đồn (3,1) và (5,1): chiếm ô thì được đi thêm 1 ô thường trong cùng lượt (không ăn quân, không vào hang, không cộng dồn); sau khi nhận, phe đó hồi 2 lượt của mình; hai phe hồi riêng; bỏ qua thì không bị hồi.
 - Nước đi mã hóa: `from | to<<7 | kind<<14`, nước kép thêm `bf<<18 | bt<<25`. Ô trạng thái sau 81 ô: hổ, hồi chiêu Sư tử/Bò/Khỉ, hồi chiêu tiền đồn (`ST=10`).

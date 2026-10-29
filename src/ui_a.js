@@ -44,7 +44,7 @@ var HEROES=[null,
    ['b','Khi dưới hồ vẫn bị các quân bằng hoặc lớn bậc hơn tấn công.'],
    ['b','Lên cạn còn bậc 3.']])],
  [H('tig','Hổ','🐯','Grào!','Chúa vồ mồi','Nhảy hồ · đáp xuống bậc 7',[
-   ['g','Nhảy qua hồ theo hàng thẳng đến bờ đối diện, đáp xuống bậc 7 cho tới khi đi nước tiếp theo.'],
+   ['g','Nhảy qua hồ theo hàng thẳng đến bờ đối diện, đáp xuống bậc 7. Giữ bậc 7 cho đến khi chính Hổ di chuyển lần tiếp theo; di chuyển quân khác không làm mất hiệu ứng.'],
    ['b','Bị chặn nếu có Chuột hoặc Cá sấu địch dưới nước trên đường nhảy.']]),
   H('eagle','Đại bàng','🦅','Éc éc!','Chúa bầu trời','Bay qua hồ không bị chặn',[
    ['g','Bay qua hồ theo hàng thẳng, Chuột hay Cá sấu không chặn được.'],
