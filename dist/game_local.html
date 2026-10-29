@@ -1115,8 +1115,10 @@ var LEVELS={
 function toMove(m,score,d){ return {m:m,bf:(m>>18)&127,bt:(m>>25)&127,f:m&127,t:(m>>7)&127,k:(m>>14)&15,score:score,depth:d,nodes:nodes}; }
 /* recent: mang hash h1 cua cac the co da xuat hien (de may tranh lap lai). */
 function search(cells0,side,level,recent,ban){
-  var L=LEVELS[level]||LEVELS[3], cells=Int8Array.from(cells0), moves=genMoves(cells,side), k, m, f, t, kd, cap, v, d, best, bestScore, alpha, complete, scores, rep, i, rn;
+  var L=LEVELS[level]||LEVELS[3], cells=Int8Array.from(cells0), moves=genMoves(cells,side), k, m, f, t, kd, cap, v, d, best, bestScore, alpha, complete, scores, rep, i, rn, noiseMargin;
   sp=0; nodes=0; aborted=false; useQ=L.q; deadline=Date.now()+L.ms;
+  /* Keep root alpha-beta bounds wider than the full score jitter range. */
+  noiseMargin=L.noise?2*L.noise:2;
   if(ban&&ban.length) moves=moves.filter(function(x){return ban.indexOf(x)<0;});
   if(!moves.length) return null;
   for(k=0;k<moves.length;k++){ m=moves[k]; if(((m>>14)&15)===0&&DEN[(m>>7)&127]===-side) return toMove(m,WIN,0); }
@@ -1149,9 +1151,11 @@ function search(cells0,side,level,recent,ban){
       cap=makeM(cells,m);
       probe(cells,-side);
       if(side>0?NTF===0:NTP===0) v=WIN;
-      else v=-negamax(cells,-side,d-1,-Infinity,L.full?Infinity:-alpha,1);
+      else v=-negamax(cells,-side,d-1,-Infinity,L.full?Infinity:-(alpha-noiseMargin),1);
       unmakeM(cells,m,cap);
       if(aborted){complete=false;break;}
+      /* A fail-low bound cannot win after score jitter; don't rank it as exact. */
+      if(!L.full&&alpha>-Infinity&&v<=alpha-noiseMargin) continue;
       v-=rep[m]||0;
       v+=L.noise?(Math.random()-.5)*2*L.noise:Math.random()*2;
       if(v>curScore){curScore=v;curBest=m;}
