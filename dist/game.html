@@ -350,6 +350,8 @@ select.sel{width:100%;padding:8px;border-radius:12px;border:3px solid var(--edge
 .no-out .cell.outpost{opacity:0}
 .m.bp::before{content:"";position:absolute;inset:3px;border-radius:14px;border:3px solid #ffd23f;background:rgba(255,210,63,.28);animation:blink .9s ease-in-out infinite}
 #btn-skip{white-space:nowrap}
+.stunned .face{filter:grayscale(.85) brightness(.9)}
+.stunned::after{content:"💫";position:absolute;left:50%;top:-4px;transform:translateX(-50%);font-size:18px;pointer-events:none}
 .lake.swamp{opacity:.5}
 </style>
 
@@ -518,10 +520,11 @@ var WATER=new Uint8Array(N), TRAP=new Int8Array(N), DEN=new Int8Array(N), ROCK=n
     for(d=0;d<4;d++){ n=ADJ[k*4+d]; if(ROCK[k]||(n>=0&&ROCK[n])) ADJ[k*4+d]=-1; }
   }
 })();
-/* cells[0..N-1] la ban co. Cac o N..N+7 la trang thai:
-   N+a: Ho giu bac 7 sau cu nhay den khi chinh no di chuyen (a=0 ben duoi, 1 ben tren);
-   N+2+a: hoi chieu Su tu; N+4+a: hoi chieu Bo rung; N+6+a: hoi chieu Khi. */
-var SL=N, ST=10, OUTCD=2, BONUS=true;
+/* cells[0..N-1] la ban co. Cac o N..N+13 la trang thai:
+   N+a: Ho giu bac 7 den khi chinh Ho di chuyen; N+2+a: hoi chieu Su tu;
+   N+4+a: hoi chieu Lao Bo rung; N+6+a: hoi chieu Khi; N+8+a: tien don;
+   N+10+a: hoi chieu Huc Bo rung; N+12+a: vi tri+1 cua quan dang choang. */
+var SL=N, ST=14, OUTCD=2, BONUS=true;
 var CLASSIC=false, TERR=true;
 var HK=new Array(19).fill('');
 var SLOTKEYS=[null,['rat'],['cat','fox'],['wolf','boar'],['dog','bear'],['leo','croc'],['tig','eagle'],['lio','bison'],['ele'],['','mon','tur']];
@@ -620,11 +623,24 @@ function stepOK(cells,i,t,atk){
   return canCap(cells,i,t,atk||0);
 }
 
+/* Bo rung huc: chi day quan dich ma Lao khong an duoc, voi o sau hop le va trong. */
+function pushOK(cells,i,s,t2,b){
+  var v=cells[t2];
+  if(v*s>=0||isTur(v)||WATER[t2]||DEN[t2]||inW(cells,t2)) return false;
+  if(stepOK(cells,i,t2,0)) return false; /* muc tieu an duoc bang Lao thi chi dung Lao */
+  if(b<0||cells[b]!==0||WATER[b]||DEN[b]) return false;
+  var k=HK[v+9];
+  if(TERR&&MARSH[b]&&(k==='rat'||k==='croc')) return false;
+  return stepOK(cells,t2,b,0);
+}
+
 /* kind: 0 buoc, 1 nhay ho, 2 Meo treo, 3 Cao nuoc rut, 4 Bao di cheo, 5 Khi doi cho,
-   6 Ca sau bat moi (khong roi cho), 7 Su tu vo xa (khong roi cho), 8 Bo rung lao, 9 Bo rung huc Voi vao bay.
-   Nuoc di ma hoa: tu | den<<7 | kind<<14. Voi kind 6, 7: den la o nan nhan. Voi kind 9: den la o cua Voi bi huc (Bo rung buoc vao o giua, Voi bi day lui 1 o vao bay). */
+   6 Ca sau bat moi (khong roi cho), 7 Su tu vo xa (khong roi cho), 8 Bo rung Lao, 9 Bo rung Huc.
+   Kind 9 day quan dich lui 1 o; quan bi day choang trong luot tiep theo cua phe minh. */
 function movesFrom(cells,i,out){
   var code=cells[i]; if(code===0) return out;
+  /* Quan bi choang khong co nuoc di trong luot tiep theo cua phe no. */
+  if(cells[SL+12+(code>0?0:1)]===i+1) return out;
   var s=code>0?1:-1, a=s>0?0:1, K=HK[code+9], lock=CLASSIC?false:locked(cells,i);
   var d,t,t2,b,p,q,blocked,r,c,dr,dc,nr,nc,tc;
   for(d=0;d<4;d++){
@@ -668,18 +684,16 @@ function movesFrom(cells,i,out){
         if(t2>=0&&!WATER[t2]&&!DEN[t2]&&(!TERR||!(BUSH[t2]||MARSH[t2]))&&cells[t2]*s<0&&canCap(cells,i,t2,0)) out.push(i|(t2<<7)|(7<<14));
       }
     }else if(K==='bison'){
-      if(cells[SL+4+a]===0&&cells[t]===0&&!DEN[t]&&!BUSH[t]&&!MARSH[t]){
+      /* Lao va Huc co hoi chieu doc lap; Huc van dung khi Lao hoi chieu neu muc tieu hop le. */
+      if(cells[t]===0&&!DEN[t]&&!BUSH[t]&&!MARSH[t]){
         t2=ADJ[t*4+d];
         if(t2>=0&&!WATER[t2]&&!DEN[t2]){
-          if(stepOK(cells,i,t2,0)) out.push(i|(t2<<7)|(8<<14));
-          if(cells[t2]===-s*8){
-            b=ADJ[t2*4+d];
-            if(b>=0&&TRAP[b]===s&&cells[b]===0) out.push(i|(t2<<7)|(9<<14));
-          }
+          if(cells[SL+4+a]===0&&stepOK(cells,i,t2,0)) out.push(i|(t2<<7)|(8<<14));
+          if(cells[SL+10+a]===0&&pushOK(cells,i,s,t2,ADJ[t2*4+d])) out.push(i|(t2<<7)|(9<<14));
         }
       }
     }else if(K==='mon'){
-      if(cells[SL+6+a]===0&&cells[t]!==0&&!DEN[t]&&!DEN[i]&&!isTur(cells[t])&&!(TERR&&BRIDGE[i]&&HK[cells[t]+9]==='ele')) out.push(i|(t<<7)|(5<<14));
+      if(cells[SL+6+a]===0&&cells[t]!==0&&!DEN[t]&&!DEN[i]&&!isTur(cells[t])&&cells[SL+12+(cells[t]>0?0:1)]!==t+1&&!(TERR&&BRIDGE[i]&&HK[cells[t]+9]==='ele')) out.push(i|(t<<7)|(5<<14));
     }else if(K==='croc'){
       if(inW(cells,i)&&cells[t]*s<0&&!DEN[t]&&(!TERR||(!BUSH[t]&&!MARSH[t]))&&!isTur(cells[t])&&effRank(cells,t)<=4) out.push(i|(t<<7)|(6<<14));
     }
@@ -743,10 +757,12 @@ function make(cells,f,t,k,bonus){
   if(cells[SL+2+a]>0) cells[SL+2+a]--;
   if(cells[SL+4+a]>0) cells[SL+4+a]--;
   if(cells[SL+6+a]>0) cells[SL+6+a]--;
+  if(cells[SL+10+a]>0) cells[SL+10+a]--;
+  cells[SL+12+a]=0; /* het choang cua phe minh sau khi phe minh da di */
   if(k===5){ cap=cells[t]; cells[t]=c; cells[f]=cap; }
   else if(k===6){ cap=cells[t]; cells[t]=0; }
   else if(k===7){ cap=cells[t]; cells[t]=0; cells[SL+2+a]=2; }
-  else if(k===9){ e=(f+t)>>1; d=dirOf(f,e); b=ADJ[t*4+d]; cells[b]=cells[t]; cells[t]=0; cells[e]=c; cells[f]=0; cells[SL+4+a]=1; }
+  else if(k===9){ e=(f+t)>>1; d=dirOf(f,e); b=ADJ[t*4+d]; cells[b]=cells[t]; cells[t]=0; cells[e]=c; cells[f]=0; cells[SL+10+a]=2; cells[SL+12+(1-a)]=b+1; }
   else{
     cap=cells[t]; cells[t]=c; cells[f]=0;
     if(k===1&&HK[c+9]==='tig') cells[SL+a]=1;
@@ -825,7 +841,9 @@ function probe(cells,side){
     h1^=Z1[i*19+c+9]; h2^=Z2[i*19+c+9];
     if(!(c===9||c===-9)||HK[c+9]!=='tur'){ if(c>0) ntp++; else ntf++; }
   }
-  for(j=0;j<ST;j++){ v=cells[SL+j]&3; if(v){ h1^=ZS1[j*4+v]; h2^=ZS2[j*4+v]; } }
+  for(j=0;j<12;j++){ v=cells[SL+j]&3; if(v){ h1^=ZS1[j*4+v]; h2^=ZS2[j*4+v]; } }
+  /* SL+12/13 stores a square index + 1. */
+  for(j=12;j<ST;j++){ v=cells[SL+j]; if(v>0){ h1^=ZS1[j*4+1]^Z1[(v-1)*19+j]; h2^=ZS2[j*4+1]^Z2[(v-1)*19+j]; } }
   H1=h1; H2=h2; NTP=ntp; NTF=ntf;
 }
 
@@ -1246,10 +1264,10 @@ var HEROES=[null,
  [H('lio','Sư tử','🦁','Gầm!','Vua rừng xanh','Vồ xa 2 ô',[
    ['g','Vồ xa: ăn quân địch cách đúng 2 ô theo hàng thẳng (ô giữa trống, không phải mặt hồ), không rời chỗ.'],
    ['b','Sau khi vồ, 2 lượt kế không vồ được. Không nhảy hồ. Không vồ được quân đang đứng trong bụi.']]),
-  H('bison','Bò rừng','🦬','Ùm bò!','Xe húc','Lao 2 ô · húc Voi vào bẫy',[
+  H('bison','Bò rừng','🦬','Ùm bò!','Xe húc','Lao 2 ô · húc đẩy lùi quân địch',[
    ['g','Lao: đi thẳng 2 ô qua ô trống. Ô đáp trống hoặc có quân địch ăn được (bậc ≤ 7) thì ăn. Bậc vẫn 7 khi lao.'],
-   ['g','Húc Voi vào bẫy: Voi địch cách đúng 2 ô theo hàng thẳng, ô giữa trống, ô phía sau Voi là bẫy phe mình đang trống. Bò rừng bước vào ô giữa và đẩy Voi vào bẫy, Voi còn bậc 4. Tính là 1 nước, không đẩy vào hang hay xuống hồ.'],
-   ['b','Lao hoặc húc xong lượt kế không lao tiếp. Không nhảy hồ, không vồ xa. Bị Chó khóa.']])],
+   ['g','Húc: dành cho quân địch mà Bò rừng không ăn được bằng Lao (chủ yếu là Voi); quân ăn được thì phải Lao. Quân đó cách đúng 2 ô theo hàng thẳng, ô giữa trống, ô ngay sau nó phải trống. Bò rừng bước vào ô giữa và đẩy nó lùi 1 ô cùng hướng, không ăn quân. Quân bị húc choáng: không đi được trong lượt kế tiếp của phe nó (Bò rừng không bị choáng). Rơi vào bẫy phe Bò rừng thì mất bậc theo luật bẫy (Voi còn bậc 4). Không đẩy vào hang hay xuống hồ, Voi không bị đẩy lên cầu gỗ hẹp. Rùa miễn nhiễm.'],
+   ['b','Hai hồi chiêu riêng: lao xong lượt kế của phe mình chưa lao được; húc xong 2 lượt kế của phe mình chưa húc được. Đang hồi chiêu chiêu này thì vẫn dùng được chiêu kia. Không nhảy hồ, không vồ xa. Bị Chó khóa.']])],
  [H('ele','Voi','🐘','Pa-ôm!','Khối núi biết đi','Ăn mọi quân trừ Chuột',[
    ['g','Ăn được mọi quân trừ Chuột.'],
    ['g','Da dày: vào bẫy địch chỉ còn bậc 4 (không về 0).'],
@@ -1744,7 +1762,8 @@ function syncPieces(){
     el.classList.toggle('in-water',!!WATER[i2]);
     el.classList.toggle('sel',i2===selected);
     el.classList.toggle('charged',K==='tig'&&cells[SL+a]===1&&!EN.isClassic());
-    el.classList.toggle('cool',!EN.isClassic()&&((K==='lio'&&cells[SL+2+a]>0)||(K==='bison'&&cells[SL+4+a]>0)||(K==='mon'&&cells[SL+6+a]>0)));
+    el.classList.toggle('cool',!EN.isClassic()&&((K==='lio'&&cells[SL+2+a]>0)||(K==='bison'&&cells[SL+4+a]>0&&cells[SL+10+a]>0)||(K==='mon'&&cells[SL+6+a]>0)));
+    el.classList.toggle('stunned',!EN.isClassic()&&cells[SL+12+a]===i2+1);
   }
 }
 var bonusFrom={};
@@ -1824,7 +1843,7 @@ function diagram(K,rk,emo){
     if(K==='cat') two('trèo qua quân kề');
     else if(K==='fox') two('nước rút');
     else if(K==='lio') two('vồ xa');
-    else if(K==='bison') two('lao / húc');
+    else if(K==='bison') two('lao / húc đẩy lùi');
     else if(K==='leo'){[[-1,-1],[-1,1],[1,-1],[1,1]].forEach(function(d){map[d[0]+','+d[1]]='x';}); key+=' <span>★ đi chéo</span>';}
     else if(K==='mon'){dirs.forEach(function(d){map[d[0]+','+d[1]]='x';}); key+=' <span>⇄ đổi chỗ quân kề</span>';}
     else if(K==='croc') key+=' <span>🎯 bắt mồi ở bờ sát hồ</span>';
@@ -1866,7 +1885,13 @@ function nowNote(code){
     var why=rankWhy(code,i);
     if(why) out+='<p class="now"><b>Bậc hiện tại '+er+'</b> (gốc '+nominal(code)+') · '+why+'.</p>';
     if(K==='lio'&&cells[SL+2+a]>0) out+='<p class="now">Sư tử đang hồi chiêu, còn '+cells[SL+2+a]+' lượt chưa vồ được.</p>';
-    if(K==='bison'&&cells[SL+4+a]>0) out+='<p class="now">Bò rừng vừa lao, lượt này chưa lao hoặc húc được.</p>';
+    if(K==='bison'){
+      var cdL=cells[SL+4+a], cdH=cells[SL+10+a];
+      if(cdL>0&&cdH>0) out+='<p class="now">Bò rừng đang hồi chiêu cả hai: lao còn '+cdL+' lượt, húc còn '+cdH+' lượt.</p>';
+      else if(cdL>0) out+='<p class="now">Lao đang hồi chiêu, còn '+cdL+' lượt. Húc vẫn dùng được.</p>';
+      else if(cdH>0) out+='<p class="now">Húc đang hồi chiêu, còn '+cdH+' lượt. Lao vẫn dùng được.</p>';
+    }
+    if(cells[SL+12+a]===i+1) out+='<p class="now">💫 Đang choáng vì bị Bò rừng húc: không đi được trong lượt tới của phe này.</p>';
   }
   return out;
 }
@@ -1958,8 +1983,8 @@ function renderRules(){
     L.push('🚩 Tiền đồn (ô có cờ ở rìa trái): chiếm bằng bất kỳ nước đi nào thì được đi thêm 1 ô thường. Bước thưởng không ăn quân, không vào hang, bỏ qua cũng được. Nhận thưởng xong, phe đó hồi 2 lượt mới nhận lại được. Hai phe hồi riêng.');
     L.push('🌉 Cầu gỗ hẹp (hai bên rìa) không chịu nổi Voi. Voi chỉ qua sông bằng bãi cạn ở giữa bàn cờ.');
     L.push('Mỗi bậc 2 đến 7 có hai tướng để chọn, mỗi tướng một tuyệt kỹ. Chuột và Voi luôn có mặt. Mỗi bên có thể thêm 1 quân ngoài bậc: Khỉ, Rùa hoặc không dùng.');
-    L.push('Khi chọn quân, ★ là chiêu đặc biệt, ≈ nhảy hồ, ⇄ đổi chỗ, 🎯 vồ xa hoặc bắt mồi, 💢 húc Voi vào bẫy. Chạm vào ô Voi địch để húc.');
-    L.push('Số trên huy hiệu là bậc hiện tại. Xanh là đang được cộng bậc, hồng là đang bị trừ. ⚡ là Hổ đang giữ bậc 7 sau cú nhảy cho đến khi chính Hổ di chuyển; quân mờ là đang hồi chiêu.');
+    L.push('Khi chọn quân, ★ là chiêu đặc biệt, ≈ nhảy hồ, ⇄ đổi chỗ, 🎯 vồ xa hoặc bắt mồi, 💢 húc đẩy lùi quân địch ăn không được (Voi) và làm nó choáng 1 lượt. Chạm vào quân đó cách 2 ô để húc; quân ăn được thì dùng Lao.');
+    L.push('Số trên huy hiệu là bậc hiện tại. Xanh là đang được cộng bậc, hồng là đang bị trừ. ⚡ là Hổ đang giữ bậc 7 sau cú nhảy cho đến khi chính Hổ di chuyển; 💫 là quân bị Bò rừng húc choáng; quân mờ là đang hồi chiêu.');
   }
   L.push('🔁 Lặp thế: nước đi làm một thế cờ y hệt xuất hiện lần thứ 3 thì bị cấm, phải đổi nước khác. Hết nước hợp lệ thì ván hòa.');
   if(pvp()) L.push('Chế độ 2 người: hai người thay nhau chạm vào bàn cờ trên cùng một thiết bị. Người 1 ở phía dưới.');
@@ -1974,7 +1999,10 @@ function describe(f,t,code,tcode,k){
   if(k===5) return {emo:emo,text:snd+' '+who+' đổi chỗ với '+th+(tcode*s>0?'':' của '+foeName)+'.'};
   if(k===6) return {emo:emo,text:snd+' '+who+' '+(K==='croc'?'bắt mồi':'tấn công từ bờ')+', ăn '+th+' của '+foeName+' mà không rời chỗ.'};
   if(k===7) return {emo:emo,text:snd+' '+who+' vồ xa, ăn '+th+' của '+foeName+' mà không rời chỗ.'};
-  if(k===9) return {emo:emo,text:snd+' '+who+' húc '+th+' của '+foeName+' rơi thẳng vào bẫy!'};
+  if(k===9){
+    var mid9=(f+t)>>1, d9=0, b9; while(d9<3&&ADJ[f*4+d9]!==mid9) d9++; b9=ADJ[t*4+d9]; var trapped=b9>=0&&TRAP[b9]===s;
+    return {emo:emo,text:snd+' '+who+' húc '+th+' của '+foeName+' lùi 1 ô'+(trapped?' vào bẫy, mất bậc':'')+' và làm nó choáng: lượt tới không đi được!'};
+  }
   if(k===8) return tcode?{emo:emo,text:snd+' '+who+' lao tới ăn '+th+' của '+foeName+'.'}:{emo:emo,text:snd+' '+who+' lao thẳng 2 ô.'};
   if(tcode){
     var verb=k===1?'nhảy qua hồ và ăn':k===2?'trèo qua rồi ăn':k===3?'lao tới ăn':k===4?'phóng chéo ăn':'ăn';
