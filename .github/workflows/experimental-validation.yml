@@ -45,6 +45,11 @@ jobs:
           node tests/ai_tactics.js
           node tests/outpost_ai.js
 
+      - name: Run paired-seed Bison stun comparison
+        run: |
+          set -o pipefail
+          node tests/bison_stun_compare.js 20 20 2026102907 120 | tee bison-stun-simulation.json
+
       - name: Run paired-seed outpost simulation
         run: |
           set -o pipefail
@@ -76,4 +81,5 @@ jobs:
           path: |
             outpost-simulation.json
             croc-rank-simulation.json
+            bison-stun-simulation.json
           if-no-files-found: ignore
