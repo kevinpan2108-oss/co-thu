@@ -42,6 +42,7 @@ jobs:
           node tests/t16.js
           node tests/terrain.js
           node tests/ai.js
+          node tests/ai_tactics.js
           node tests/outpost_ai.js
 
       - name: Run paired-seed outpost simulation
