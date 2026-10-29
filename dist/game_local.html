@@ -519,8 +519,8 @@ var WATER=new Uint8Array(N), TRAP=new Int8Array(N), DEN=new Int8Array(N), ROCK=n
   }
 })();
 /* cells[0..N-1] la ban co. Cac o N..N+7 la trang thai:
-   N+a: Ho vua nhay (a=0 ben duoi, 1 ben tren); N+2+a: hoi chieu Su tu;
-   N+4+a: hoi chieu Bo rung; N+6+a: hoi chieu Khi. */
+   N+a: Ho giu bac 7 sau cu nhay den khi chinh no di chuyen (a=0 ben duoi, 1 ben tren);
+   N+2+a: hoi chieu Su tu; N+4+a: hoi chieu Bo rung; N+6+a: hoi chieu Khi. */
 var SL=N, ST=10, OUTCD=2, BONUS=true;
 var CLASSIC=false, TERR=true;
 var HK=new Array(19).fill('');
@@ -732,8 +732,13 @@ function make(cells,f,t,k,bonus){
   var c=cells[f], a=c>0?0:1, o=sp*ST, j, cap=0, d, e, b;
   for(j=0;j<ST;j++) stk[o+j]=cells[SL+j];
   sp++;
-  if(bonus){ cells[t]=c; cells[f]=0; return 0; }
-  cells[SL+a]=0;
+  if(bonus){
+    /* Buoc thuong van la mot nuoc di cua chinh quan di them; neu la Ho thi ket thuc hieu ung cu nhay. */
+    if(!CLASSIC&&HK[c+9]==='tig') cells[SL+a]=0;
+    cells[t]=c; cells[f]=0; return 0;
+  }
+  /* Hieu ung tang bac cua Ho chi het khi chinh Ho di; Co dien giu hanh vi cu. */
+  if(CLASSIC||HK[c+9]==='tig') cells[SL+a]=0;
   if(cells[SL+8+a]>0) cells[SL+8+a]--;
   if(cells[SL+2+a]>0) cells[SL+2+a]--;
   if(cells[SL+4+a]>0) cells[SL+4+a]--;
@@ -747,6 +752,8 @@ function make(cells,f,t,k,bonus){
     if(k===1&&HK[c+9]==='tig') cells[SL+a]=1;
     else if(k===8) cells[SL+4+a]=1;
   }
+  /* Neu Ho dang duoc tang bac bi an, xoa trang thai cua phe no. Doi cho bang Khi khong phai an quan. */
+  if(k!==5&&cap&&HK[cap+9]==='tig') cells[SL+(cap>0?0:1)]=0;
   return cap;
 }
 function unmake(cells,f,t,k,cap){
@@ -792,9 +799,11 @@ function bonusSteps(cells,s){
 }
 /* Di that buoc thuong: khong tru hoi chieu cua cac quan, bat dau hoi chieu tien don. */
 function commitBonus(cells,f,t){
-  var a=cells[f]>0?0:1;
+  var c=cells[f], a=c>0?0:1;
+  /* Buoc thuong tien don cung tinh la Ho da tu di chuyen. */
+  if(HK[c+9]==='tig') cells[SL+a]=0;
   if(OUTCD>0) cells[SL+8+a]=OUTCD;
-  cells[t]=cells[f]; cells[f]=0;
+  cells[t]=c; cells[f]=0;
 }
 /* Dung cho giao dien: di that, khong can unmake. */
 function commit(cells,f,t,k){ var s0=sp, cap=make(cells,f,t,k); sp=s0; return cap; }
@@ -1229,7 +1238,7 @@ var HEROES=[null,
    ['b','Khi dưới hồ vẫn bị các quân bằng hoặc lớn bậc hơn tấn công.'],
    ['b','Lên cạn còn bậc 3.']])],
  [H('tig','Hổ','🐯','Grào!','Chúa vồ mồi','Nhảy hồ · đáp xuống bậc 7',[
-   ['g','Nhảy qua hồ theo hàng thẳng đến bờ đối diện, đáp xuống bậc 7 cho tới khi đi nước tiếp theo.'],
+   ['g','Nhảy qua hồ theo hàng thẳng đến bờ đối diện, đáp xuống bậc 7. Giữ bậc 7 cho đến khi chính Hổ di chuyển lần tiếp theo; di chuyển quân khác không làm mất hiệu ứng.'],
    ['b','Bị chặn nếu có Chuột hoặc Cá sấu địch dưới nước trên đường nhảy.']]),
   H('eagle','Đại bàng','🦅','Éc éc!','Chúa bầu trời','Bay qua hồ không bị chặn',[
    ['g','Bay qua hồ theo hàng thẳng, Chuột hay Cá sấu không chặn được.'],
@@ -1833,6 +1842,7 @@ function rankWhy(code,i){
   var s=code>0?1:-1, K=HK[code+9], cl=EN.isClassic(), er;
   if(cl||i<0||TRAP[i]===-s) return '';
   er=effRank(cells,i);
+  if(K==='tig'&&cells[SL+(s>0?0:1)]===1) return 'bậc 7: giữ hiệu ứng sau cú nhảy tới khi chính Hổ di chuyển';
   if(K==='wolf') return EN.hasMate(cells,i)?'bậc 4: có đồng đội (bậc ≥ 2) đứng kề':'bậc 3: đi lẻ, chưa có đồng đội kề';
   if(K==='boar') return EN.nearWater(i)?'bậc 4: đứng kề hồ':'bậc 3: chưa kề hồ';
   if(K==='dog') return EN.guarding(i,s)?'bậc 5: ở khu hang nhà (trong 2 ô quanh hang), khóa chiêu quân địch kề':'bậc 4: xa hang nhà';
@@ -1855,7 +1865,6 @@ function nowNote(code){
   if(!cl){
     var why=rankWhy(code,i);
     if(why) out+='<p class="now"><b>Bậc hiện tại '+er+'</b> (gốc '+nominal(code)+') · '+why+'.</p>';
-    if(K==='tig'&&cells[SL+a]===1) out+='<p class="now">Bậc 7 sau cú nhảy, cho tới nước đi kế.</p>';
     if(K==='lio'&&cells[SL+2+a]>0) out+='<p class="now">Sư tử đang hồi chiêu, còn '+cells[SL+2+a]+' lượt chưa vồ được.</p>';
     if(K==='bison'&&cells[SL+4+a]>0) out+='<p class="now">Bò rừng vừa lao, lượt này chưa lao hoặc húc được.</p>';
   }
@@ -1950,7 +1959,7 @@ function renderRules(){
     L.push('🌉 Cầu gỗ hẹp (hai bên rìa) không chịu nổi Voi. Voi chỉ qua sông bằng bãi cạn ở giữa bàn cờ.');
     L.push('Mỗi bậc 2 đến 7 có hai tướng để chọn, mỗi tướng một tuyệt kỹ. Chuột và Voi luôn có mặt. Mỗi bên có thể thêm 1 quân ngoài bậc: Khỉ, Rùa hoặc không dùng.');
     L.push('Khi chọn quân, ★ là chiêu đặc biệt, ≈ nhảy hồ, ⇄ đổi chỗ, 🎯 vồ xa hoặc bắt mồi, 💢 húc Voi vào bẫy. Chạm vào ô Voi địch để húc.');
-    L.push('Số trên huy hiệu là bậc hiện tại. Xanh là đang được cộng bậc, hồng là đang bị trừ. ⚡ là Hổ vừa nhảy, quân mờ là đang hồi chiêu.');
+    L.push('Số trên huy hiệu là bậc hiện tại. Xanh là đang được cộng bậc, hồng là đang bị trừ. ⚡ là Hổ đang giữ bậc 7 sau cú nhảy cho đến khi chính Hổ di chuyển; quân mờ là đang hồi chiêu.');
   }
   L.push('🔁 Lặp thế: nước đi làm một thế cờ y hệt xuất hiện lần thứ 3 thì bị cấm, phải đổi nước khác. Hết nước hợp lệ thì ván hòa.');
   if(pvp()) L.push('Chế độ 2 người: hai người thay nhau chạm vào bàn cờ trên cùng một thiết bị. Người 1 ở phía dưới.');
