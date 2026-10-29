@@ -146,7 +146,7 @@ const plyCap = Math.max(1, +process.argv[5] || 120);
 E.LEVELS[3].ms = ms;
 E.setClassic(false);
 E.setAI(true);
-const {N,COLS,DEN,TRAP,SL} = E;
+const {N,ROWS,COLS,DEN,TRAP,SL} = E;
 const ZERO = [0,0,0,0,0,0,0,0,0,0];
 
 function rng(seed) {
