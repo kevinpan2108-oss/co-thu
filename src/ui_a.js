@@ -52,10 +52,10 @@ var HEROES=[null,
  [H('lio','Sư tử','🦁','Gầm!','Vua rừng xanh','Vồ xa 2 ô',[
    ['g','Vồ xa: ăn quân địch cách đúng 2 ô theo hàng thẳng (ô giữa trống, không phải mặt hồ), không rời chỗ.'],
    ['b','Sau khi vồ, 2 lượt kế không vồ được. Không nhảy hồ. Không vồ được quân đang đứng trong bụi.']]),
-  H('bison','Bò rừng','🦬','Ùm bò!','Xe húc','Lao 2 ô · húc Voi vào bẫy',[
+  H('bison','Bò rừng','🦬','Ùm bò!','Xe húc','Lao 2 ô · húc đẩy lùi quân địch',[
    ['g','Lao: đi thẳng 2 ô qua ô trống. Ô đáp trống hoặc có quân địch ăn được (bậc ≤ 7) thì ăn. Bậc vẫn 7 khi lao.'],
-   ['g','Húc Voi vào bẫy: Voi địch cách đúng 2 ô theo hàng thẳng, ô giữa trống, ô phía sau Voi là bẫy phe mình đang trống. Bò rừng bước vào ô giữa và đẩy Voi vào bẫy, Voi còn bậc 4. Tính là 1 nước, không đẩy vào hang hay xuống hồ.'],
-   ['b','Lao hoặc húc xong lượt kế không lao tiếp. Không nhảy hồ, không vồ xa. Bị Chó khóa.']])],
+   ['g','Húc: quân địch bất kỳ (trừ Rùa) cách đúng 2 ô theo hàng thẳng, ô giữa trống, ô ngay sau quân địch phải trống. Bò rừng bước vào ô giữa và đẩy quân địch lùi 1 ô cùng hướng. Húc không ăn quân, không cần bẫy; nếu quân bị đẩy rơi vào bẫy phe mình thì bị mất bậc theo luật bẫy (Voi còn bậc 4). Không đẩy vào hang hay xuống hồ, Voi không bị đẩy lên cầu gỗ hẹp, Chuột và Cá sấu không bị đẩy vào đầm lầy.'],
+   ['b','Hai hồi chiêu riêng: lao xong lượt kế của phe mình chưa lao được; húc xong 2 lượt kế của phe mình chưa húc được. Đang hồi chiêu chiêu này thì vẫn dùng được chiêu kia. Không nhảy hồ, không vồ xa. Bị Chó khóa.']])],
  [H('ele','Voi','🐘','Pa-ôm!','Khối núi biết đi','Ăn mọi quân trừ Chuột',[
    ['g','Ăn được mọi quân trừ Chuột.'],
    ['g','Da dày: vào bẫy địch chỉ còn bậc 4 (không về 0).'],
