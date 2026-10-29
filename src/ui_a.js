@@ -33,7 +33,7 @@ var HEROES=[null,
    ['b','Không đi chéo vào hồ/hang.']]),
   H('croc','Cá sấu','🐊','Ngoạp!','Chúa đầm lầy','Lội hồ bậc 6 · bắt mồi',[
    ['g','Dưới hồ bậc 6; bắt quân bậc 1–4 sát bờ.'],
-   ['b','Chặn Hổ nhảy hồ; lên cạn bậc 3.']])],
+   ['b','Chặn Hổ nhảy hồ; trên bờ ăn Chuột đang bơi.']])],
  [H('tig','Hổ','🐯','Grào!','Chúa vồ mồi','Nhảy hồ · đáp xuống bậc 7',[
    ['g','Nhảy qua hồ, đáp xuống đạt bậc 7.'],
    ['b','Giữ bậc 7 đến khi Hổ tự đi; Chuột/Cá sấu chặn đường.']]),
