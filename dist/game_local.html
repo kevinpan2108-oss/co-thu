@@ -1367,7 +1367,7 @@ var HEROES=[null,
    ['b','Không đi chéo vào hồ/hang.']]),
   H('croc','Cá sấu','🐊','Ngoạp!','Chúa đầm lầy','Lội hồ bậc 6 · bắt mồi',[
    ['g','Dưới hồ bậc 6; bắt quân bậc 1–4 sát bờ.'],
-   ['b','Chặn Hổ nhảy hồ; lên cạn bậc 3.']])],
+   ['b','Chặn Hổ nhảy hồ; trên bờ ăn Chuột đang bơi.']])],
  [H('tig','Hổ','🐯','Grào!','Chúa vồ mồi','Nhảy hồ · đáp xuống bậc 7',[
    ['g','Nhảy qua hồ, đáp xuống đạt bậc 7.'],
    ['b','Giữ bậc 7 đến khi Hổ tự đi; Chuột/Cá sấu chặn đường.']]),
@@ -1978,12 +1978,12 @@ function rankWhy(code,i){
   er=effRank(cells,i);
   if(K==='tig'&&cells[SL+(s>0?0:1)]===1) return 'bậc 7 sau khi nhảy, đến khi Hổ tự đi';
   if(K==='wolf') return EN.hasMate(cells,i)?'bậc 4 khi có đồng đội bậc ≥ 2 kề':'bậc 3 khi đi lẻ';
-  if(K==='boar') return EN.nearWater(i)?'bậc 4 khi sát hồ':'bậc 3 khi xa hồ';
-  if(K==='dog') return EN.guarding(i,s)?'bậc 5 trong vùng hang nhà, khóa chiêu địch kề':'bậc 4 ngoài vùng hang';
-  if(K==='bear') return EN.advanced(i,s)?'bậc 5 ở nửa sân địch':'bậc 4 ở sân nhà';
+  if(K==='boar') return EN.nearWater(i)?'bậc 4: kề hồ':'bậc 3: chưa kề hồ';
+  if(K==='dog') return EN.guarding(i,s)?'bậc 5: khu hang nhà, khóa chiêu địch kề':'bậc 4: xa hang nhà';
+  if(K==='bear') return EN.advanced(i,s)?'bậc 5: sân địch':'bậc 4: chưa qua giữa bàn';
   if(K==='croc'){
     if(WATER[i]) return 'bậc 6: đang dưới hồ';
-    return er===6?'bậc 6 trong đầm lầy':'bậc 3: lên cạn nên tụt bậc';
+    return er===6?'bậc 6: đầm lầy':'bậc 3: lên cạn';
   }
   return '';
 }
@@ -2003,8 +2003,8 @@ function nowNote(code){
     if(K==='bison'){
       var cdL=cells[SL+4+a], cdH=cells[SL+10+a];
       if(cdL>0&&cdH>0) out+='<p class="now">Hồi chiêu: Lao '+cdL+' lượt · Húc '+cdH+' lượt.</p>';
-      else if(cdL>0) out+='<p class="now">Lao hồi chiêu: '+cdL+' lượt; Húc sẵn sàng.</p>';
-      else if(cdH>0) out+='<p class="now">Húc hồi chiêu: '+cdH+' lượt; Lao sẵn sàng.</p>';
+      else if(cdL>0) out+='<p class="now">Lao đang hồi chiêu, còn '+cdL+' lượt. Húc vẫn dùng được.</p>';
+      else if(cdH>0) out+='<p class="now">Húc đang hồi chiêu, còn '+cdH+' lượt. Lao vẫn dùng được.</p>';
     }
     if(cells[SL+12+a]===i+1) out+='<p class="now">💫 Choáng: bỏ lượt đi kế tiếp.</p>';
   }
