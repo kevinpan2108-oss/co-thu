@@ -32,22 +32,22 @@ function hasLegal(side){
 var worker=null, workerBad=false, wId=0, wCb=null, wPending=null;
 function mkWorker(){
   try{
-    var src='(function(){var E=('+engineSrc+')();onmessage=function(ev){var d=ev.data;E.SQ[0]=d.sq0;E.SQ[1]=d.sq1;E.setClassic(d.classic);var r=E.search(new Int8Array(d.cells),d.side,d.level,d.recent,d.ban);postMessage({id:d.id,mv:r});};})();';
+    var src='(function(){var E=('+engineSrc+')();onmessage=function(ev){var d=ev.data;E.SQ[0]=d.sq0;E.SQ[1]=d.sq1;E.setClassic(d.classic);E.setAI(d.aiMask);var r=E.search(new Int8Array(d.cells),d.side,d.level,d.recent,d.ban);postMessage({id:d.id,mv:r});};})();';
     var w=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));
     w.onmessage=function(ev){ if(wCb&&ev.data.id===wId){var cb=wCb;wCb=null;wPending=null;cb(ev.data.mv);} };
     w.onerror=function(){
       workerBad=true; try{w.terminate();}catch(e){} worker=null;
-      if(wCb&&wPending){ var cb=wCb,p=wPending; wCb=null; wPending=null; setTimeout(function(){cb(EN.search(Int8Array.from(p.cells),p.side,p.level,p.recent,p.ban));},20); }
+      if(wCb&&wPending){ var cb=wCb,p=wPending; wCb=null; wPending=null; setTimeout(function(){EN.setAI(p.aiMask);cb(EN.search(Int8Array.from(p.cells),p.side,p.level,p.recent,p.ban));},20); }
     };
     return w;
   }catch(e){ workerBad=true; return null; }
 }
 function think(side,lv,done){
-  var id=++wId, payload={id:id,cells:Array.from(cells),side:side,level:lv,recent:posHist.slice(-14),ban:banList(side),sq0:SQ[0].slice(),sq1:SQ[1].slice(),classic:EN.isClassic()};
+  var id=++wId, payload={id:id,cells:Array.from(cells),side:side,level:lv,recent:posHist.slice(-14),ban:banList(side),sq0:SQ[0].slice(),sq1:SQ[1].slice(),classic:EN.isClassic(),aiMask:4};
   wCb=done; wPending=payload;
   if(!worker&&!workerBad) worker=mkWorker();
   if(worker){ try{ worker.postMessage(payload); return; }catch(e){ workerBad=true; worker=null; } }
-  setTimeout(function(){ if(wCb!==done) return; wCb=null; wPending=null; done(EN.search(Int8Array.from(cells),side,lv,posHist.slice(-14),payload.ban)); },30);
+  setTimeout(function(){ if(wCb!==done) return; wCb=null; wPending=null; EN.setAI(payload.aiMask); done(EN.search(Int8Array.from(cells),side,lv,posHist.slice(-14),payload.ban)); },30);
 }
 function cancelThink(){ wCb=null; wPending=null; wId++; if(worker){ try{worker.terminate();}catch(e){} worker=null; } }
 
