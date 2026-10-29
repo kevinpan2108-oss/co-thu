@@ -1,6 +1,6 @@
 
 /* ---------- Trang thai ---------- */
-var cells, turn=1, selected=-1, legal=[], legalKind={}, legalAlt={}, pickSkill=null, lastMove=null, history=[], over=false, thinking=false, token=0;
+var cells, turn=1, selected=-1, legal=[], legalKind={}, lastMove=null, history=[], over=false, thinking=false, token=0;
 var hint=null, hintTimer=0, boardFocused=false, inspectCode=0, previewRank=0, previewHero=null, counted=0, posHist=[], bonus=null;
 var level=Math.min(5,Math.max(1,+load('cothu:lv','3')||3));
 var oppKey=load('cothu:opp','ai')==='pvp'?'pvp':'ai';
@@ -42,6 +42,7 @@ function syncPieces(){
     el.classList.toggle('sel',i2===selected);
     el.classList.toggle('charged',K==='tig'&&cells[SL+a]===1&&!EN.isClassic());
     el.classList.toggle('cool',!EN.isClassic()&&((K==='lio'&&cells[SL+2+a]>0)||(K==='bison'&&cells[SL+4+a]>0&&cells[SL+10+a]>0)||(K==='mon'&&cells[SL+6+a]>0)));
+    el.classList.toggle('stunned',!EN.isClassic()&&cells[SL+12+a]===i2+1);
   }
 }
 var bonusFrom={};
@@ -56,7 +57,6 @@ function updateMarks(){
     if(hint&&(i===hint.f||i===hint.t)) cls+=' hint';
     if(legalSet[i]){
       lc=legalKind[i]||0; cls+=' legal';
-      if(legalAlt[i]!==undefined) cls+=' alt2';
       if(lc===5) cls+=' sw';
       else if(lc===9) cls+=' ps';
       else if(lc===6||lc===7) cls+=' cap rg';
@@ -170,6 +170,7 @@ function nowNote(code){
       else if(cdL>0) out+='<p class="now">Lao đang hồi chiêu, còn '+cdL+' lượt. Húc vẫn dùng được.</p>';
       else if(cdH>0) out+='<p class="now">Húc đang hồi chiêu, còn '+cdH+' lượt. Lao vẫn dùng được.</p>';
     }
+    if(cells[SL+12+a]===i+1) out+='<p class="now">💫 Đang choáng vì bị Bò rừng húc: không đi được trong lượt tới của phe này.</p>';
   }
   return out;
 }
@@ -211,7 +212,6 @@ function updateButtons(){
   $('btn-undo').disabled=thinking||!canUndo;
   $('btn-hint').disabled=thinking||over||!humanTurn()||!!bonus;
   $('btn-skip').hidden=!bonus||over;
-  $('pick-skill').hidden=!pickSkill||over||!!bonus;
   if(bonus) $('btn-skip').disabled=!bonus.skipOK;
 }
 function updateScore(){
@@ -262,7 +262,7 @@ function renderRules(){
     L.push('🚩 Tiền đồn (ô có cờ ở rìa trái): chiếm bằng bất kỳ nước đi nào thì được đi thêm 1 ô thường. Bước thưởng không ăn quân, không vào hang, bỏ qua cũng được. Nhận thưởng xong, phe đó hồi 2 lượt mới nhận lại được. Hai phe hồi riêng.');
     L.push('🌉 Cầu gỗ hẹp (hai bên rìa) không chịu nổi Voi. Voi chỉ qua sông bằng bãi cạn ở giữa bàn cờ.');
     L.push('Mỗi bậc 2 đến 7 có hai tướng để chọn, mỗi tướng một tuyệt kỹ. Chuột và Voi luôn có mặt. Mỗi bên có thể thêm 1 quân ngoài bậc: Khỉ, Rùa hoặc không dùng.');
-    L.push('Khi chọn quân, ★ là chiêu đặc biệt, ≈ nhảy hồ, ⇄ đổi chỗ, 🎯 vồ xa hoặc bắt mồi, 💢 húc đẩy lùi quân địch. Chạm vào quân địch cách 2 ô để húc; nếu cũng lao ăn được thì hiện hộp chọn Lao hoặc Húc.');
+    L.push('Khi chọn quân, ★ là chiêu đặc biệt, ≈ nhảy hồ, ⇄ đổi chỗ, 🎯 vồ xa hoặc bắt mồi, 💢 húc đẩy lùi quân địch ăn không được (Voi) và làm nó choáng 1 lượt. Chạm vào quân đó cách 2 ô để húc; quân ăn được thì dùng Lao.');
     L.push('Số trên huy hiệu là bậc hiện tại. Xanh là đang được cộng bậc, hồng là đang bị trừ. ⚡ là Hổ vừa nhảy, quân mờ là đang hồi chiêu.');
   }
   L.push('🔁 Lặp thế: nước đi làm một thế cờ y hệt xuất hiện lần thứ 3 thì bị cấm, phải đổi nước khác. Hết nước hợp lệ thì ván hòa.');
@@ -280,7 +280,7 @@ function describe(f,t,code,tcode,k){
   if(k===7) return {emo:emo,text:snd+' '+who+' vồ xa, ăn '+th+' của '+foeName+' mà không rời chỗ.'};
   if(k===9){
     var mid9=(f+t)>>1, d9=0, b9; while(d9<3&&ADJ[f*4+d9]!==mid9) d9++; b9=ADJ[t*4+d9]; var trapped=b9>=0&&TRAP[b9]===s;
-    return {emo:emo,text:snd+' '+who+' húc '+th+' của '+foeName+' lùi 1 ô'+(trapped?' vào bẫy, mất sức mạnh!':'.')};
+    return {emo:emo,text:snd+' '+who+' húc '+th+' của '+foeName+' lùi 1 ô'+(trapped?' vào bẫy, mất bậc':'')+' và làm nó choáng: lượt tới không đi được!'};
   }
   if(k===8) return tcode?{emo:emo,text:snd+' '+who+' lao tới ăn '+th+' của '+foeName+'.'}:{emo:emo,text:snd+' '+who+' lao thẳng 2 ô.'};
   if(tcode){

@@ -53,7 +53,7 @@ function cancelThink(){ wCb=null; wPending=null; wId++; if(worker){ try{worker.t
 
 /* ---------- Nuoc di ---------- */
 function clearHint(){hint=null;clearTimeout(hintTimer);}
-function deselect(){selected=-1;legal=[];legalKind={};legalAlt={};pickSkill=null;}
+function deselect(){selected=-1;legal=[];legalKind={};}
 function destOf(f,t,k){ return k===9?(f+t)>>1:(k===6||k===7?f:t); }
 
 function isHumanSide(s){ return pvp()||s===1; }
@@ -188,9 +188,9 @@ function scheduleAI(){
 
 /* ---------- Dieu khien nguoi choi ---------- */
 function select(i){
-  selected=i; legal=[]; legalKind={}; legalAlt={}; pickSkill=null;
+  selected=i; legal=[]; legalKind={};
   var nb=0;
-  movesFrom(cells,i,[]).forEach(function(m){var t=(m>>7)&127, k=(m>>14)&15; if(repBanned(i,t,k,cells[i]>0?1:-1)){nb++;return;} if(legalKind[t]!==undefined){ if(legalKind[t]!==k) legalAlt[t]=k; return; } legal.push(t); legalKind[t]=k;});
+  movesFrom(cells,i,[]).forEach(function(m){var t=(m>>7)&127, k=(m>>14)&15; if(repBanned(i,t,k,cells[i]>0?1:-1)){nb++;return;} legal.push(t); legalKind[t]=k;});
   if(nb) setBubble('🔁','Có nước bị cấm vì làm thế cờ lặp lần thứ 3. Hãy đổi nước khác.');
   inspectCode=cells[i]; previewRank=0; previewHero=null; sfx.select();
 }
@@ -211,9 +211,7 @@ function onCell(i){
     deselect(); inspectCode=code; refresh(); return;
   }
   if(humanTurn()){
-    if(selected>=0&&legal.indexOf(i)>=0){
-      if(legalAlt[i]!==undefined){ pickSkill={f:selected,t:i}; setBubble('🦬','Bò rừng: chọn Lao ăn hoặc Húc đẩy lùi quân địch này.'); refresh(); return; }
-      applyMove(selected,i,legalKind[i]); return; }
+    if(selected>=0&&legal.indexOf(i)>=0){ applyMove(selected,i,legalKind[i]); return; }
     if(code*turn>0){
       if(selected===i){deselect();inspectCode=0;}
       else select(i);
@@ -401,9 +399,6 @@ $('res-view').addEventListener('click',function(){resultEl.hidden=true;});
 $('btn-undo').addEventListener('click',undo);
 $('btn-hint').addEventListener('click',doHint);
 $('btn-skip').addEventListener('click',skipBonus);
-function doPick(k){ if(!pickSkill||over||!humanTurn()) return; var p=pickSkill; pickSkill=null; applyMove(p.f,p.t,k); }
-$('btn-lao').addEventListener('click',function(){doPick(8);});
-$('btn-huc').addEventListener('click',function(){doPick(9);});
 $('btn-sound').addEventListener('click',function(){
   soundOn=!soundOn; store('cothu:sound',soundOn?'1':'0');
   this.textContent='Âm thanh: '+(soundOn?'Bật':'Tắt'); this.setAttribute('aria-pressed',String(soundOn));
