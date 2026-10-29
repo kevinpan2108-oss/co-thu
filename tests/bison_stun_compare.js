@@ -276,4 +276,139 @@ out.interpretation={
   mixedCrossPlay:'A and B are assigned to opposite sides, then sides/start order are swapped for the paired game. Mode-specific wins are a head-to-head signal, not proof of universal balance.',
   caveat:'AI search is level 3 with a short time budget; treat small win-rate differences as directional. The benchmark only tests the stated stun rules under the same other experimental Huc/cooldown rules.'
 };
+
+/* Conditional experiment: force the same legal Huc in A and B, then let the AI play out.
+   This isolates what changes after Huc is actually used; standard opening games above rarely choose Huc.
+*/
+function freshConditionalStats() {
+  return {
+    games:0, bisonSideWins:0, targetSideWins:0, draws:0, totalPlies:0, avgPlies:0,
+    endReasons:{}, hucIntoBisonTrap:0, immediateDenThreatsPrevented:0,
+    targetBlockedAtOpponentTurn:0, bisonSelfStunApplied:0
+  };
+}
+function createHucScenario(layoutRng) {
+  E.setClassic(false);
+  E.SQ[0]=ZERO.slice(); E.SQ[1]=ZERO.slice();
+  E.SQ[0][7]=1; E.SQ[1][7]=1; E.setKeys();
+  const directions=[0,1,2,3];
+  const validExtra = i => i>=0 && !E.DEN[i] && !E.WATER[i] && !E.ROCK[i] &&
+    !E.BUSH[i] && !E.MARSH[i] && !E.TRAP[i] && !E.BRIDGE[i];
+  for(let attempt=0;attempt<2500;attempt++) {
+    const cells=new Int8Array(N+E.ST);
+    const bison=(1+Math.floor(layoutRng()*7))*COLS+Math.floor(layoutRng()*COLS);
+    if(!validExtra(bison)) continue;
+    const dirs=directions.slice().sort(()=>layoutRng()-.5);
+    let target=-1, middle=-1, behind=-1, foundDir=-1;
+    for(const d of dirs) {
+      const m=E.ADJ[bison*4+d];
+      const t=m<0?-1:E.ADJ[m*4+d];
+      const b=t<0?-1:E.ADJ[t*4+d];
+      if(m<0||t<0||b<0) continue;
+      if(!validExtra(m)||!validExtra(t)||E.DEN[b]||E.WATER[b]||E.ROCK[b]||E.BRIDGE[b]) continue;
+      if(E.TRAP[t]===1) continue; // Bison-side trap would make this Elephant capturable.
+      if(E.OUTPOST[m]) continue; // avoid conflating Huc with the bonus-step rule.
+      middle=m; target=t; behind=b; foundDir=d; break;
+    }
+    if(foundDir<0) continue;
+    cells[bison]=7; cells[target]=-8;
+    const used=new Set([bison,middle,target,behind]);
+    const plusRanks=[2,4,6], minusRanks=[1,3,5];
+    function placeExtra(side,ranks) {
+      for(const rank of ranks) {
+        let placed=false;
+        for(let k=0;k<300;k++) {
+          const i=Math.floor(layoutRng()*N);
+          if(used.has(i)||!validExtra(i)) continue;
+          cells[i]=rank*side; used.add(i); placed=true; break;
+        }
+        if(!placed) return false;
+      }
+      return true;
+    }
+    if(!placeExtra(1,plusRanks)||!placeExtra(-1,minusRanks)) continue;
+    const huc=E.genMoves(cells,1).find(m =>
+      (m&127)===bison && ((m>>7)&127)===target && ((m>>14)&15)===9 &&
+      (((m>>18)&127)===((m>>25)&127))
+    );
+    if(!huc) continue;
+    const mirror=new Int8Array(N+E.ST);
+    for(let i=0;i<N;i++) {
+      if(!cells[i]) continue;
+      const r=(i/COLS)|0, c=i%COLS, j=(ROWS-1-r)*COLS+c;
+      mirror[j]=-cells[i];
+    }
+    const mirrorBison=(ROWS-1-((bison/COLS)|0))*COLS+(bison%COLS);
+    const mirrorTarget=(ROWS-1-((target/COLS)|0))*COLS+(target%COLS);
+    const mirrorHuc=E.genMoves(mirror,-1).find(m =>
+      (m&127)===mirrorBison && ((m>>7)&127)===mirrorTarget && ((m>>14)&15)===9 &&
+      (((m>>18)&127)===((m>>25)&127))
+    );
+    if(!mirrorHuc) continue;
+    return {cells,huc,bison,target,behind,mirror,mirrorHuc,mirrorBison,mirrorTarget};
+  }
+  throw new Error('Could not build a Huc-legal scenario after 2500 attempts');
+}
+function playAfterForcedHuc(position, hucMove, hucSide, mode, seed, st) {
+  E.setClassic(false);
+  E.SQ[0]=ZERO.slice(); E.SQ[1]=ZERO.slice();
+  E.SQ[0][7]=1; E.SQ[1][7]=1; E.setKeys();
+  E.setBisonStunModes(mode,mode);
+  E.clearTT(); Math.random=rng(seed);
+  const cells=Int8Array.from(position);
+  const f=hucMove&127, t=(hucMove>>7)&127;
+  E.commitM(cells,hucMove);
+  const pushed=t+(t-f)/2;
+  if(TRAP[pushed]===hucSide) st.hucIntoBisonTrap++;
+  const targetSide=-hucSide;
+  if(immediateDenWinExists(cells,pushed,targetSide)) st.immediateDenThreatsPrevented++;
+  if(!E.genMoves(cells,targetSide).some(m=>(m&127)===pushed)) st.targetBlockedAtOpponentTurn++;
+  if(mode===2) {
+    const slot=SL+12+(hucSide>0?0:1);
+    if(cells[slot]===((f+t)>>1)+1) st.bisonSelfStunApplied++;
+  }
+  let side=-hucSide, plies=0, winner=0, reason='cap';
+  const history=[E.hashOf(cells,side)];
+  while(plies<plyCap) {
+    const moves=E.genMoves(cells,side);
+    if(!moves.length) { reason='stalemate'; break; }
+    const banned=moves.filter(m=>{
+      const k=(m>>14)&15,to=(m>>7)&127;
+      if(k===0&&DEN[to]===-side&&((m>>18)&127)===((m>>25)&127)) return false;
+      const next=Int8Array.from(cells); E.commitM(next,m);
+      const hash=E.hashOf(next,-side);
+      return history.filter(h=>h===hash).length>=2;
+    });
+    if(banned.length===moves.length) { reason='repeat'; break; }
+    const result=E.search(cells,side,3,history.slice(-14),banned);
+    if(!result) { reason='null'; break; }
+    E.commitM(cells,result.m);
+    if(result.k===0&&DEN[result.t]===-side&&result.bf===result.bt) {
+      winner=side; reason='den'; plies++; break;
+    }
+    const counts=E.counts(cells);
+    if((side>0&&counts[1]===0)||(side<0&&counts[0]===0)) {
+      winner=side; reason='wipe'; plies++; break;
+    }
+    side=-side; plies++; history.push(E.hashOf(cells,side));
+  }
+  st.games++; st.totalPlies+=plies; st.endReasons[reason]=(st.endReasons[reason]||0)+1;
+  if(winner===0) st.draws++;
+  else if(winner===hucSide) st.bisonSideWins++;
+  else st.targetSideWins++;
+}
+const conditional={scenarios:20,mode1:freshConditionalStats(),mode2:freshConditionalStats()};
+const layoutRng=rng(initialSeed ^ 0x7ac31b5d);
+for(let i=0;i<conditional.scenarios;i++) {
+  const sc=createHucScenario(layoutRng);
+  const seed=(initialSeed ^ Math.imul(i+1,0x85ebca6b))>>>0;
+  playAfterForcedHuc(sc.cells,sc.huc,1,1,seed,conditional.mode1);
+  playAfterForcedHuc(sc.cells,sc.huc,1,2,seed,conditional.mode2);
+  // Mirror the same tactical pattern to balance which side performs Huc and who moves first.
+  playAfterForcedHuc(sc.mirror,sc.mirrorHuc,-1,1,seed,conditional.mode1);
+  playAfterForcedHuc(sc.mirror,sc.mirrorHuc,-1,2,seed,conditional.mode2);
+}
+for(const st of [conditional.mode1,conditional.mode2]) st.avgPlies=st.games?+(st.totalPlies/st.games).toFixed(1):0;
+out.conditionalHuc=conditional;
+
 console.log(JSON.stringify(out));
