@@ -264,7 +264,7 @@ try {
     }
     // Head-to-head: rule A starts once and rule B starts once for each paired squad.
     play(squad,1,2,1,seedPlus,out.mixedCrossPlay);
-    play(squad,2,1,-1,seedMinus,out.mixedCrossPlay);
+    play(squad,2,1,1,seedPlus,out.mixedCrossPlay);
   }
 } finally {
   Math.random=originalRandom;
