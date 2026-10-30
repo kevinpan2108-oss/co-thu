@@ -520,4 +520,143 @@ select.sel{width:100%;padding:8px;border-radius:12px;border:3px solid var(--edge
 }
 
 
+
+/* ---------- Compact, consistent web-game UI ---------- */
+body{
+  padding-block:16px 36px;
+  padding-left:max(12px,env(safe-area-inset-left,0px));
+  padding-right:max(12px,env(safe-area-inset-right,0px));
+}
+.app,.app.big{width:100%;max-width:1220px;gap:14px}
+.top{align-items:center;gap:10px 18px;padding:0 2px}
+.brand{gap:4px}
+.logo{font-size:clamp(32px,5vw,48px);gap:4px}
+.logo span{border-width:2px;box-shadow:0 3px 0 var(--ink)}
+.tag{font-size:13px;line-height:1.25}
+.score{gap:6px;font-size:13px}
+.score span{padding:5px 11px;border:1.5px solid var(--edge);box-shadow:0 2px 7px rgba(16,38,58,.06)}
+.layout,.app.big .layout{width:100%;grid-template-columns:minmax(0,1fr) 322px;gap:18px;justify-content:stretch;align-items:start}
+.play,.side{gap:10px}
+.side{gap:10px}
+.status{gap:8px}
+.pill{padding:6px 11px;border-width:2px;box-shadow:0 2px 0 var(--pop);font-size:14px}
+.pill .dot{width:11px;height:11px}
+.bubble{padding:7px 11px;border:1.5px solid var(--edge);border-radius:13px;font-size:13px}
+.team{width:100%;display:flex;align-items:center;flex-wrap:nowrap;gap:8px}
+.team .who{flex:0 0 82px;min-width:82px;gap:4px;font-size:14px}
+.strip{flex:1 1 auto;min-width:0;flex-wrap:nowrap;gap:4px}
+.mini{width:27px;height:27px;font-size:14px;border-width:1.5px}
+.oc{flex:0 1 145px;max-width:145px;min-width:0;margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10.5px}
+.frame{padding:10px;border-width:3px;border-radius:21px;box-shadow:0 4px 0 var(--pop),0 10px 22px rgba(0,0,0,.16)}
+.frame::before{inset:4px;border-radius:16px}
+.board{border-radius:10px;box-shadow:0 0 0 2px var(--ink),inset 0 0 0 1px rgba(0,0,0,.35)}
+.card{border:1.5px solid var(--edge);border-radius:16px;padding:12px 13px;gap:9px;box-shadow:0 4px 14px rgba(16,38,58,.06)}
+.card h2,details.card summary{font-size:16px}
+.info{min-height:78px;gap:8px}
+.info-head{gap:10px}
+.info-token{width:54px;height:54px;font-size:29px;border-width:2px;box-shadow:0 2px 0 var(--ink),inset 0 -5px 0 rgba(0,0,0,.13)}
+.info h3{font-size:18px}
+.info p{font-size:13px;line-height:1.32}
+.seg label{border-width:1.5px;border-radius:10px}
+.seg input:checked + label{box-shadow:0 2px 0 var(--pop)}
+.btn{border-width:1.5px;border-radius:11px;padding:9px 13px;box-shadow:0 2px 0 var(--pop);font-size:14px}
+.btn:active{transform:translateY(2px);box-shadow:0 0 0 var(--pop)}
+.btn:disabled{box-shadow:0 2px 0 var(--pop)}
+.row{border-width:1.5px;border-radius:11px}
+details.card summary::after{font-size:20px}
+
+/* Online play remains in the same position and uses the same labels for both seats. */
+.online-card{margin:0;padding:13px 17px;border-width:1.5px;border-radius:17px;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:12px 22px;box-shadow:0 4px 14px rgba(16,38,58,.07)}
+.online-copy h2{font-size:21px}
+.online-controls{gap:6px}
+.online-entry .btn{min-width:104px}
+.online-actions .btn{font-size:12px;padding:7px 10px}
+.online-code{border:1.5px solid var(--edge);border-radius:10px;padding:9px 11px;box-shadow:inset 0 1px 2px rgba(16,38,58,.04)}
+.online-status{border-radius:10px;font-size:12px;min-height:32px;padding:7px 9px}
+
+/* During a live match show only the shared controls that both players can use. */
+.online-mode #opponent-setting,.online-mode #mode-setting,.online-mode #lvl-box,
+.online-mode #btn-new,.online-mode #btn-undo,.online-mode #btn-hint{display:none!important}
+.online-mode .game-settings{gap:7px;padding:10px 12px}
+.online-mode .game-settings h2{font-size:14px}
+.online-mode .game-toolbar{margin:0}
+.online-mode #btn-sound{width:100%}
+
+/* Only the board is mirrored for the second player. Page chrome stays upright. */
+.board{transition:transform .18s ease}
+.board.online-flipped{transform:rotate(180deg)}
+.board.online-flipped .emo,.board.online-flipped .rank{transform:rotate(180deg)}
+.board.online-flipped .result{transform:rotate(180deg)}
+
+@media(max-width:960px){
+  body{padding-block:10px 26px}
+  .app,.app.big{max-width:780px;gap:10px}
+  .layout,.app.big .layout{grid-template-columns:minmax(0,1fr);gap:10px}
+  .play,.side{gap:8px}
+  .online-card{grid-template-columns:minmax(0,1fr);gap:8px;padding:11px 13px}
+}
+@media(max-width:600px){
+  body{padding:5px 0 18px!important}
+  .app,.app.big{display:block;width:100%;max-width:none;margin:0;padding:0 4px}
+  .top{padding:0 3px;margin-bottom:7px;gap:5px 8px}
+  .logo{font-size:clamp(29px,8vw,38px);gap:3px}
+  .logo span{box-shadow:0 2px 0 var(--ink)}
+  .tag{font-size:10.5px;max-width:31ch}
+  .score{font-size:11px;gap:4px}
+  .score span{padding:3px 7px;border-radius:9px}
+  .online-card{margin:0 0 8px;padding:9px 10px;border-radius:13px;gap:7px}
+  .online-copy{gap:2px}
+  .online-kicker{font-size:9px}
+  .online-copy h2{font-size:17px}
+  .online-copy .mode-desc{font-size:10.5px;line-height:1.25}
+  .online-controls{gap:5px}
+  .online-entry{grid-template-columns:minmax(0,1fr) auto;gap:5px}
+  .online-entry .btn{min-width:82px;padding:8px 9px;font-size:12px}
+  .online-code{font-size:14px;padding:8px 9px;letter-spacing:.1em}
+  .online-actions{gap:4px}
+  .online-actions .btn{font-size:11px;padding:6px 8px}
+  .online-status{font-size:10px;line-height:1.25;min-height:28px;padding:5px 7px}
+  .layout,.app.big .layout{display:flex;flex-flow:column nowrap;gap:7px;margin:0}
+  .play,.side{display:grid;grid-template-columns:minmax(0,1fr);gap:5px}
+  .status{gap:5px}
+  .pill{font-size:11px;padding:4px 7px;gap:5px}
+  .bubble{font-size:10.5px;line-height:1.2;padding:5px 7px;gap:5px;border-radius:9px}
+  .team{gap:4px}
+  .team .who{flex:0 0 58px;min-width:58px;font-size:10px;gap:2px}
+  .team .who small{font-size:9px}
+  .strip{gap:2px}
+  .mini{width:clamp(17px,5vw,21px);height:clamp(17px,5vw,21px);font-size:11px;border-width:1px}
+  .oc{flex:0 1 102px;max-width:102px;font-size:8px;padding:1px 3px}
+  .frame{padding:4px;border-width:2px;border-radius:13px}
+  .frame::before{inset:3px;border-radius:9px}
+  .board{border-radius:7px;box-shadow:0 0 0 1.5px var(--ink)}
+  .card{padding:8px 9px;border-radius:11px;gap:6px}
+  .card h2,details.card summary{font-size:14px}
+  .info{gap:5px;min-height:0}
+  .info-head{gap:7px}
+  .info-token{width:36px;height:36px;font-size:20px}
+  .info-token .rank{width:16px;height:16px;font-size:8px}
+  .info h3{font-size:14px}
+  .info h3 em{font-size:9px}
+  .info small{font-size:9.5px}
+  .info p{font-size:10.5px;line-height:1.22}
+  .info-body{display:block}
+  .traits{font-size:10.5px;line-height:1.2;gap:3px}
+  .traits li:nth-child(n+3){display:none}
+  .mv{display:none}
+  .game-settings{gap:6px}
+  .btn{font-size:11px;padding:7px 9px}
+  .seg label{font-size:10.5px;padding:6px 4px}
+  .field-label{font-size:9.5px}
+  .mode-desc,.lvl-note{font-size:10px}
+  .online-mode .game-settings{padding:7px 8px}
+  .online-mode .game-settings h2{font-size:12px}
+}
+@media(max-width:370px){
+  .team .who{flex-basis:52px;min-width:52px;font-size:9px}
+  .team .mini{width:16px;height:16px;font-size:9px}
+  .oc{max-width:90px;font-size:7.5px}
+  .score{font-size:10px}
+}
+
 </style>
