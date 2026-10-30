@@ -16,7 +16,7 @@ const path = require('path');
     window.Peer=Peer;
   });
   await page.goto('file://'+path.join(__dirname,'..',process.env.DIST||'dist','game_local.html'));
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(250); await page.click('#menu-online'); await page.waitForTimeout(250);
   if(!(await page.evaluate(()=>!!window.__ONLINE_TEST__))) throw new Error('Online module was not included in the build');
   let ok=0,bad=0;
   const chk=(name,pass)=>{if(pass)ok++;else{bad++;console.log('FAIL',name);}};

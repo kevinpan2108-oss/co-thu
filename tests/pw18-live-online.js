@@ -24,7 +24,7 @@ const path = require('path');
   }
   const status=page=>page.locator('#online-status').textContent();
   try{
-    await Promise.all([host.goto(url),guest.goto(url)]);
+    await Promise.all([host.goto(url),guest.goto(url)]); await Promise.all([host.click('#menu-online'),guest.click('#menu-online')]);
     await Promise.all([host.waitForSelector('#online-create:enabled'),guest.waitForSelector('#online-join:enabled')]);
     await host.click('#online-create');
     await host.waitForFunction(()=>/đã sẵn sàng/i.test(document.querySelector('#online-status').textContent),null,{timeout:40000});

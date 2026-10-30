@@ -424,7 +424,7 @@ function updateMenuAudio(){
 }
 function showMainMenu(){
  $('main-menu').hidden=false;$('menu-modal').hidden=true;
- $('app').classList.add('menu-open');$('online-card').hidden=true;
+ $('app').classList.add('menu-open');$('app').classList.remove('online-lobby');$('online-card').hidden=true;
  document.body.style.overflow='hidden';
  $('home-hint').textContent='Chọn một chế độ để bắt đầu. Bạn có thể quay lại trang chủ bất cứ lúc nào.';
 }
@@ -434,13 +434,13 @@ function enterMenuMode(kind){
  try{
    if(kind==='online'){
      menu.hidden=true;app.classList.remove('menu-open');document.body.style.overflow='';
-     online.hidden=false;
+     online.hidden=false;app.classList.add('online-lobby');
      online.scrollIntoView({behavior:'smooth',block:'start'});
      hint.textContent='Đang mở khu vực chơi trực tuyến…';
      setTimeout(function(){var inp=$('online-room-code');if(inp)inp.focus();},350);
      return;
    }
-   online.hidden=true;
+   online.hidden=true;app.classList.remove('online-lobby');
    if(kind==='single'){
      applyOpp('ai');newGame();
      hint.textContent='Đang chuẩn bị trận đấu với máy…';
@@ -461,6 +461,7 @@ function enterMenuMode(kind){
    if(button)button.classList.remove('is-loading');
  }
 }
+$('online-back').addEventListener('click',showMainMenu);
 $('menu-single').addEventListener('click',function(){enterMenuMode('single');});
 $('menu-local').addEventListener('click',function(){enterMenuMode('local');});
 $('menu-online').addEventListener('click',function(){enterMenuMode('online');});
