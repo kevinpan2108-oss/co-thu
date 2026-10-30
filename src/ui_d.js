@@ -417,35 +417,53 @@ $('btn-sound').textContent='Âm thanh: '+(soundOn?'Bật':'Tắt');
 $('btn-sound').setAttribute('aria-pressed',String(soundOn));
 function updateMenuAudio(){
  var sm=$('menu-sound'),mm=$('menu-music');
- if(sm){sm.textContent=soundOn?'🔊':'🔇';sm.setAttribute('aria-pressed',String(soundOn));}
- if(mm){mm.textContent=musicOn?'♫':'♪';mm.setAttribute('aria-pressed',String(musicOn));}
+ if(sm){sm.setAttribute('aria-pressed',String(soundOn));sm.querySelector('.utility-icon').textContent=soundOn?'🔊':'🔇';sm.querySelector('.utility-label').textContent='Âm thanh '+(soundOn?'bật':'tắt');}
+ if(mm){mm.setAttribute('aria-pressed',String(musicOn));mm.querySelector('.utility-icon').textContent=musicOn?'♫':'♪';mm.querySelector('.utility-label').textContent='Nhạc nền '+(musicOn?'bật':'tắt');}
  $('btn-sound').textContent='Âm thanh: '+(soundOn?'Bật':'Tắt');
  $('btn-sound').setAttribute('aria-pressed',String(soundOn));
 }
 function showMainMenu(){
- $('main-menu').hidden=false;$('menu-modal').hidden=true;$('app').classList.add('menu-open');
- $('online-card').hidden=true;document.body.style.overflow='hidden';
+ $('main-menu').hidden=false;$('menu-modal').hidden=true;
+ $('app').classList.add('menu-open');$('online-card').hidden=true;
+ document.body.style.overflow='hidden';
+ $('home-hint').textContent='Chọn một chế độ để bắt đầu. Bạn có thể quay lại trang chủ bất cứ lúc nào.';
 }
 function enterMenuMode(kind){
+ var hint=$('home-hint');
+ if(kind==='online'){
+   $('main-menu').hidden=true;$('app').classList.remove('menu-open');document.body.style.overflow='';
+   $('online-card').hidden=false;
+   $('online-card').scrollIntoView({behavior:'smooth',block:'start'});
+   hint.textContent='Đang mở khu vực chơi trực tuyến…';
+   setTimeout(function(){var inp=$('online-room-code');if(inp)inp.focus({preventScroll:true});},350);
+   return;
+ }
  $('main-menu').hidden=true;$('app').classList.remove('menu-open');document.body.style.overflow='';
- $('online-card').hidden=kind!=='online';
- if(kind==='single'){applyOpp('ai');newGame();}
- else if(kind==='local'){applyOpp('pvp');newGame();}
- else if(kind==='online')$('online-card').scrollIntoView({behavior:'smooth',block:'start'});
+ $('online-card').hidden=true;
+ if(kind==='single'){
+   applyOpp('ai');newGame();
+   $('home-hint').textContent='Đang chuẩn bị trận đấu với máy…';
+ }else{
+   applyOpp('pvp');newGame();
+   $('home-hint').textContent='Đang chuẩn bị bàn đấu hai người…';
+ }
+ var target=$('draft').hidden?$('frame'):$('draft');
+ target.scrollIntoView({behavior:'smooth',block:'center'});
 }
-$('menu-single').addEventListener('click',function(){enterMenuMode('single');});
-$('menu-local').addEventListener('click',function(){enterMenuMode('local');});
-$('menu-online').addEventListener('click',function(){enterMenuMode('online');});
+$('menu-single').addEventListener('click',function(){this.classList.add('is-loading');enterMenuMode('single');});
+$('menu-local').addEventListener('click',function(){this.classList.add('is-loading');enterMenuMode('local');});
+$('menu-online').addEventListener('click',function(){this.classList.add('is-loading');enterMenuMode('online');});
 $('menu-sound').addEventListener('click',function(){soundOn=!soundOn;store('cothu:sound',soundOn?'1':'0');updateMenuAudio();if(soundOn)sfx.select();});
 $('menu-music').addEventListener('click',function(){setMusic(!musicOn);});
-$('menu-info').addEventListener('click',function(){$('menu-modal').hidden=false;});
+$('menu-info').addEventListener('click',function(){$('menu-modal').hidden=false;$('menu-modal-close').focus();});
 $('menu-modal-close').addEventListener('click',function(){$('menu-modal').hidden=true;});
 $('menu-modal').addEventListener('click',function(e){if(e.target===$('menu-modal'))$('menu-modal').hidden=true;});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('menu-modal').hidden)$('menu-modal').hidden=true;});
 $('menu-share').addEventListener('click',function(){
- var data={title:'Cờ Thú',text:'Cùng chơi Safari Chess – Cờ Thú nhé!',url:location.href};
- if(navigator.share)navigator.share(data).catch(function(){});
- else if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(location.href);
- else window.prompt('Sao chép liên kết game:',location.href);
+ var data={title:'Cờ Thú',text:'Cùng chơi Cờ Thú nhé!',url:location.href};
+ if(navigator.share){navigator.share(data).catch(function(){});}
+ else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(location.href).then(function(){$('home-hint').textContent='Đã sao chép liên kết game.';}).catch(function(){$('home-hint').textContent='Hãy sao chép liên kết trên thanh địa chỉ để chia sẻ.';});}
+ else{$('home-hint').textContent='Liên kết game: '+location.href;}
 });
 $('btn-menu').addEventListener('click',showMainMenu);
 updateMenuAudio();
