@@ -655,37 +655,62 @@ details.card summary::after{font-size:20px}
 
 
 
-/* Main menu: use the game's existing visual language; feature-focused, not a separate theme. */
-.main-menu{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;overflow:auto;padding:24px 16px;background:var(--page,var(--bg));color:var(--ink)}
+
+/* Cờ Thú home hub */
+.main-menu{position:fixed;inset:0;z-index:1000;overflow:auto;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 10% 0%,rgba(58,151,174,.18),transparent 40%),radial-gradient(ellipse at 100% 100%,rgba(91,157,111,.16),transparent 38%),var(--bg);color:var(--fg)}
 .main-menu[hidden]{display:none}
-.menu-sky,.menu-land{display:none}
-.menu-content{position:relative;width:min(100%,460px);display:flex;flex-direction:column;align-items:stretch;gap:16px;padding:clamp(22px,5vw,34px);border:1px solid var(--edge);border-radius:22px;background:var(--panel,var(--card));box-shadow:var(--shadow,0 12px 36px rgba(20,35,50,.14));text-align:center}
-.menu-mascots{display:none}
-.menu-logo{display:block;color:var(--ink);font:900 clamp(32px,8vw,46px)/1 var(--font-display);letter-spacing:0;text-shadow:none;-webkit-text-stroke:0;transform:none}
-.menu-logo span{display:inline}
-.menu-logo span:last-child{font-size:inherit}
-.menu-subtitle{margin:0;color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.08em;text-shadow:none}
-.menu-actions{width:100%;display:grid;gap:10px;margin:6px 0}
-.menu-btn{min-height:52px;border:1px solid var(--edge);border-radius:12px;padding:10px 16px;background:var(--surface,var(--panel));color:var(--ink);font:800 16px/1.2 var(--font-display);letter-spacing:0;text-shadow:none;box-shadow:0 2px 5px rgba(20,35,50,.07);cursor:pointer;transition:transform .12s,background .12s}
-.menu-btn:before,.menu-btn:after{content:none}
-.menu-btn.online{background:var(--accent,var(--brand));color:white;border-color:transparent}
-.menu-btn span{font-size:1em;margin-right:8px}
-.menu-btn:active,.menu-tool:active{transform:translateY(1px);filter:brightness(.97);box-shadow:none}
-.menu-tools{display:flex;justify-content:center;gap:10px;margin:0}
-.menu-tool{width:84px;height:44px;border:1px solid var(--edge);border-radius:10px;background:var(--surface,var(--panel));color:var(--ink);font:700 22px var(--font-display);text-shadow:none;box-shadow:none;cursor:pointer}
-.menu-tool[aria-pressed="false"]{opacity:.58}
-.menu-footer{display:flex;justify-content:center;gap:10px}
-.menu-footer button{width:42px;height:42px;border:1px solid var(--edge);border-radius:50%;background:var(--surface,var(--panel));color:var(--ink);font:700 21px var(--font-body);text-shadow:none;box-shadow:none;cursor:pointer}
-.menu-version{margin:0;color:var(--muted);font:700 10px var(--font-body);letter-spacing:.12em}
-.menu-modal{position:fixed;inset:0;z-index:1100;display:grid;place-items:center;padding:20px;background:rgba(13,34,48,.55)}
+.home-shell{width:min(100%,1040px);min-height:min(700px,calc(100dvh - 48px));display:flex;flex-direction:column;padding:clamp(22px,4vw,42px);border:1px solid var(--edge);border-radius:26px;background:var(--surface);box-shadow:0 24px 70px rgba(16,38,58,.16);position:relative;isolation:isolate}
+.home-shell:before{content:"";position:absolute;z-index:-1;right:-25px;top:95px;width:230px;height:230px;border:1px solid color-mix(in srgb,var(--fg) 10%,transparent);border-radius:50%;box-shadow:0 0 0 22px color-mix(in srgb,var(--fg) 3%,transparent),0 0 0 46px color-mix(in srgb,var(--fg) 2%,transparent);pointer-events:none}
+.home-topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--edge)}
+.home-brand{display:flex;align-items:center;gap:10px;font:900 18px var(--font-display);letter-spacing:.08em;color:var(--fg)}
+.home-brand-mark{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--fg);color:var(--surface);font-size:20px}
+.home-version{color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.14em}
+.home-main{flex:1;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(24px,5vw,64px);align-items:center;padding:clamp(26px,5vw,56px) 0}
+.home-intro{max-width:430px}
+.home-eyebrow{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:11px;font-weight:900;letter-spacing:.16em}
+.home-live-dot{width:8px;height:8px;border-radius:50%;background:#3aab83;box-shadow:0 0 0 4px rgba(58,171,131,.13)}
+.home-intro h1{margin:18px 0 14px;color:var(--fg);font:900 clamp(38px,5.6vw,64px)/.98 var(--font-display);letter-spacing:-.045em}
+.home-intro h1 span{color:#268b91}
+.home-lead{max-width:36ch;margin:0;color:var(--muted);font-size:15px;line-height:1.65}
+.home-stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.home-stats div{display:flex;align-items:center;gap:7px;padding:8px 10px;border:1px solid var(--edge);border-radius:10px;color:var(--muted);font-size:11px;font-weight:800}
+.home-stats b{color:var(--fg);font-size:15px}
+.home-quick{display:flex;flex-wrap:wrap;gap:8px;margin-top:30px}
+.home-utility{display:flex;align-items:center;gap:7px;min-height:38px;padding:7px 10px;border:1px solid var(--edge);border-radius:10px;background:transparent;color:var(--fg);font:700 11px var(--font-body);cursor:pointer;transition:background .15s,border-color .15s,transform .15s}
+.home-utility:hover{background:color-mix(in srgb,var(--fg) 5%,var(--surface));transform:translateY(-1px)}
+.home-utility[aria-pressed="false"]{color:var(--muted)}
+.utility-icon{font-size:16px}
+.home-modes{display:flex;flex-direction:column;gap:12px;padding:clamp(18px,3vw,28px);border:1px solid var(--edge);border-radius:20px;background:color-mix(in srgb,var(--bg) 45%,var(--surface));box-shadow:0 8px 24px rgba(16,38,58,.06)}
+.home-section-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.home-section-heading>div>span{color:#268b91;font-size:10px;font-weight:900;letter-spacing:.16em}
+.home-section-heading h2{margin:5px 0 0;color:var(--fg);font:900 clamp(19px,2.5vw,25px)/1.1 var(--font-display)}
+.home-paw{font-size:28px;opacity:.75}
+.mode-card{width:100%;display:flex;align-items:center;gap:14px;min-height:88px;padding:14px 16px;border:1px solid var(--edge);border-radius:15px;background:var(--surface);color:var(--fg);text-align:left;cursor:pointer;transition:transform .16s,border-color .16s,box-shadow .16s,background .16s}
+.mode-card:hover{transform:translateY(-2px);border-color:#268b91;box-shadow:0 8px 18px rgba(16,38,58,.09)}
+.mode-card:focus-visible,.home-utility:focus-visible{outline:3px solid #268b91;outline-offset:3px}
+.mode-card:active{transform:scale(.985)}
+.mode-card.featured{border-color:#268b91;background:linear-gradient(110deg,color-mix(in srgb,#268b91 12%,var(--surface)),var(--surface) 70%)}
+.mode-symbol{flex:0 0 46px;width:46px;height:46px;display:grid;place-items:center;border-radius:13px;background:color-mix(in srgb,var(--fg) 7%,var(--surface));font-size:22px}
+.online-symbol{background:rgba(38,139,145,.14);color:#268b91;font-size:28px}
+.local-symbol{font-size:18px;letter-spacing:-5px;padding-right:5px}
+.mode-copy{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.mode-copy b{font:900 16px var(--font-display)}
+.mode-copy small{color:var(--muted);font:600 11px/1.4 var(--font-body)}
+.mode-arrow{font-size:24px;color:var(--muted);transition:transform .16s,color .16s}
+.mode-card:hover .mode-arrow{transform:translateX(4px);color:#268b91}
+.home-hint{min-height:18px;margin:2px 0 0;color:var(--muted);font-size:11px;line-height:1.45}
+.home-footer{display:flex;justify-content:space-between;gap:10px;padding-top:16px;border-top:1px solid var(--edge);color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.08em}
+.menu-modal{position:fixed;inset:0;z-index:1100;display:grid;place-items:center;padding:20px;background:rgba(7,20,32,.62);backdrop-filter:blur(5px)}
 .menu-modal[hidden]{display:none}
-.menu-modal-card{position:relative;width:min(100%,420px);padding:24px;border:1px solid var(--edge);border-radius:18px;background:var(--panel,var(--card));color:var(--ink);box-shadow:var(--shadow,0 12px 36px rgba(0,0,0,.2));text-align:left}
-.menu-modal-card h2{margin:0 32px 10px 0;font:900 22px var(--font-display)}
-.menu-modal-card p,.menu-modal-card li{font-weight:500;line-height:1.5}
-.menu-modal-card ul{padding-left:22px}
-.menu-modal-close{position:absolute;right:12px;top:8px;border:0;background:transparent;color:var(--ink);font-size:28px;cursor:pointer}
+.menu-modal-card{position:relative;width:min(100%,460px);padding:28px;border:1px solid var(--edge);border-radius:20px;background:var(--surface);color:var(--fg);box-shadow:0 22px 60px rgba(0,0,0,.25);text-align:left}
+.menu-modal-card h2{margin:0 32px 12px 0;font:900 23px var(--font-display)}
+.menu-modal-card p,.menu-modal-card li{color:var(--muted);font-size:13px;line-height:1.6}
+.menu-modal-card ul{padding-left:21px}
+.menu-modal-close{position:absolute;right:13px;top:10px;width:34px;height:34px;border:0;border-radius:9px;background:transparent;color:var(--fg);font-size:26px;cursor:pointer}
 #btn-menu{margin-left:auto}
-@media(max-height:620px){.menu-content{gap:10px;padding:18px}.menu-actions{gap:7px}.menu-btn{min-height:44px}.menu-tool{height:40px}}
+@media(max-width:760px){.main-menu{padding:10px}.home-shell{min-height:calc(100dvh - 20px);padding:20px;border-radius:18px}.home-main{grid-template-columns:1fr;gap:22px;padding:24px 0}.home-intro{max-width:none}.home-intro h1{font-size:clamp(38px,10vw,52px);margin:12px 0}.home-lead{font-size:13px}.home-stats{margin-top:16px}.home-quick{margin-top:18px}.home-modes{padding:16px;gap:9px}.mode-card{min-height:74px;padding:11px 12px}.home-version{font-size:8px;text-align:right}.home-shell:before{width:130px;height:130px;right:-18px;top:90px}}
+@media(max-width:390px){.home-shell{padding:15px}.home-topbar{padding-bottom:12px}.home-version{max-width:125px;line-height:1.4}.home-stats div{font-size:10px;padding:6px 7px}.home-quick{gap:6px}.home-utility{font-size:10px;padding:6px 8px}.home-modes{padding:13px}.mode-copy b{font-size:14px}.mode-copy small{font-size:10px}.mode-symbol{flex-basis:40px;width:40px;height:40px}}
+@media(prefers-reduced-motion:reduce){.mode-card,.home-utility,.mode-arrow{transition:none}}
 
 </style>
 
@@ -834,35 +859,53 @@ details.card summary::after{font-size:20px}
   </div>
 </main>
 
-<section class="main-menu" id="main-menu" aria-label="Màn hình bắt đầu">
-  <div class="menu-sky" aria-hidden="true"></div>
-  <div class="menu-land" aria-hidden="true"></div>
-  <div class="menu-content">
-    <div class="menu-logo">CỜ THÚ</div>
-    <p class="menu-subtitle">CHỌN CÁCH BẠN MUỐN CHƠI</p>
-    <div class="menu-actions">
-      <button class="menu-btn" id="menu-single"><span>♟</span> SINGLE PLAY</button>
-      <button class="menu-btn online" id="menu-online"><span>🌐</span> PLAY ONLINE</button>
-      <button class="menu-btn" id="menu-local"><span>👥</span> LOCAL 2P</button>
+<section class="main-menu" id="main-menu" aria-label="Trang chủ Cờ Thú">
+  <div class="home-shell">
+    <header class="home-topbar">
+      <div class="home-brand"><span class="home-brand-mark">♟</span><span>CỜ THÚ</span></div>
+      <span class="home-version">CHIẾN THUẬT · PHIÊU LƯU · ĐỐI ĐẦU</span>
+    </header>
+    <div class="home-main">
+      <section class="home-intro">
+        <div class="home-eyebrow"><span class="home-live-dot"></span> SẴN SÀNG RA TRẬN</div>
+        <h1>Chào mừng<br/>đến với <span>Cờ Thú</span></h1>
+        <p class="home-lead">Chỉ huy đội quân muông thú, tận dụng địa hình và tuyệt kỹ để chiếm hang đối thủ.</p>
+        <div class="home-stats">
+          <div><b>♜</b><span>Chiến thuật</span></div>
+          <div><b>🐾</b><span>Nhiều đội hình</span></div>
+          <div><b>⚔</b><span>Đấu cùng bạn bè</span></div>
+        </div>
+        <div class="home-quick">
+          <button class="home-utility" id="menu-sound" type="button" aria-pressed="true"><span class="utility-icon">🔊</span><span class="utility-label">Âm thanh bật</span></button>
+          <button class="home-utility" id="menu-music" type="button" aria-pressed="false"><span class="utility-icon">♫</span><span class="utility-label">Nhạc nền tắt</span></button>
+          <button class="home-utility" id="menu-share" type="button"><span class="utility-icon">↗</span><span class="utility-label">Chia sẻ</span></button>
+          <button class="home-utility" id="menu-info" type="button"><span class="utility-icon">ⓘ</span><span class="utility-label">Giới thiệu</span></button>
+        </div>
+      </section>
+      <section class="home-modes" aria-label="Chọn chế độ chơi">
+        <div class="home-section-heading"><div><span>BẮT ĐẦU</span><h2>Bạn muốn chơi thế nào?</h2></div><span class="home-paw">🐾</span></div>
+        <button class="mode-card" id="menu-single" type="button">
+          <span class="mode-symbol single-symbol">♟</span><span class="mode-copy"><b>Đấu với máy</b><small>Chọn đội hình, cấp độ và thử thách AI</small></span><span class="mode-arrow">→</span>
+        </button>
+        <button class="mode-card featured" id="menu-online" type="button">
+          <span class="mode-symbol online-symbol">◎</span><span class="mode-copy"><b>Chơi trực tuyến</b><small>Tạo phòng hoặc nhập mã để đấu với bạn bè</small></span><span class="mode-arrow">→</span>
+        </button>
+        <button class="mode-card" id="menu-local" type="button">
+          <span class="mode-symbol local-symbol">♟♟</span><span class="mode-copy"><b>Hai người cùng máy</b><small>Luân phiên điều khiển trên một thiết bị</small></span><span class="mode-arrow">→</span>
+        </button>
+        <p class="home-hint" id="home-hint" role="status" aria-live="polite">Chọn một chế độ để bắt đầu. Bạn có thể quay lại trang chủ bất cứ lúc nào.</p>
+      </section>
     </div>
-    <div class="menu-tools">
-      <button class="menu-tool" id="menu-sound" type="button" aria-pressed="true" aria-label="Bật tắt hiệu ứng âm thanh">🔊</button>
-      <button class="menu-tool" id="menu-music" type="button" aria-pressed="false" aria-label="Bật tắt nhạc nền">♫</button>
-    </div>
-    <div class="menu-footer">
-      <button id="menu-share" type="button" aria-label="Chia sẻ game">↗</button>
-      <button id="menu-info" type="button" aria-label="Thông tin game">ⓘ</button>
-    </div>
-    <p class="menu-version">CỜ THÚ · CHIẾN THUẬT · GIẢI TRÍ</p>
+    <footer class="home-footer"><span>© CỜ THÚ</span><span>Chọn chiến thuật của bạn.</span></footer>
   </div>
 </section>
 <section class="menu-modal" id="menu-modal" hidden role="dialog" aria-modal="true" aria-labelledby="menu-modal-title">
   <div class="menu-modal-card">
     <button class="menu-modal-close" id="menu-modal-close" aria-label="Đóng">×</button>
-    <h2 id="menu-modal-title">THÔNG TIN CỜ THÚ</h2>
-    <p>Cờ Thú – cuộc đấu trí chiến thuật giữa các loài vật.</p>
-    <ul><li>Single Play: đấu với máy, chọn cấp độ và chế độ chơi.</li><li>Play Online: tạo phòng hoặc nhập mã để đấu với bạn bè qua Internet.</li><li>Local 2P: hai người chơi luân phiên trên cùng một thiết bị.</li></ul>
-    <p>Đưa quân vào hang đối phương hoặc ăn hết quân chiến đấu của đối thủ để giành chiến thắng.</p>
+    <h2 id="menu-modal-title">GIỚI THIỆU CỜ THÚ</h2>
+    <p>Cờ Thú là trò chơi chiến thuật nơi mỗi loài vật có thứ hạng, khả năng và vai trò riêng.</p>
+    <ul><li><b>Đấu với máy:</b> luyện tập với AI, chọn cấp độ và đội hình.</li><li><b>Chơi trực tuyến:</b> tạo phòng hoặc nhập mã phòng của bạn bè.</li><li><b>Hai người cùng máy:</b> thay phiên nhau điều khiển hai đội.</li></ul>
+    <p>Mục tiêu là đưa quân vào hang đối phương hoặc đánh bại toàn bộ quân chiến đấu của đối thủ.</p>
   </div>
 </section>
 \n<div id="confetti" aria-hidden="true"></div>
@@ -2860,35 +2903,53 @@ $('btn-sound').textContent='Âm thanh: '+(soundOn?'Bật':'Tắt');
 $('btn-sound').setAttribute('aria-pressed',String(soundOn));
 function updateMenuAudio(){
  var sm=$('menu-sound'),mm=$('menu-music');
- if(sm){sm.textContent=soundOn?'🔊':'🔇';sm.setAttribute('aria-pressed',String(soundOn));}
- if(mm){mm.textContent=musicOn?'♫':'♪';mm.setAttribute('aria-pressed',String(musicOn));}
+ if(sm){sm.setAttribute('aria-pressed',String(soundOn));sm.querySelector('.utility-icon').textContent=soundOn?'🔊':'🔇';sm.querySelector('.utility-label').textContent='Âm thanh '+(soundOn?'bật':'tắt');}
+ if(mm){mm.setAttribute('aria-pressed',String(musicOn));mm.querySelector('.utility-icon').textContent=musicOn?'♫':'♪';mm.querySelector('.utility-label').textContent='Nhạc nền '+(musicOn?'bật':'tắt');}
  $('btn-sound').textContent='Âm thanh: '+(soundOn?'Bật':'Tắt');
  $('btn-sound').setAttribute('aria-pressed',String(soundOn));
 }
 function showMainMenu(){
- $('main-menu').hidden=false;$('menu-modal').hidden=true;$('app').classList.add('menu-open');
- $('online-card').hidden=true;document.body.style.overflow='hidden';
+ $('main-menu').hidden=false;$('menu-modal').hidden=true;
+ $('app').classList.add('menu-open');$('online-card').hidden=true;
+ document.body.style.overflow='hidden';
+ $('home-hint').textContent='Chọn một chế độ để bắt đầu. Bạn có thể quay lại trang chủ bất cứ lúc nào.';
 }
 function enterMenuMode(kind){
+ var hint=$('home-hint');
+ if(kind==='online'){
+   $('main-menu').hidden=true;$('app').classList.remove('menu-open');document.body.style.overflow='';
+   $('online-card').hidden=false;
+   $('online-card').scrollIntoView({behavior:'smooth',block:'start'});
+   hint.textContent='Đang mở khu vực chơi trực tuyến…';
+   setTimeout(function(){var inp=$('online-room-code');if(inp)inp.focus({preventScroll:true});},350);
+   return;
+ }
  $('main-menu').hidden=true;$('app').classList.remove('menu-open');document.body.style.overflow='';
- $('online-card').hidden=kind!=='online';
- if(kind==='single'){applyOpp('ai');newGame();}
- else if(kind==='local'){applyOpp('pvp');newGame();}
- else if(kind==='online')$('online-card').scrollIntoView({behavior:'smooth',block:'start'});
+ $('online-card').hidden=true;
+ if(kind==='single'){
+   applyOpp('ai');newGame();
+   $('home-hint').textContent='Đang chuẩn bị trận đấu với máy…';
+ }else{
+   applyOpp('pvp');newGame();
+   $('home-hint').textContent='Đang chuẩn bị bàn đấu hai người…';
+ }
+ var target=$('draft').hidden?$('frame'):$('draft');
+ target.scrollIntoView({behavior:'smooth',block:'center'});
 }
-$('menu-single').addEventListener('click',function(){enterMenuMode('single');});
-$('menu-local').addEventListener('click',function(){enterMenuMode('local');});
-$('menu-online').addEventListener('click',function(){enterMenuMode('online');});
+$('menu-single').addEventListener('click',function(){this.classList.add('is-loading');enterMenuMode('single');});
+$('menu-local').addEventListener('click',function(){this.classList.add('is-loading');enterMenuMode('local');});
+$('menu-online').addEventListener('click',function(){this.classList.add('is-loading');enterMenuMode('online');});
 $('menu-sound').addEventListener('click',function(){soundOn=!soundOn;store('cothu:sound',soundOn?'1':'0');updateMenuAudio();if(soundOn)sfx.select();});
 $('menu-music').addEventListener('click',function(){setMusic(!musicOn);});
-$('menu-info').addEventListener('click',function(){$('menu-modal').hidden=false;});
+$('menu-info').addEventListener('click',function(){$('menu-modal').hidden=false;$('menu-modal-close').focus();});
 $('menu-modal-close').addEventListener('click',function(){$('menu-modal').hidden=true;});
 $('menu-modal').addEventListener('click',function(e){if(e.target===$('menu-modal'))$('menu-modal').hidden=true;});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('menu-modal').hidden)$('menu-modal').hidden=true;});
 $('menu-share').addEventListener('click',function(){
- var data={title:'Cờ Thú',text:'Cùng chơi Safari Chess – Cờ Thú nhé!',url:location.href};
- if(navigator.share)navigator.share(data).catch(function(){});
- else if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(location.href);
- else window.prompt('Sao chép liên kết game:',location.href);
+ var data={title:'Cờ Thú',text:'Cùng chơi Cờ Thú nhé!',url:location.href};
+ if(navigator.share){navigator.share(data).catch(function(){});}
+ else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(location.href).then(function(){$('home-hint').textContent='Đã sao chép liên kết game.';}).catch(function(){$('home-hint').textContent='Hãy sao chép liên kết trên thanh địa chỉ để chia sẻ.';});}
+ else{$('home-hint').textContent='Liên kết game: '+location.href;}
 });
 $('btn-menu').addEventListener('click',showMainMenu);
 updateMenuAudio();
