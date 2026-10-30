@@ -485,6 +485,40 @@ select.sel{width:100%;padding:8px;border-radius:12px;border:3px solid var(--edge
 .board.online-flipped{transform:rotate(180deg)}
 .board.online-flipped .emo,.board.online-flipped .rank{transform:rotate(180deg)}
 .board.online-flipped > .result{transform:rotate(180deg)}
+/* Online multiplayer: prominent room panel above the board */
+.online-card{
+  width:100%;margin:0 0 14px;padding:16px 20px;
+  display:grid;grid-template-columns:minmax(0,.9fr) minmax(360px,1.1fr);
+  align-items:center;gap:12px 24px;border-width:3px;
+}
+.online-copy{display:grid;gap:5px;min-width:0}
+.online-kicker{font-size:11px;font-weight:900;letter-spacing:.14em;color:var(--muted)}
+.online-copy h2{margin:0;font-size:22px;line-height:1.15}
+.online-copy .mode-desc{margin:0;max-width:48ch;font-size:13px;line-height:1.4}
+.online-controls{display:grid;gap:7px;min-width:0}
+.online-controls .field-label{margin:0}
+.online-entry{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:stretch}
+.online-entry .btn{min-width:116px}
+.online-actions{display:flex;flex-wrap:wrap;gap:7px}
+.online-actions .btn{font-size:13px;padding:8px 11px}
+.online-code{min-width:0;letter-spacing:.14em}
+.online-status{min-height:36px;display:flex;align-items:center}
+.online-status.good{color:#247a3e;background:rgba(95,208,104,.14)}
+.online-status.bad{color:#b4233d;background:rgba(255,77,109,.12)}
+@media(max-width:900px){
+  .online-card{grid-template-columns:minmax(0,1fr);gap:10px;padding:12px 14px;margin-bottom:9px}
+  .online-copy h2{font-size:20px}
+  .online-copy .mode-desc{font-size:12.5px}
+}
+@media(max-width:480px){
+  .online-entry{grid-template-columns:minmax(0,1fr) auto;gap:6px}
+  .online-entry .btn{min-width:92px;padding:8px 10px;font-size:13px}
+  .online-code{font-size:15px;padding:8px 9px;letter-spacing:.1em}
+  .online-actions{gap:5px}
+  .online-actions .btn{font-size:12px;padding:7px 9px}
+  .online-status{font-size:11.5px;min-height:32px}
+}
+
 
 </style>
 
@@ -509,6 +543,28 @@ select.sel{width:100%;padding:8px;border-radius:12px;border:3px solid var(--edge
     </div>
     <div class="score" aria-label="Điểm số"><span class="pv"><em id="sc1-l">Thắng</em> <b id="wins">0</b></span><span class="pv"><em id="sc2-l">Thua</em> <b id="losses">0</b></span></div>
   </header>
+
+      <section class="card online-card" id="online-card" aria-labelledby="online-title">
+        <div class="online-copy">
+          <span class="online-kicker">THÁCH ĐẤU BẠN BÈ</span>
+          <h2 id="online-title">Chơi online 2 người</h2>
+          <p class="mode-desc">Mỗi người mở game trên một thiết bị. Tạo phòng, chia sẻ mã và bắt đầu đấu trực tuyến.</p>
+        </div>
+        <div class="online-controls">
+          <label class="field-label" for="online-room-code">Mã phòng</label>
+          <div class="online-entry">
+            <input id="online-room-code" class="online-code" type="text" maxlength="8" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="NHẬP MÃ 8 KÝ TỰ" aria-label="Mã phòng">
+            <button class="btn" id="online-join" type="button">Vào phòng</button>
+          </div>
+          <div class="online-actions">
+            <button class="btn" id="online-create" type="button">＋ Tạo phòng mới</button>
+            <button class="btn alt" id="online-copy" type="button" hidden>Sao chép liên kết</button>
+            <button class="btn alt" id="online-rematch" type="button" hidden>Ván mới cho cả hai</button>
+            <button class="btn alt" id="online-leave" type="button" hidden>Thoát phòng</button>
+          </div>
+          <p class="online-status" id="online-status" role="status" aria-live="polite">Sẵn sàng. Tạo phòng mới hoặc nhập mã bạn bè gửi cho bạn.</p>
+        </div>
+      </section>
 
   <div class="layout">
     <section class="play" aria-label="Bàn cờ">
@@ -593,23 +649,6 @@ select.sel{width:100%;padding:8px;border-radius:12px;border:3px solid var(--edge
           <button class="btn alt" id="btn-undo" type="button">Đi lại</button>
           <button class="btn alt" id="btn-hint" type="button">Gợi ý</button>
           <button class="btn alt" id="btn-sound" type="button" aria-pressed="true">Âm thanh: Bật</button>
-        </div>
-      </div>
-
-      <div class="card" id="online-card">
-        <h2>Chơi online 2 người</h2>
-        <p class="mode-desc">Tạo phòng rồi gửi mã cho bạn, hoặc nhập mã phòng để tham gia. Mỗi người chơi trên một thiết bị riêng.</p>
-        <div class="field-label">Mã phòng</div>
-        <input id="online-room-code" class="online-code" type="text" maxlength="8" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="NHẬP 8 KÝ TỰ">
-        <div class="btns">
-          <button class="btn" id="online-create" type="button">Tạo phòng</button>
-          <button class="btn alt" id="online-join" type="button">Vào phòng</button>
-        </div>
-        <p class="online-status" id="online-status" role="status" aria-live="polite">Chưa kết nối. Tạo phòng hoặc nhập mã phòng để chơi.</p>
-        <div class="btns">
-          <button class="btn alt" id="online-copy" type="button" hidden>Sao chép liên kết</button>
-          <button class="btn alt" id="online-rematch" type="button" hidden>Ván mới cho cả hai</button>
-          <button class="btn alt" id="online-leave" type="button" hidden>Thoát phòng</button>
         </div>
       </div>
 
@@ -2708,6 +2747,49 @@ function onlineLoadPeer(done){
   }
   next();
 }
+function onlinePeerOptions(){
+  return {
+    host:'0.peerjs.com', port:443, path:'/', secure:true, debug:2,
+    config:{
+      iceServers:[
+        {urls:'stun:stun.l.google.com:19302'},
+        {urls:['turn:eu-0.turn.peerjs.com:3478'],username:'peerjs',credential:'peerjsp'},
+        {urls:['turn:us-0.turn.peerjs.com:3478'],username:'peerjs',credential:'peerjsp'}
+      ],
+      sdpSemantics:'unified-plan'
+    }
+  };
+}
+function onlineNewPeer(id){
+  var opts=onlinePeerOptions();
+  return id?new window.Peer(id,opts):new window.Peer(opts);
+}
+function onlinePeerErrorText(e,role){
+  var type=e&&e.type?e.type:'unknown';
+  var specific={
+    'unavailable-id':'Mã phòng bị trùng. Hãy thoát và tạo phòng mới.',
+    'peer-unavailable':'Không tìm thấy phòng. Kiểm tra mã và đảm bảo người tạo phòng vẫn đang mở game.',
+    'network':'Không kết nối được máy chủ ghép phòng PeerJS qua cổng 443. Kiểm tra mạng hoặc thử đổi Wi-Fi/4G.',
+    'socket-error':'Kênh kết nối tới máy chủ phòng bị lỗi. Hãy tải lại game và thử lại.',
+    'socket-closed':'Máy chủ phòng đã đóng kết nối. Hãy tải lại game và tạo phòng mới.',
+    'server-error':'Máy chủ ghép phòng trả về lỗi. Hãy thử tạo phòng mới sau ít phút.',
+    'browser-incompatible':'Trình duyệt không hỗ trợ WebRTC. Hãy mở bằng Chrome, Edge hoặc Safari bản mới.',
+    'webrtc':'Hai thiết bị chưa thiết lập được đường truyền WebRTC. Có thể mạng di động/Wi-Fi đang chặn kết nối ngang hàng.',
+    'ssl-unavailable':'Không thiết lập được kết nối bảo mật tới máy chủ ghép phòng.',
+    'invalid-id':'Mã phòng không hợp lệ. Hãy tạo mã mới.',
+    'disconnected':'Trình duyệt đã ngắt khỏi máy chủ ghép phòng. Hãy tải lại game.'
+  };
+  return (specific[type]||('Lỗi kết nối online ('+type+'). '+(e&&e.message?e.message:''))).trim();
+}
+function onlineWirePeerErrors(peer,role){
+  peer.on('error',function(e){
+    onlineStatus(onlinePeerErrorText(e,role),'bad');
+  });
+  peer.on('disconnected',function(){
+    onlineStatus('Đã mất kết nối tới máy chủ ghép phòng. Đang thử khôi phục…','bad');
+    try{if(peer&&peer.disconnected)peer.reconnect();}catch(e){}
+  });
+}
 function onlineCopyLink(){
   var url=location.href.split('#')[0].split('?')[0]+'?room='+encodeURIComponent(onlineCode);
   if(navigator.clipboard&&navigator.clipboard.writeText){
@@ -2862,9 +2944,9 @@ function onlineAttachConnection(conn,role){
   conn.on('data',onlineHandleData);
   conn.on('close',function(){
     if(onlineConn===conn)onlineConn=null;
-    if(onlineActive){onlineReady=false;onlineStatus('Đối thủ đã ngắt kết nối. Nhấn “Thoát phòng”, rồi nhập lại cùng mã để kết nối lại.','bad');refresh();}
+    if(onlineActive){onlineReady=false;onlineStatus('Đối thủ đã ngắt kết nối. Nhấn “Thoát phòng”, rồi nhập lại cùng mã để kết nối lại.','bad');if(typeof cells!=='undefined'&&cells&&cells.length)refresh();}
   });
-  conn.on('error',function(e){onlineStatus('Lỗi kết nối: '+(e&&e.message?e.message:'không xác định'),'bad');});
+  conn.on('error',function(e){onlineStatus('Đường truyền giữa hai thiết bị gặp lỗi ('+(e&&e.type?e.type:'unknown')+'). Hãy thử đổi giữa Wi-Fi và 4G/5G. '+(e&&e.message?e.message:''),'bad');});
 }
 function onlineCreateRoom(){
   if(onlineActive||onlineStarting)return;
@@ -2878,25 +2960,22 @@ function onlineCreateRoom(){
     onlineCode=onlineCodeMake(); onlineRole='host'; onlineActivate(1,'host');
     $('online-room-code').value=onlineCode;
     var id=onlinePeerId(onlineCode);
-    try{onlinePeer=new window.Peer(id,{debug:1});}
+    try{onlinePeer=onlineNewPeer(id);}
     catch(e){onlineDisconnect(false);onlineStatus('Không khởi tạo được kết nối online: '+e.message,'bad');return;}
+    onlineWirePeerErrors(onlinePeer,'host');
     onlinePeer.on('open',function(){
-      onlineStatus('Đã tạo phòng '+onlineCode+'. Gửi mã này cho người chơi còn lại.','good');
+      if(onlineConnectTimer){clearTimeout(onlineConnectTimer);onlineConnectTimer=0;}
+      onlineStatus('Phòng '+onlineCode+' đã sẵn sàng. Gửi mã này cho người chơi còn lại.','good');
       $('online-copy').hidden=false;
       if(onlineConnectTimer)clearTimeout(onlineConnectTimer);
       onlineConnectTimer=setTimeout(function(){
         if(onlineActive&&!onlineReady)onlineStatus('Phòng vẫn mở. Đang chờ người chơi nhập mã…');
-      },20000);
+      },45000);
     });
+    onlineConnectTimer=setTimeout(function(){if(onlineActive&&!onlineReady)onlineStatus('Chưa kết nối được máy chủ tạo phòng. Kiểm tra mạng hoặc thử đổi Wi-Fi/4G rồi tạo lại.','bad');},15000);
     onlinePeer.on('connection',function(conn){
       if(onlineConn){try{conn.close();}catch(e){}return;}
       onlineAttachConnection(conn,'host');
-    });
-    onlinePeer.on('error',function(e){
-      var msg=e&&e.type==='unavailable-id'?'Mã phòng bị trùng. Hãy thoát và tạo phòng mới.':
-        e&&e.type==='network'?'Không kết nối được máy chủ signaling. Hãy kiểm tra mạng.':
-        'Lỗi online: '+(e&&e.type?e.type:'không xác định');
-      onlineStatus(msg,'bad');
     });
   });
 }
@@ -2911,22 +2990,20 @@ function onlineJoinRoom(){
     if(err||!window.Peer){onlineDisconnect(false);$('online-create').disabled=false;$('online-join').disabled=false;onlineStatus('Không tải được PeerJS từ CDN. Hãy thử đổi mạng hoặc tải lại trang.','bad');return;}
     if(onlineActive)return;
     onlineCode=code; onlineRole='guest'; onlineActivate(-1,'guest');
-    try{onlinePeer=new window.Peer({debug:1});}
+    try{onlinePeer=onlineNewPeer();}
     catch(e){onlineDisconnect(false);onlineStatus('Không khởi tạo được kết nối online: '+e.message,'bad');return;}
+    onlineWirePeerErrors(onlinePeer,'guest');
     onlinePeer.on('open',function(){
+      if(onlineConnectTimer){clearTimeout(onlineConnectTimer);onlineConnectTimer=0;}
+      onlineStatus('Đã vào máy chủ ghép phòng. Đang kết nối tới chủ phòng…');
       try{onlineAttachConnection(onlinePeer.connect(onlinePeerId(code),{reliable:true}),'guest');}
       catch(e){onlineStatus('Không thể tham gia phòng: '+e.message,'bad');}
       if(onlineConnectTimer)clearTimeout(onlineConnectTimer);
       onlineConnectTimer=setTimeout(function(){
         if(onlineActive&&!onlineReady)onlineStatus('Không tìm thấy phòng hoặc chủ phòng chưa mở phòng. Kiểm tra lại mã.','bad');
-      },18000);
+      },25000);
     });
-    onlinePeer.on('error',function(e){
-      var msg=e&&e.type==='peer-unavailable'?'Không tìm thấy phòng. Kiểm tra mã hoặc yêu cầu chủ phòng tạo phòng mới.':
-        e&&e.type==='network'?'Không kết nối được máy chủ online. Hãy kiểm tra mạng.':
-        'Lỗi online: '+(e&&e.type?e.type:'không xác định');
-      onlineStatus(msg,'bad');
-    });
+    onlineConnectTimer=setTimeout(function(){if(onlineActive&&!onlineReady)onlineStatus('Thiết bị chưa kết nối được máy chủ ghép phòng. Thử đổi Wi-Fi/4G/5G và tải lại game.','bad');},15000);
   });
 }
 function onlineDisconnect(resetGame){
@@ -2939,7 +3016,8 @@ function onlineDisconnect(resetGame){
   $('online-copy').hidden=true; $('online-room-code').value='';
   applyOpp(onlinePreviousOpp,true);
   applyMode(onlinePreviousMode);
-  updateScore(); refresh();
+  updateScore();
+  if(typeof cells!=='undefined'&&cells&&cells.length) refresh();
   onlineStatus('Đã thoát phòng. Có thể chơi lại hoặc tạo phòng mới.');
   newGame();
 }
