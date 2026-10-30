@@ -2,7 +2,7 @@
 var onlineActive=false, onlineReady=false, onlineSide=1, onlineRole='', onlineCode='';
 var onlinePeer=null, onlineConn=null, onlineInSeq=0, onlineOutSeq=0;
 var onlineApplying=false, onlineSwappedStrips=false, onlineLastResult=null, onlineMode='draft';
-var onlineConnectTimer=0, onlineLoadBusy=false, onlineLoadQueue=[];
+var onlineConnectTimer=0, onlineLoadBusy=false, onlineLoadQueue=[], onlineStarting=false;
 var onlinePreviousOpp='ai', onlinePreviousMode='draft';
 
 var localPvp=pvp, localPn=pn, localPnl=pnl, localHumanTurn=humanTurn, localIsHumanSide=isHumanSide;
@@ -116,6 +116,7 @@ function onlineSetControls(locked){
   $('online-create').disabled=!!locked;
   $('online-join').disabled=!!locked;
   $('online-leave').hidden=!locked;
+  $('online-room-code').readOnly=!!locked;
   $('online-copy').hidden=!(locked&&onlineRole==='host'&&!!onlineCode);
   $('online-rematch').hidden=true;
 }
@@ -257,11 +258,14 @@ function onlineAttachConnection(conn,role){
   conn.on('error',function(e){onlineStatus('Lỗi kết nối: '+(e&&e.message?e.message:'không xác định'),'bad');});
 }
 function onlineCreateRoom(){
-  if(onlineActive)return;
+  if(onlineActive||onlineStarting)return;
+  onlineStarting=true; $('online-create').disabled=true; $('online-join').disabled=true;
   onlinePreviousOpp=oppKey; onlinePreviousMode=modeKey;
   onlineStatus('Đang tải thư viện kết nối online…');
   onlineLoadPeer(function(err){
-    if(err||!window.Peer){onlineStatus('Không tải được PeerJS từ CDN. Hãy thử đổi mạng hoặc tải lại trang.','bad');return;}
+    onlineStarting=false;
+    if(err||!window.Peer){$('online-create').disabled=false;$('online-join').disabled=false;onlineStatus('Không tải được PeerJS từ CDN. Hãy thử đổi mạng hoặc tải lại trang.','bad');return;}
+    if(onlineActive)return;
     onlineCode=onlineCodeMake(); onlineRole='host'; onlineActivate(1,'host');
     $('online-room-code').value=onlineCode;
     var id=onlinePeerId(onlineCode);
@@ -288,13 +292,16 @@ function onlineCreateRoom(){
   });
 }
 function onlineJoinRoom(){
-  if(onlineActive)return;
-  onlinePreviousOpp=oppKey; onlinePreviousMode=modeKey;
+  if(onlineActive||onlineStarting)return;
   var code=String($('online-room-code').value||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
   if(!/^[A-Z0-9]{8}$/.test(code)){onlineStatus('Mã phòng cần đúng 8 ký tự.','bad');return;}
-  onlineCode=code; onlineRole='guest'; onlineActivate(-1,'guest');
+  onlineStarting=true; $('online-create').disabled=true; $('online-join').disabled=true;
+  onlinePreviousOpp=oppKey; onlinePreviousMode=modeKey;
   onlineLoadPeer(function(err){
-    if(err||!window.Peer){onlineDisconnect(false);onlineStatus('Không tải được PeerJS từ CDN. Hãy thử đổi mạng hoặc tải lại trang.','bad');return;}
+    onlineStarting=false;
+    if(err||!window.Peer){onlineDisconnect(false);$('online-create').disabled=false;$('online-join').disabled=false;onlineStatus('Không tải được PeerJS từ CDN. Hãy thử đổi mạng hoặc tải lại trang.','bad');return;}
+    if(onlineActive)return;
+    onlineCode=code; onlineRole='guest'; onlineActivate(-1,'guest');
     try{onlinePeer=new window.Peer({debug:1});}
     catch(e){onlineDisconnect(false);onlineStatus('Không khởi tạo được kết nối online: '+e.message,'bad');return;}
     onlinePeer.on('open',function(){
