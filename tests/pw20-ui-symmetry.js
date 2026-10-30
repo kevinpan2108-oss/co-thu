@@ -46,6 +46,7 @@ const path = require('path');
     settings:document.querySelector('#app').classList.contains('online-mode'),
     boardFlipped:document.querySelector('#board').classList.contains('online-flipped'),
     boardTransform:getComputedStyle(document.querySelector('#board')).transform,
+    status:document.querySelector('#online-status').textContent,
     soundVisible:!!(document.querySelector('#btn-sound').getClientRects().length),
     aiSettingsHidden:['opponent-setting','mode-setting','lvl-box'].every(id=>getComputedStyle(document.getElementById(id)).display==='none')
   }));
@@ -69,6 +70,7 @@ const path = require('path');
   chk('Guest co giao dien online dong bo',guestUi.settings&&!guestUi.guest&&!guestUi.boardFlipped&&guestUi.soundVisible&&guestUi.aiSettingsHidden);
   chk('Hai ben co cung nhan va thu tu giao dien',JSON.stringify(hostUi.score)===JSON.stringify(guestUi.score)&&JSON.stringify(hostUi.teams)===JSON.stringify(guestUi.teams));
   chk('Hai ben thay cung mot huong ban co',hostUi.boardTransform===guestUi.boardTransform&&hostUi.boardFlipped===guestUi.boardFlipped);
+  chk('Hai ben hien thi cung mot trang thai luot di',hostUi.status===guestUi.status&&hostUi.status==='Lượt của Người chơi 1.');
   chk('Undo va hint bi khoa trong online',await page.locator('#btn-undo').isDisabled()&&await page.locator('#btn-hint').isDisabled());
   chk('Nut thoat phong hien thi',await page.locator('#online-leave').isVisible());
   console.log('online ui/state ok',ok,'bad',bad,'errors',JSON.stringify(errors));
