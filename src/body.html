@@ -145,43 +145,37 @@
 </main>
 
 <section class="main-menu" id="main-menu" aria-label="Trang chủ Cờ Thú">
-  <div class="home-shell">
-    <header class="home-topbar">
-      <div class="home-brand"><span class="home-brand-mark">♟</span><span>CỜ THÚ</span></div>
-      <span class="home-version">CHIẾN THUẬT · PHIÊU LƯU · ĐỐI ĐẦU</span>
-    </header>
-    <div class="home-main">
-      <section class="home-intro">
-        <div class="home-eyebrow"><span class="home-live-dot"></span> SẴN SÀNG RA TRẬN</div>
-        <h1>Chào mừng<br/>đến với <span class="nowrap">Cờ Thú</span></h1>
-        <p class="home-lead">Chỉ huy đội quân muông thú, tận dụng địa hình và tuyệt kỹ để chiếm hang đối thủ.</p>
-        <ul class="home-stats" aria-label="Điểm nổi bật">
-          <li><b>♜</b><span>Chiến thuật</span></li>
-          <li><b>🐾</b><span>Nhiều đội hình</span></li>
-          <li><b>⚔</b><span>Đấu cùng bạn bè</span></li>
-        </ul>
-        <div class="home-quick">
-          <button class="home-utility" id="menu-sound" type="button" aria-pressed="true"><span class="utility-icon">🔊</span><span class="utility-label">Âm thanh bật</span></button>
-          <button class="home-utility" id="menu-music" type="button" aria-pressed="false"><span class="utility-icon">♫</span><span class="utility-label">Nhạc nền tắt</span></button>
-          <button class="home-utility" id="menu-share" type="button"><span class="utility-icon">↗</span><span class="utility-label">Chia sẻ</span></button>
-          <button class="home-utility" id="menu-info" type="button"><span class="utility-icon">ⓘ</span><span class="utility-label">Giới thiệu</span></button>
+  <div class="hm-bg" aria-hidden="true"><i class="hm-sun"></i><i class="hm-cloud c1"></i><i class="hm-cloud c2"></i><span class="hm-float f1">🦁</span><span class="hm-float f2">🐘</span><span class="hm-float f3">🐯</span><span class="hm-float f4">🦅</span><span class="hm-float f5">🐺</span><span class="hm-float f6">🐊</span><span class="hm-float f7">🐭</span><span class="hm-float f8">🦬</span><div class="hm-hills"></div></div>
+  <div class="hm-wrap">
+    <nav class="hm-util" aria-label="Cài đặt nhanh">
+      <button class="home-utility" id="menu-sound" type="button" aria-pressed="true"><span class="utility-icon">🔊</span><span class="utility-label">Âm thanh bật</span></button>
+      <button class="home-utility" id="menu-music" type="button" aria-pressed="false"><span class="utility-icon">♫</span><span class="utility-label">Nhạc nền tắt</span></button>
+      <button class="home-utility" id="menu-share" type="button"><span class="utility-icon">↗</span><span class="utility-label">Chia sẻ</span></button>
+      <button class="home-utility" id="menu-info" type="button"><span class="utility-icon">ⓘ</span><span class="utility-label">Giới thiệu</span></button>
+    </nav>
+    <div class="hm-hero">
+      <div class="hm-copy">
+        <div class="hm-badge"><span class="home-live-dot"></span> TRÒ CHƠI CHIẾN THUẬT · BÀN CỜ 9×9</div>
+        <h1 class="hm-logo" aria-label="Cờ Thú"><span aria-hidden="true">C</span><span aria-hidden="true">Ờ</span><span aria-hidden="true" class="gap"></span><span aria-hidden="true">T</span><span aria-hidden="true">H</span><span aria-hidden="true">Ú</span></h1>
+        <p class="hm-sub">Chỉ huy đội quân muông thú, tận dụng địa hình và tuyệt kỹ để <b>chiếm hang đối thủ</b>.</p>
+        <button class="hm-play" id="menu-single" type="button">
+          <span class="hm-play-ico">▶</span><span class="hm-play-txt"><b>CHƠI NGAY</b><small>Đấu với máy · chọn đội hình và cấp độ</small></span>
+        </button>
+        <div class="hm-alt">
+          <button class="hm-card online" id="menu-online" type="button"><span class="hm-card-ico">🌐</span><span class="hm-card-txt"><b>Chơi trực tuyến</b><small>Tạo phòng, gửi mã cho bạn bè</small></span></button>
+          <button class="hm-card" id="menu-local" type="button"><span class="hm-card-ico">👥</span><span class="hm-card-txt"><b>Hai người cùng máy</b><small>Luân phiên trên một thiết bị</small></span></button>
         </div>
-      </section>
-      <section class="home-modes" aria-label="Chọn chế độ chơi">
-        <div class="home-section-heading"><div><span>BẮT ĐẦU</span><h2>Bạn muốn chơi thế nào?</h2></div><span class="home-paw">🐾</span></div>
-        <button class="mode-card" id="menu-single" type="button">
-          <span class="mode-symbol single-symbol">♟</span><span class="mode-copy"><b>Đấu với máy</b><small>Chọn đội hình, cấp độ và thử thách AI</small></span><span class="mode-arrow">→</span>
-        </button>
-        <button class="mode-card featured" id="menu-online" type="button">
-          <span class="mode-symbol online-symbol">◎</span><span class="mode-copy"><b>Chơi trực tuyến</b><small>Tạo phòng hoặc nhập mã để đấu với bạn bè</small></span><span class="mode-arrow">→</span>
-        </button>
-        <button class="mode-card" id="menu-local" type="button">
-          <span class="mode-symbol local-symbol">♟♟</span><span class="mode-copy"><b>Hai người cùng máy</b><small>Luân phiên điều khiển trên một thiết bị</small></span><span class="mode-arrow">→</span>
-        </button>
         <p class="home-hint" id="home-hint" role="status" aria-live="polite">Chọn một chế độ để bắt đầu. Bạn có thể quay lại trang chủ bất cứ lúc nào.</p>
-      </section>
+      </div>
+      <div class="hm-stage" aria-hidden="true">
+        <div class="hm-board"><b class="c"></b><b class="c"></b><b class="c"><i class="hm-pc f">🐘</i></b><b class="c t"></b><b class="c den foe"><i class="hm-den">🏠</i></b><b class="c t"></b><b class="c"><i class="hm-pc f">🦁</i></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c"><i class="hm-pc f">🐺</i></b><b class="c"></b><b class="c"></b><b class="c t"></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c"><i class="hm-pc f">🦅</i></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c w"></b><b class="c w"></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c w"></b><b class="c w"></b><b class="c"></b><b class="c"></b><b class="c w"></b><b class="c w"></b><b class="c"><i class="hm-pc w">🐊</i></b><b class="c"></b><b class="c"></b><b class="c w"></b><b class="c w"></b><b class="c"></b><b class="c"></b><b class="c w"></b><b class="c w"></b><b class="c"></b><b class="c"></b><b class="c"><i class="hm-pc m">🐱</i></b><b class="c w"></b><b class="c w"></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c"><i class="hm-pc m">🦬</i></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c t"></b><b class="c"></b><b class="c"></b><b class="c"><i class="hm-pc m">🐭</i></b><b class="c"></b><b class="c"></b><b class="c"></b><b class="c"><i class="hm-pc m">🐆</i></b><b class="c t"></b><b class="c den me"><i class="hm-den">🏠</i></b><b class="c t"></b><b class="c"><i class="hm-pc m">🐯</i></b><b class="c"></b><b class="c"></b></div>
+        <span class="hm-tag t1">⚔ Ăn quân mạnh hơn</span><span class="hm-tag t2">🏠 Vào hang để thắng</span>
+      </div>
     </div>
-    <footer class="home-footer"><span>© CỜ THÚ</span><span>Chọn chiến thuật của bạn.</span></footer>
+    <section class="hm-roster" aria-label="Thứ hạng quân">
+      <h2>ĐỘI QUÂN MUÔNG THÚ <em>· số nhỏ là bậc sức mạnh</em></h2>
+      <ul><li><span>🐭</span><em>1</em></li><li><span>🐱</span><em>2</em></li><li><span>🦊</span><em>2</em></li><li><span>🐺</span><em>3</em></li><li><span>🐗</span><em>3</em></li><li><span>🐶</span><em>4</em></li><li><span>🐻</span><em>4</em></li><li><span>🐆</span><em>5</em></li><li><span>🐊</span><em>5</em></li><li><span>🐯</span><em>6</em></li><li><span>🦅</span><em>6</em></li><li><span>🦁</span><em>7</em></li><li><span>🦬</span><em>7</em></li><li><span>🐘</span><em>8</em></li></ul>
+    </section>
   </div>
 </section>
 <section class="menu-modal" id="menu-modal" hidden role="dialog" aria-modal="true" aria-labelledby="menu-modal-title">
