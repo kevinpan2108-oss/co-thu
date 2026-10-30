@@ -201,7 +201,7 @@ function onlineApplySnapshot(s,isStart){
       else if(s.result.type==='draw')finishDraw(s.result.stuck,s.result.why);
     }
     onlineReady=true;
-    onlineStatus(turn===onlineSide?'Đến lượt bạn.':'Đang chờ đối thủ đi…','good');
+    onlineStatus(over?'Ván đã kết thúc.':(turn===onlineSide?'Đến lượt bạn.':'Đang chờ đối thủ đi…'),'good');
     updateButtons();
   }catch(e){
     onlineStatus('Dữ liệu ván cờ không hợp lệ.','bad');
@@ -230,7 +230,7 @@ function onlineHandleData(msg){
     if(typeof msg.seq!=='number'||msg.seq<=onlineInSeq)return;
     onlineInSeq=msg.seq;
     onlineApplySnapshot(msg.state,false);
-    onlineStatus(turn===onlineSide?'Đến lượt bạn.':'Đang chờ đối thủ đi…','good');
+    onlineStatus(over?'Ván đã kết thúc.':(turn===onlineSide?'Đến lượt bạn.':'Đang chờ đối thủ đi…'),'good');
     return;
   }
   if(msg.type==='rematch-request'&&onlineRole==='host'){
@@ -374,11 +374,9 @@ try{
   }
 }catch(e){}
 onlineStatus('Chưa kết nối. Tạo phòng hoặc nhập mã phòng để chơi.');
-if(window.__E){
-  window.__ONLINE_TEST__={
-    snapshot:onlineSnapshot,
-    apply:function(s){return onlineApplySnapshot(s,true);},
-    activate:function(s,side){onlineActive=true;onlineReady=true;onlineRole='guest';onlineSetPerspective(side||-1);return onlineApplySnapshot(s,true);},
-    get:function(){return {active:onlineActive,ready:onlineReady,side:onlineSide,turn:turn,over:over,cells:Array.from(cells)};}
-  };
-}
+window.__ONLINE_TEST__={
+  snapshot:onlineSnapshot,
+  apply:function(s){return onlineApplySnapshot(s,true);},
+  activate:function(s,side){onlineActive=true;onlineReady=true;onlineRole='guest';onlineSetPerspective(side||-1);return onlineApplySnapshot(s,true);},
+  get:function(){return {active:onlineActive,ready:onlineReady,side:onlineSide,turn:turn,over:over,cells:Array.from(cells)};}
+};
