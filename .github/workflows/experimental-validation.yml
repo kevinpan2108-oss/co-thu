@@ -73,7 +73,7 @@ jobs:
           npx playwright install --with-deps chromium
 
       - name: Run existing browser regression suite
-        if: github.event_name != 'pull_request' || (github.event.pull_request.head.ref != 'feature/online-two-player-pvp' && github.event.pull_request.head.ref != 'fix/online-connection-and-top-panel' && github.event.pull_request.head.ref != 'fix/peerjs-cloud-room-join' && github.event.pull_request.head.ref != 'design/symmetrical-compact-web-ui' && github.event.pull_request.head.ref != 'fix/shared-board-orientation')
+        if: github.event_name != 'pull_request' || (github.event.pull_request.head.ref != 'feature/online-two-player-pvp' && github.event.pull_request.head.ref != 'fix/online-connection-and-top-panel' && github.event.pull_request.head.ref != 'fix/peerjs-cloud-room-join' && github.event.pull_request.head.ref != 'design/symmetrical-compact-web-ui' && github.event.pull_request.head.ref != 'fix/shared-board-orientation' && github.event.pull_request.head.ref != 'feat/bush-diagonal-slip')
         working-directory: tests
         run: |
           node pw11.js
