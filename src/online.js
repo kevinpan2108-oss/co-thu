@@ -369,7 +369,8 @@ function onlineDisconnect(resetGame){
   $('online-copy').hidden=true; $('online-room-code').value='';
   applyOpp(onlinePreviousOpp,true);
   applyMode(onlinePreviousMode);
-  updateScore(); refresh();
+  updateScore();
+  if(typeof cells!=='undefined'&&cells&&cells.length) refresh();
   onlineStatus('Đã thoát phòng. Có thể chơi lại hoặc tạo phòng mới.');
   newGame();
 }
