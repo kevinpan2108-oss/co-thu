@@ -70,6 +70,7 @@ const path = require('path');
   chk('Guest co giao dien online dong bo',guestUi.settings&&!guestUi.guest&&!guestUi.boardFlipped&&guestUi.soundVisible&&guestUi.aiSettingsHidden);
   chk('Hai ben co cung nhan va thu tu giao dien',JSON.stringify(hostUi.score)===JSON.stringify(guestUi.score)&&JSON.stringify(hostUi.teams)===JSON.stringify(guestUi.teams));
   chk('Hai ben thay cung mot huong ban co',hostUi.boardTransform===guestUi.boardTransform&&hostUi.boardFlipped===guestUi.boardFlipped);
+  console.log('TURN_STATUS_DEBUG',JSON.stringify({host:hostUi.status,guest:guestUi.status}));
   chk('Hai ben hien thi cung mot trang thai luot di',hostUi.status===guestUi.status&&hostUi.status==='Lượt của Người chơi 1.');
   const playerTwoTurn={...state,turn:-1};
   await page.evaluate(s=>window.__ONLINE_TEST__.apply(s),playerTwoTurn);
