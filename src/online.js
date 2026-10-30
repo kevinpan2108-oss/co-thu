@@ -7,8 +7,8 @@ var onlinePreviousOpp='ai', onlinePreviousMode='draft';
 
 var localPvp=pvp, localPn=pn, localPnl=pnl, localHumanTurn=humanTurn, localIsHumanSide=isHumanSide;
 pvp=function(){ return onlineActive||localPvp(); };
-pn=function(side){ return onlineActive?(side===onlineSide?'Bạn':'Đối thủ'):localPn(side); };
-pnl=function(side){ return onlineActive?(side===onlineSide?'bạn':'đối thủ'):localPnl(side); };
+pn=function(side){ return onlineActive?(side>0?'Người chơi 1':'Người chơi 2'):localPn(side); };
+pnl=function(side){ return onlineActive?(side>0?'người chơi 1':'người chơi 2'):localPnl(side); };
 humanTurn=function(){ return onlineActive?(!over&&!thinking&&onlineReady&&turn===onlineSide):localHumanTurn(); };
 isHumanSide=function(side){ return onlineActive?(onlineReady&&side===onlineSide):localIsHumanSide(side); };
 
@@ -22,28 +22,26 @@ updateStatus=function(){
 };
 var localUpdateScore=updateScore;
 updateScore=function(){
+  /* Both clients see the same fixed Player 1 / Player 2 score columns. */
   localUpdateScore();
   if(onlineActive){
-    /* Always present the score from the local player's point of view. */
-    $('sc1-l').textContent='Bạn';
-    $('sc2-l').textContent='Đối thủ';
-    var myWins=onlineSide===1?p1w:p2w;
-    var foeWins=onlineSide===1?p2w:p1w;
-    $('wins').textContent=myWins;
-    $('losses').textContent=foeWins;
+    $('sc1-l').textContent='Người 1';
+    $('sc2-l').textContent='Người 2';
+    $('wins').textContent=p1w;
+    $('losses').textContent=p2w;
   }
 };
 var localUpdateStrips=updateStrips;
 updateStrips=function(){
+  /* The board always has Player 2 at the top (-1) and Player 1 at the bottom (+1). */
   localUpdateStrips();
   if(onlineActive){
-    $('who-me').textContent='Bạn';
-    $('who-foe').textContent='Đối thủ';
-    if(onlineSide===-1){
-      var a=$('cnt-me').textContent, b=$('cnt-foe').textContent;
-      $('cnt-me').textContent=b; $('cnt-foe').textContent=a;
-      setOc('oc-me',-1); setOc('oc-foe',1);
-    }
+    $('who-foe').textContent='Người chơi 2';
+    $('who-me').textContent='Người chơi 1';
+    $('foe-team').setAttribute('aria-label','Đội hình Người chơi 2 ở phía trên');
+    $('me-team').setAttribute('aria-label','Đội hình Người chơi 1 ở phía dưới');
+    setOc('oc-me',1);
+    setOc('oc-foe',-1);
   }
 };
 var localUpdateButtons=updateButtons;
@@ -208,17 +206,19 @@ function onlineSwapStrips(){
   b.appendChild(frag);
 }
 function onlineSetPerspective(side){
-  /* Keep the page layout identical. Only mirror the board and exchange
-     the two miniature rosters so the local player is always at the bottom. */
-  if(side<0&&!onlineSwappedStrips){onlineSwapStrips();onlineSwappedStrips=true;}
-  else if(side>0&&onlineSwappedStrips){onlineSwapStrips();onlineSwappedStrips=false;}
+  /*
+   * Shared north-up board: Player 2 always stays at the top and Player 1
+   * always stays at the bottom on EVERY device. Never rotate the board or
+   * swap the rosters based on which player is viewing it.
+   */
   onlineSide=side;
-  boardEl.classList.toggle('online-flipped',side<0);
-  $('app').classList.toggle('online-guest',side<0);
-  $('who-me').textContent='Bạn';
-  $('who-foe').textContent='Đối thủ';
-  $('me-team').setAttribute('aria-label','Đội hình của bạn ở phía dưới');
-  $('foe-team').setAttribute('aria-label','Đội hình đối thủ ở phía trên');
+  onlineSwappedStrips=false;
+  boardEl.classList.remove('online-flipped');
+  $('app').classList.remove('online-guest');
+  $('who-me').textContent='Người chơi 1';
+  $('who-foe').textContent='Người chơi 2';
+  $('me-team').setAttribute('aria-label','Đội hình Người chơi 1 ở phía dưới');
+  $('foe-team').setAttribute('aria-label','Đội hình Người chơi 2 ở phía trên');
 }
 function onlineActivate(side,role){
   onlineActive=true; onlineReady=false; onlineRole=role; onlineSetPerspective(side);
