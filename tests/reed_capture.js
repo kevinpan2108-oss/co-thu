@@ -33,8 +33,8 @@ E.setReedCapture(true);
 }
 {
   const sq=Z.slice();sq[4]=0;E.SQ[0]=sq.slice();E.SQ[1]=sq.slice();E.setKeys();
-  const cells=new Int8Array(N+ST),sg=1,I=(r,c)=>r*COLS+c;cells[I(2,2)]=3;cells[I(1,2)]=-4;
-  ok('Dog lock van vo hieu hoa buoc cheo',!E.genMoves(cells,sg).some(x=>(x&127)===I(2,2)&&((x>>14)&15)===10));
+  const cells=new Int8Array(N+ST),sg=1,I=(r,c)=>r*COLS+c;cells[I(1,2)]=3;cells[I(1,3)]=-4;
+  ok('Dog lock van vo hieu hoa buoc cheo',!E.genMoves(cells,sg).some(x=>(x&127)===I(1,2)&&((x>>14)&15)===10));
 }
 console.log('reed capture tests',pass,'pass',fail,'fail');
 process.exit(fail?1:0);
