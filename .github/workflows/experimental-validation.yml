@@ -45,6 +45,7 @@ jobs:
           node tests/ai_tactics.js
           node tests/bison.js
           node tests/outpost_ai.js
+          node tests/reed_capture.js
 
       - name: Compare starting formations
         if: github.event_name != 'pull_request' || (github.event.pull_request.head.ref != 'feature/online-two-player-pvp' && github.event.pull_request.head.ref != 'fix/online-connection-and-top-panel' && github.event.pull_request.head.ref != 'fix/peerjs-cloud-room-join' && github.event.pull_request.head.ref != 'design/symmetrical-compact-web-ui' && github.event.pull_request.head.ref != 'fix/shared-board-orientation' && github.event.pull_request.head.ref != 'feat/bush-diagonal-slip')
@@ -65,6 +66,11 @@ jobs:
         run: |
           set -o pipefail
           node tests/croc_rank_compare.js 25 25 2026102808 140 | tee croc-rank-simulation.json
+
+      - name: Compare reed diagonal capture variants
+        run: |
+          set -o pipefail
+          node tests/reed_capture_compare.js 6 100 20261030 | tee reed-capture-simulation.json
 
       - name: Install Chromium for Playwright
         working-directory: tests
@@ -96,4 +102,5 @@ jobs:
           path: |
             outpost-simulation.json
             croc-rank-simulation.json
+            reed-capture-simulation.json
           if-no-files-found: ignore
