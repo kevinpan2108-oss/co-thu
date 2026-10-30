@@ -22,7 +22,7 @@ const path = require('path');
   const chk=(name,pass)=>{if(pass)ok++;else{bad++;console.log('FAIL',name);}};
   await page.click('#online-create');
   await page.waitForTimeout(100);
-  console.log('ONLINE_DEBUG',JSON.stringify(await page.evaluate(()=>({peerType:typeof window.Peer,fake:!!window.__FAKE_PEER_INSTANCE__,status:document.querySelector('#online-status').textContent,createDisabled:document.querySelector('#online-create').disabled,active:window.__ONLINE_TEST__.get().active}))));
+  console.log('ONLINE_DEBUG',JSON.stringify(await page.evaluate(()=>({peerType:typeof window.Peer,fake:!!window.__FAKE_PEER_INSTANCE__,status:document.querySelector('#online-status').textContent,createDisabled:document.querySelector('#online-create').disabled}))));
   await page.waitForFunction(()=>!!window.__FAKE_PEER_INSTANCE__);
   await page.waitForTimeout(30);
   const code=await page.locator('#online-room-code').inputValue();
