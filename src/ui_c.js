@@ -258,6 +258,7 @@ function renderRules(){
   ];
   if(!cl){
     L.push('🌳 Bụi rậm và lau sậy là ô đi bình thường, nhưng chiêu đi thẳng của Cáo, Sư tử, Bò rừng không băng qua được ô bụi (đáp xuống bụi thì được). Quân đứng trong bụi không bị Sư tử vồ xa và không bị Cá sấu rình.');
+    L.push('🍃 Lách lau sậy: nếu bắt đầu lượt khi đang đứng trong bụi/lau, quân có thể đi chéo 1 ô tới ô trống (không ăn quân). Không được đi vào nước, đá hoặc hang; vẫn không đi được khi bị Chó khóa.');
     L.push('🪷 Đầm lầy (rìa phải) mọi quân đều đi vào được. Cáo, Sư tử, Bò rừng không lao hay vồ xuyên qua đầm lầy. Quân đứng trong đầm lầy không bị Sư tử vồ xa hay Cá sấu rình nhưng vẫn bị ăn bằng đòn thường. Chuột và Cá sấu trong đầm lầy giữ lợi thế như dưới nước.');
     L.push('🚩 Tiền đồn (ô có cờ ở rìa trái): chiếm bằng bất kỳ nước đi nào thì được đi thêm 1 ô thường. Bước thưởng không ăn quân, không vào hang, bỏ qua cũng được. Nhận thưởng xong, phe đó hồi 2 lượt mới nhận lại được. Hai phe hồi riêng.');
     L.push('🌉 Cầu gỗ hẹp (hai bên rìa) không chịu nổi Voi. Voi chỉ qua sông bằng bãi cạn ở giữa bàn cờ.');
@@ -283,6 +284,7 @@ function describe(f,t,code,tcode,k){
     return {emo:emo,text:snd+' '+who+' húc '+th+' của '+foeName+' lùi 1 ô'+(trapped?' vào bẫy, mất bậc':'')+' và làm nó choáng: lượt tới không đi được!'};
   }
   if(k===8) return tcode?{emo:emo,text:snd+' '+who+' lao tới ăn '+th+' của '+foeName+'.'}:{emo:emo,text:snd+' '+who+' lao thẳng 2 ô.'};
+  if(k===10) return {emo:emo,text:snd+' '+who+' lách chéo 1 ô qua bụi/lau.'};
   if(tcode){
     var verb=k===1?'nhảy qua hồ và ăn':k===2?'trèo qua rồi ăn':k===3?'lao tới ăn':k===4?'phóng chéo ăn':'ăn';
     return {emo:emo,text:snd+' '+who+' '+verb+' '+th+' của '+foeName+'.'};
