@@ -1,7 +1,7 @@
 <title>Cờ Thú</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=Noto+Serif:wght@300;400;500;600&family=Noto+Serif+JP:wght@400;500;600&display=swap">
 <style>
 /* Layout: a realistic wooden-framed jungle board (painted on canvas, animated water) beside a sticker-style control column. */
 :root{
@@ -657,55 +657,72 @@ details.card summary::after{font-size:20px}
 
 
 /* Cờ Thú home hub */
-.main-menu{position:fixed;inset:0;z-index:1000;overflow:auto;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 10% 0%,rgba(58,151,174,.18),transparent 40%),radial-gradient(ellipse at 100% 100%,rgba(91,157,111,.16),transparent 38%),var(--bg);color:var(--fg)}
+/* ---- Trang chu (hm-*): toi gian kieu Nhat ---- */
+.main-menu{--paper:#f5f0e6;--paper2:#ece5d6;--sumi:#1d1d1f;--sumi2:#5b5850;--shu:#c8402f;--line:rgba(29,29,31,.16);position:fixed;inset:0;z-index:1000;overflow:auto;color:var(--sumi);background:radial-gradient(ellipse at 20% 0%,rgba(255,255,255,.7),transparent 55%),repeating-linear-gradient(0deg,rgba(120,100,60,.025) 0 2px,transparent 2px 5px),var(--paper);font-family:'Noto Serif','Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',Georgia,serif}
 .main-menu[hidden]{display:none}
-.home-shell{width:min(100%,1040px);min-height:min(700px,calc(100dvh - 48px));display:flex;flex-direction:column;padding:clamp(22px,4vw,42px);border:1px solid var(--edge);border-radius:26px;background:var(--surface);box-shadow:0 24px 70px rgba(16,38,58,.16);position:relative;isolation:isolate}
-.home-shell:before{content:"";position:absolute;z-index:-1;right:-25px;top:95px;width:230px;height:230px;border:1px solid color-mix(in srgb,var(--fg) 10%,transparent);border-radius:50%;box-shadow:0 0 0 22px color-mix(in srgb,var(--fg) 3%,transparent),0 0 0 46px color-mix(in srgb,var(--fg) 2%,transparent);pointer-events:none}
-.home-topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--edge)}
-.home-brand{display:flex;align-items:center;gap:10px;font:900 18px var(--font-display);letter-spacing:.08em;color:var(--fg)}
-.home-brand-mark{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--fg);color:var(--surface);font-size:20px}
-.home-version{color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.14em}
-.home-main{flex:1;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(24px,5vw,64px);align-items:center;padding:clamp(26px,5vw,56px) 0}
-.home-intro{max-width:470px}
-.home-eyebrow{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:11px;font-weight:900;letter-spacing:.16em}
-.home-live-dot{width:8px;height:8px;border-radius:50%;background:#3aab83;box-shadow:0 0 0 4px rgba(58,171,131,.13)}
-.home-intro h1{margin:18px 0 14px;color:var(--fg);font:900 clamp(38px,5.6vw,64px)/.98 var(--font-display);letter-spacing:-.045em}
-.home-intro h1 span{color:#268b91}
-.home-lead{max-width:36ch;margin:0;color:var(--muted);font-size:15px;line-height:1.65}
-.home-stats{display:flex;flex-wrap:wrap;gap:6px 18px;margin:24px 0 0;padding:0;list-style:none;color:var(--muted);font-size:12px;font-weight:800}
-.home-stats li{display:flex;align-items:center;gap:7px;cursor:default}
-.home-stats b{display:grid;place-items:center;width:26px;height:26px;border-radius:8px;background:color-mix(in srgb,#268b91 14%,transparent);color:#268b91;font-size:13px}
+.hm-wrap{min-height:100%;width:min(100%,1080px);margin:0 auto;padding:clamp(16px,3vw,30px) clamp(18px,4vw,40px);display:flex;flex-direction:column;gap:clamp(12px,3vh,34px)}
+.hm-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.hm-mark{display:flex;align-items:center;gap:12px}
+.hm-seal{display:grid;place-items:center;width:34px;height:34px;background:var(--shu);color:#fff;font:700 20px/1 'Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',serif;border-radius:3px;transform:rotate(-3deg)}
+.hm-word{font:600 13px/1 'Noto Serif',serif;letter-spacing:.32em;white-space:nowrap}
+.hm-util{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:2px 18px}
+.home-utility{display:flex;align-items:center;gap:7px;padding:6px 0;border:0;background:none;color:var(--sumi2);font:600 12px 'Noto Serif',serif;letter-spacing:.04em;cursor:pointer;transition:color .15s}
+.home-utility .utility-icon{display:none}
+.home-utility:before{content:"";width:6px;height:6px;border-radius:50%;border:1px solid var(--sumi2);transition:background .15s,border-color .15s}
+.home-utility[aria-pressed="true"]:before{background:var(--shu);border-color:var(--shu)}
+.home-utility:not([aria-pressed]):before{display:none}
+.home-utility:hover{color:var(--sumi)}
+.hm-hero{flex:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.82fr);gap:clamp(24px,6vw,84px);align-items:center;padding:clamp(6px,2vh,22px) 0}
+.hm-kicker{margin:0 0 clamp(10px,2vh,22px);color:var(--shu);font:600 11px 'Noto Serif',serif;letter-spacing:.3em}
+.hm-title{position:relative;display:inline-block;margin:0;font:300 clamp(58px,9.5vw,120px)/1 'Noto Serif',Georgia,serif;letter-spacing:-.02em}
+.hm-sun{position:absolute;right:-.34em;top:.08em;width:.3em;height:.3em;border-radius:50%;background:var(--shu)}
+.hm-sub{margin:clamp(14px,3vh,28px) 0 clamp(18px,4vh,40px);color:var(--sumi2);font:400 clamp(14px,1.5vw,16px)/1.9 'Noto Serif',serif}
+.hm-menu{margin:0;padding:0;list-style:none;max-width:460px;border-top:1px solid var(--sumi)}
+.hm-menu li{border-bottom:1px solid var(--line)}
+.hm-row{width:100%;display:flex;align-items:center;gap:18px;padding:16px 6px;border:0;background:none;color:var(--sumi);text-align:left;cursor:pointer;transition:padding .25s ease,background .2s}
+.hm-no{flex:0 0 26px;color:var(--shu);font:400 22px/1 'Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',serif}
+.hm-rt{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0}
+.hm-rt b{font:600 clamp(17px,2vw,20px)/1.2 'Noto Serif',serif;letter-spacing:.02em}
+.hm-rt small{color:var(--sumi2);font:400 12px/1.4 'Noto Serif',serif}
+.hm-go{color:var(--sumi2);font-size:20px;transition:transform .25s,color .2s}
+.hm-row:hover,.hm-row:focus-visible{padding-left:16px;background:linear-gradient(90deg,rgba(200,64,47,.07),transparent)}
+.hm-row:hover .hm-go,.hm-row:focus-visible .hm-go{transform:translateX(6px);color:var(--shu)}
+.hm-row:active{background:rgba(200,64,47,.12)}
+.hm-row:focus-visible,.home-utility:focus-visible{outline:2px solid var(--shu);outline-offset:3px}
+.home-hint{min-height:18px;margin:18px 0 0;color:var(--sumi2);font:400 12px/1.6 'Noto Serif',serif;max-width:460px}
+.hm-stage{display:flex;flex-direction:column;align-items:center;gap:14px}
+.hm-svg{width:min(100%,420px);height:auto;overflow:visible;color:var(--sumi)}
+.hm-svg .grid path{stroke:currentColor;stroke-opacity:.22;stroke-width:1;fill:none}
+.hm-svg .edge{fill:none;stroke:currentColor;stroke-width:1.6}
+.hm-svg .w{fill:#7fa6b8;fill-opacity:.28}
+.hm-svg .den{fill:none;stroke-width:1.6}.hm-svg .den.m{fill:rgba(200,64,47,.12);stroke:var(--shu)}.hm-svg .den.f{fill:rgba(29,29,31,.08);stroke:currentColor}
+.hm-svg .trap{fill:none;stroke:currentColor;stroke-opacity:.5;stroke-width:1.2}
+.hm-svg .pc circle{fill:var(--paper);stroke-width:1.6}
+.hm-svg .pc text{font:600 17px 'Noto Serif JP','Hiragino Mincho ProN','Yu Mincho','Noto Serif',serif;text-anchor:middle}
+.hm-svg .pc.m circle{stroke:var(--shu)}.hm-svg .pc.m text{fill:var(--shu)}
+.hm-svg .pc.f circle{stroke:var(--sumi)}.hm-svg .pc.f text{fill:var(--sumi)}
+.hm-svg .pc.w circle{stroke:#4f7e93}.hm-svg .pc.w text{fill:#4f7e93}
+.hm-svg .pc{animation:hmFade .9s ease-out both}
+.hm-svg .pc:nth-child(odd){animation-delay:.2s}.hm-svg .pc:nth-child(3n){animation-delay:.45s}
+@keyframes hmFade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.hm-cap{margin:0;color:var(--sumi2);font:400 11px 'Noto Serif',serif;letter-spacing:.2em}
+.hm-roster{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding-top:16px;border-top:1px solid var(--line)}
+.hm-rl{font:600 11px 'Noto Serif',serif;letter-spacing:.22em}
+.hm-rl em{margin-left:8px;font-style:normal;font-weight:400;letter-spacing:.04em;color:var(--sumi2)}
+.hm-roster ul{display:flex;flex-wrap:wrap;gap:10px 14px;margin:0;padding:0;list-style:none}
+.hm-roster li{display:flex;align-items:baseline;gap:3px}
+.hm-roster li span{font:500 20px/1 'Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',serif}
+.hm-roster li em{color:var(--shu);font:600 10px 'Noto Serif',serif;font-style:normal}
+@media(max-width:860px){.hm-hero{grid-template-columns:1fr;gap:20px}.hm-stage{display:none}.hm-menu,.home-hint{max-width:none}}
+@media(max-width:560px){.hm-wrap{padding:14px 18px 20px}.hm-top{padding-bottom:10px}.hm-util{gap:0 12px}.home-utility{font-size:11px}.hm-word{letter-spacing:.2em}.hm-sub{margin:12px 0 18px}.hm-row{padding:14px 4px}.hm-roster{gap:10px}.hm-roster li span{font-size:18px}.hm-rl em{display:block;margin:4px 0 0}}
+@media(prefers-reduced-motion:reduce){.hm-svg .pc{animation:none}.hm-row,.hm-go{transition:none}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .main-menu{--paper:#17181b;--paper2:#1e2024;--sumi:#ece7dc;--sumi2:#a39e92;--shu:#e5604d;--line:rgba(236,231,220,.16);background:radial-gradient(ellipse at 20% 0%,rgba(255,255,255,.05),transparent 55%),var(--paper)}
+:root:not([data-theme="light"]) .hm-svg .w{fill:#5f8aa0;fill-opacity:.3}:root:not([data-theme="light"]) .hm-svg .pc.w circle{stroke:#8fb8cc}:root:not([data-theme="light"]) .hm-svg .pc.w text{fill:#8fb8cc}}
+:root[data-theme="dark"] .hm-svg .w{fill:#5f8aa0;fill-opacity:.3}:root[data-theme="dark"] .hm-svg .pc.w circle{stroke:#8fb8cc}:root[data-theme="dark"] .hm-svg .pc.w text{fill:#8fb8cc}
+:root[data-theme="dark"] .main-menu{--paper:#17181b;--sumi:#ece7dc;--sumi2:#a39e92;--shu:#e5604d;--line:rgba(236,231,220,.16);background:var(--paper)}
 .nowrap{white-space:nowrap}
 .online-back{justify-self:start;margin:0 0 8px;padding:5px 10px;border:1px solid var(--edge);border-radius:999px;background:transparent;color:var(--muted);font:800 11px var(--font-body);cursor:pointer;transition:background .15s,color .15s}
 .online-back:hover{background:color-mix(in srgb,var(--fg) 7%,var(--surface));color:var(--fg)}
-.home-quick{display:flex;flex-wrap:wrap;gap:6px;margin-top:26px;padding-top:22px;border-top:1px dashed var(--edge)}
-.home-utility{display:flex;align-items:center;gap:7px;min-height:38px;padding:7px 10px;border:1px solid var(--edge);border-radius:10px;background:transparent;color:var(--fg);font:700 11px var(--font-body);cursor:pointer;transition:background .15s,border-color .15s,transform .15s}
-.home-utility:hover{background:color-mix(in srgb,var(--fg) 5%,var(--surface));transform:translateY(-1px)}
-.home-utility[aria-pressed="false"]{color:var(--muted)}
-.utility-icon{font-size:16px}
-.home-modes{display:flex;flex-direction:column;gap:12px;padding:clamp(18px,3vw,28px);border:1px solid var(--edge);border-radius:20px;background:color-mix(in srgb,var(--bg) 45%,var(--surface));box-shadow:0 8px 24px rgba(16,38,58,.06)}
-.home-section-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
-.home-section-heading>div>span{color:#268b91;font-size:10px;font-weight:900;letter-spacing:.16em}
-.home-section-heading h2{margin:5px 0 0;color:var(--fg);font:900 clamp(19px,2.5vw,25px)/1.1 var(--font-display)}
-.home-paw{font-size:28px;opacity:.75}
-.mode-card{width:100%;display:flex;align-items:center;gap:14px;min-height:88px;padding:14px 16px;border:1px solid var(--edge);border-radius:15px;background:var(--surface);color:var(--fg);text-align:left;cursor:pointer;transition:transform .16s,border-color .16s,box-shadow .16s,background .16s}
-.mode-card:hover{transform:translateY(-2px);border-color:#268b91;box-shadow:0 8px 18px rgba(16,38,58,.09)}
-.mode-card:hover .mode-symbol{background:rgba(38,139,145,.18);color:#268b91}
-.mode-card.featured:after{content:"PHỔ BIẾN";position:absolute;top:-8px;right:14px;padding:2px 8px;border-radius:999px;background:#268b91;color:#fff;font:900 8px var(--font-body);letter-spacing:.12em}
-.mode-card{position:relative}
-.mode-card:focus-visible,.home-utility:focus-visible{outline:3px solid #268b91;outline-offset:3px}
-.mode-card:active{transform:scale(.985)}
-.mode-card.featured{border-color:#268b91;background:linear-gradient(110deg,color-mix(in srgb,#268b91 12%,var(--surface)),var(--surface) 70%)}
-.mode-symbol{flex:0 0 46px;width:46px;height:46px;display:grid;place-items:center;border-radius:13px;background:color-mix(in srgb,var(--fg) 7%,var(--surface));font-size:22px}
-.online-symbol{background:rgba(38,139,145,.14);color:#268b91;font-size:28px}
-.local-symbol{font-size:18px;letter-spacing:-5px;padding-right:5px}
-.mode-copy{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
-.mode-copy b{font:900 16px var(--font-display)}
-.mode-copy small{color:var(--muted);font:600 11px/1.4 var(--font-body)}
-.mode-arrow{font-size:24px;color:var(--muted);transition:transform .16s,color .16s}
-.mode-card:hover .mode-arrow{transform:translateX(4px);color:#268b91}
-.home-hint{min-height:18px;margin:2px 0 0;color:var(--muted);font-size:11px;line-height:1.45}
-.home-footer{display:flex;justify-content:space-between;gap:10px;padding-top:16px;border-top:1px solid var(--edge);color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.08em}
 .menu-modal{position:fixed;inset:0;z-index:1100;display:grid;place-items:center;padding:20px;background:rgba(7,20,32,.62);backdrop-filter:blur(5px)}
 .menu-modal[hidden]{display:none}
 .menu-modal-card{position:relative;width:min(100%,460px);padding:28px;border:1px solid var(--edge);border-radius:20px;background:var(--surface);color:var(--fg);box-shadow:0 22px 60px rgba(0,0,0,.25);text-align:left}
@@ -714,9 +731,6 @@ details.card summary::after{font-size:20px}
 .menu-modal-card ul{padding-left:21px}
 .menu-modal-close{position:absolute;right:13px;top:10px;width:34px;height:34px;border:0;border-radius:9px;background:transparent;color:var(--fg);font-size:26px;cursor:pointer}
 #btn-menu{margin-left:auto}
-@media(max-width:760px){.main-menu{padding:10px}.home-shell{min-height:calc(100dvh - 20px);padding:20px;border-radius:18px}.home-main{grid-template-columns:1fr;gap:22px;padding:24px 0}.home-intro{max-width:none}.home-intro h1{font-size:clamp(38px,10vw,52px);margin:12px 0}.home-lead{font-size:13px}.home-stats{margin-top:16px}.home-quick{margin-top:18px}.home-modes{padding:16px;gap:9px}.mode-card{min-height:74px;padding:11px 12px}.home-version{font-size:8px;text-align:right}.home-shell:before{width:130px;height:130px;right:-18px;top:90px}}
-@media(max-width:390px){.home-shell{padding:15px}.home-topbar{padding-bottom:12px}.home-version{max-width:125px;line-height:1.4}.home-stats{gap:6px 12px;font-size:11px}.home-quick{gap:6px}.home-utility{font-size:10px;padding:6px 8px}.home-modes{padding:13px}.mode-copy b{font-size:14px}.mode-copy small{font-size:10px}.mode-symbol{flex-basis:40px;width:40px;height:40px}}
-@media(prefers-reduced-motion:reduce){.mode-card,.home-utility,.mode-arrow{transition:none}}
 
 .app.online-lobby:not(.online-mode) .layout{display:none}
 .app.online-lobby:not(.online-mode) .online-card{max-width:760px;margin:6vh auto 0;grid-template-columns:minmax(0,1fr);padding:22px 24px;box-shadow:0 18px 50px rgba(16,38,58,.18)}
@@ -869,43 +883,35 @@ details.card summary::after{font-size:20px}
 </main>
 
 <section class="main-menu" id="main-menu" aria-label="Trang chủ Cờ Thú">
-  <div class="home-shell">
-    <header class="home-topbar">
-      <div class="home-brand"><span class="home-brand-mark">♟</span><span>CỜ THÚ</span></div>
-      <span class="home-version">CHIẾN THUẬT · PHIÊU LƯU · ĐỐI ĐẦU</span>
+  <div class="hm-wrap">
+    <header class="hm-top">
+      <div class="hm-mark"><span class="hm-seal" aria-hidden="true">獣</span><span class="hm-word">CỜ THÚ</span></div>
+      <nav class="hm-util" aria-label="Cài đặt nhanh">
+        <button class="home-utility" id="menu-sound" type="button" aria-pressed="true"><span class="utility-icon">🔊</span><span class="utility-label">Âm thanh bật</span></button>
+        <button class="home-utility" id="menu-music" type="button" aria-pressed="false"><span class="utility-icon">♫</span><span class="utility-label">Nhạc nền tắt</span></button>
+        <button class="home-utility" id="menu-theme" type="button" aria-pressed="false"><span class="utility-icon">◐</span><span class="utility-label">Giao diện: Mặc định</span></button>
+        <button class="home-utility" id="menu-share" type="button"><span class="utility-icon">↗</span><span class="utility-label">Chia sẻ</span></button>
+        <button class="home-utility" id="menu-info" type="button"><span class="utility-icon">ⓘ</span><span class="utility-label">Giới thiệu</span></button>
+      </nav>
     </header>
-    <div class="home-main">
-      <section class="home-intro">
-        <div class="home-eyebrow"><span class="home-live-dot"></span> SẴN SÀNG RA TRẬN</div>
-        <h1>Chào mừng<br/>đến với <span class="nowrap">Cờ Thú</span></h1>
-        <p class="home-lead">Chỉ huy đội quân muông thú, tận dụng địa hình và tuyệt kỹ để chiếm hang đối thủ.</p>
-        <ul class="home-stats" aria-label="Điểm nổi bật">
-          <li><b>♜</b><span>Chiến thuật</span></li>
-          <li><b>🐾</b><span>Nhiều đội hình</span></li>
-          <li><b>⚔</b><span>Đấu cùng bạn bè</span></li>
-        </ul>
-        <div class="home-quick">
-          <button class="home-utility" id="menu-sound" type="button" aria-pressed="true"><span class="utility-icon">🔊</span><span class="utility-label">Âm thanh bật</span></button>
-          <button class="home-utility" id="menu-music" type="button" aria-pressed="false"><span class="utility-icon">♫</span><span class="utility-label">Nhạc nền tắt</span></button>
-          <button class="home-utility" id="menu-share" type="button"><span class="utility-icon">↗</span><span class="utility-label">Chia sẻ</span></button>
-          <button class="home-utility" id="menu-info" type="button"><span class="utility-icon">ⓘ</span><span class="utility-label">Giới thiệu</span></button>
-        </div>
-      </section>
-      <section class="home-modes" aria-label="Chọn chế độ chơi">
-        <div class="home-section-heading"><div><span>BẮT ĐẦU</span><h2>Bạn muốn chơi thế nào?</h2></div><span class="home-paw">🐾</span></div>
-        <button class="mode-card" id="menu-single" type="button">
-          <span class="mode-symbol single-symbol">♟</span><span class="mode-copy"><b>Đấu với máy</b><small>Chọn đội hình, cấp độ và thử thách AI</small></span><span class="mode-arrow">→</span>
-        </button>
-        <button class="mode-card featured" id="menu-online" type="button">
-          <span class="mode-symbol online-symbol">◎</span><span class="mode-copy"><b>Chơi trực tuyến</b><small>Tạo phòng hoặc nhập mã để đấu với bạn bè</small></span><span class="mode-arrow">→</span>
-        </button>
-        <button class="mode-card" id="menu-local" type="button">
-          <span class="mode-symbol local-symbol">♟♟</span><span class="mode-copy"><b>Hai người cùng máy</b><small>Luân phiên điều khiển trên một thiết bị</small></span><span class="mode-arrow">→</span>
-        </button>
+    <main class="hm-hero">
+      <div class="hm-copy">
+        <p class="hm-kicker">獣棋 · TRÒ CHƠI CHIẾN THUẬT</p>
+        <h1 class="hm-title" aria-label="Cờ Thú">Cờ Thú<i class="hm-sun" aria-hidden="true"></i></h1>
+        <p class="hm-sub">Chỉ huy đội quân muông thú,<br/>chiếm hang đối thủ bằng địa hình và tuyệt kỹ.</p>
+        <ol class="hm-menu">
+          <li><button class="hm-row" id="menu-single" type="button"><span class="hm-no" aria-hidden="true">一</span><span class="hm-rt"><b>Đấu với máy</b><small>Chọn đội hình và cấp độ</small></span><span class="hm-go" aria-hidden="true">→</span></button></li>
+          <li><button class="hm-row" id="menu-online" type="button"><span class="hm-no" aria-hidden="true">二</span><span class="hm-rt"><b>Chơi trực tuyến</b><small>Tạo phòng, gửi mã cho bạn bè</small></span><span class="hm-go" aria-hidden="true">→</span></button></li>
+          <li><button class="hm-row" id="menu-local" type="button"><span class="hm-no" aria-hidden="true">三</span><span class="hm-rt"><b>Hai người cùng máy</b><small>Luân phiên trên một thiết bị</small></span><span class="hm-go" aria-hidden="true">→</span></button></li>
+        </ol>
         <p class="home-hint" id="home-hint" role="status" aria-live="polite">Chọn một chế độ để bắt đầu. Bạn có thể quay lại trang chủ bất cứ lúc nào.</p>
-      </section>
-    </div>
-    <footer class="home-footer"><span>© CỜ THÚ</span><span>Chọn chiến thuật của bạn.</span></footer>
+      </div>
+      <div class="hm-stage" aria-hidden="true"><svg viewBox="-6 -6 372 372" class="hm-svg" role="img" aria-label="Bàn cờ 9×9 thu nhỏ"><g><rect x="40" y="120" width="40" height="40" class="w"/><rect x="80" y="120" width="40" height="40" class="w"/><rect x="240" y="120" width="40" height="40" class="w"/><rect x="280" y="120" width="40" height="40" class="w"/><rect x="40" y="160" width="40" height="40" class="w"/><rect x="80" y="160" width="40" height="40" class="w"/><rect x="240" y="160" width="40" height="40" class="w"/><rect x="280" y="160" width="40" height="40" class="w"/><rect x="40" y="200" width="40" height="40" class="w"/><rect x="80" y="200" width="40" height="40" class="w"/><rect x="240" y="200" width="40" height="40" class="w"/><rect x="280" y="200" width="40" height="40" class="w"/><rect x="160" y="0" width="40" height="40" class="den f"/><rect x="160" y="320" width="40" height="40" class="den m"/><circle cx="140" cy="20" r="5" class="trap"/><circle cx="220" cy="20" r="5" class="trap"/><circle cx="180" cy="60" r="5" class="trap"/><circle cx="140" cy="340" r="5" class="trap"/><circle cx="220" cy="340" r="5" class="trap"/><circle cx="180" cy="300" r="5" class="trap"/></g><g class="grid"><path d="M40 0V360M0 40H360"/><path d="M80 0V360M0 80H360"/><path d="M120 0V360M0 120H360"/><path d="M160 0V360M0 160H360"/><path d="M200 0V360M0 200H360"/><path d="M240 0V360M0 240H360"/><path d="M280 0V360M0 280H360"/><path d="M320 0V360M0 320H360"/></g><rect x="0" y="0" width="360" height="360" class="edge"/><g class="pc f"><circle cx="100" cy="20" r="15"/><text x="100" y="27">象</text></g><g class="pc f"><circle cx="260" cy="20" r="15"/><text x="260" y="27">獅</text></g><g class="pc f"><circle cx="60" cy="60" r="15"/><text x="60" y="67">狼</text></g><g class="pc f"><circle cx="220" cy="100" r="15"/><text x="220" y="107">鷹</text></g><g class="pc w"><circle cx="140" cy="180" r="15"/><text x="140" y="187">鰐</text></g><g class="pc m"><circle cx="220" cy="220" r="15"/><text x="220" y="227">猫</text></g><g class="pc m"><circle cx="140" cy="260" r="15"/><text x="140" y="267">牛</text></g><g class="pc m"><circle cx="300" cy="300" r="15"/><text x="300" y="307">鼠</text></g><g class="pc m"><circle cx="100" cy="340" r="15"/><text x="100" y="347">豹</text></g><g class="pc m"><circle cx="260" cy="340" r="15"/><text x="260" y="347">虎</text></g></svg><p class="hm-cap">Đưa một quân vào hang đối phương để thắng</p></div>
+    </main>
+    <footer class="hm-roster" aria-label="Thứ hạng quân">
+      <span class="hm-rl">Quân cờ <em>số nhỏ là bậc sức mạnh</em></span>
+      <ul><li title="Bậc 1"><span>鼠</span><em>1</em></li><li title="Bậc 2"><span>猫</span><em>2</em></li><li title="Bậc 2"><span>狐</span><em>2</em></li><li title="Bậc 3"><span>狼</span><em>3</em></li><li title="Bậc 3"><span>猪</span><em>3</em></li><li title="Bậc 4"><span>犬</span><em>4</em></li><li title="Bậc 4"><span>熊</span><em>4</em></li><li title="Bậc 5"><span>豹</span><em>5</em></li><li title="Bậc 5"><span>鰐</span><em>5</em></li><li title="Bậc 6"><span>虎</span><em>6</em></li><li title="Bậc 6"><span>鷹</span><em>6</em></li><li title="Bậc 7"><span>獅</span><em>7</em></li><li title="Bậc 7"><span>牛</span><em>7</em></li><li title="Bậc 8"><span>象</span><em>8</em></li></ul>
+    </footer>
   </div>
 </section>
 <section class="menu-modal" id="menu-modal" hidden role="dialog" aria-modal="true" aria-labelledby="menu-modal-title">
@@ -2956,6 +2962,16 @@ function enterMenuMode(kind){
    if(button)button.classList.remove('is-loading');
  }
 }
+function applyTheme(t){
+ document.documentElement.setAttribute('data-theme',t);
+ var b=$('menu-theme');
+ if(b){b.setAttribute('aria-pressed',String(t==='dark'));b.querySelector('.utility-label').textContent='Giao diện: '+(t==='dark'?'Tối':'Mặc định');}
+}
+(function(){var t='light';try{t=localStorage.getItem('cothu:theme')==='dark'?'dark':'light';}catch(e){}applyTheme(t);})();
+$('menu-theme').addEventListener('click',function(){
+ var t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+ applyTheme(t);try{localStorage.setItem('cothu:theme',t);}catch(e){}
+});
 $('online-back').addEventListener('click',showMainMenu);
 $('menu-single').addEventListener('click',function(){enterMenuMode('single');});
 $('menu-local').addEventListener('click',function(){enterMenuMode('local');});
