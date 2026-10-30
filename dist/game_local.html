@@ -2915,30 +2915,41 @@ function showMainMenu(){
  $('home-hint').textContent='Chọn một chế độ để bắt đầu. Bạn có thể quay lại trang chủ bất cứ lúc nào.';
 }
 function enterMenuMode(kind){
- var hint=$('home-hint');
- if(kind==='online'){
-   $('main-menu').hidden=true;$('app').classList.remove('menu-open');document.body.style.overflow='';
-   $('online-card').hidden=false;
-   $('online-card').scrollIntoView({behavior:'smooth',block:'start'});
-   hint.textContent='Đang mở khu vực chơi trực tuyến…';
-   setTimeout(function(){var inp=$('online-room-code');if(inp)inp.focus({preventScroll:true});},350);
-   return;
+ var menu=$('main-menu'), app=$('app'), online=$('online-card'), hint=$('home-hint');
+ var button=kind==='single'?$('menu-single'):kind==='local'?$('menu-local'):$('menu-online');
+ try{
+   if(kind==='online'){
+     menu.hidden=true;app.classList.remove('menu-open');document.body.style.overflow='';
+     online.hidden=false;
+     online.scrollIntoView({behavior:'smooth',block:'start'});
+     hint.textContent='Đang mở khu vực chơi trực tuyến…';
+     setTimeout(function(){var inp=$('online-room-code');if(inp)inp.focus();},350);
+     return;
+   }
+   online.hidden=true;
+   if(kind==='single'){
+     applyOpp('ai');newGame();
+     hint.textContent='Đang chuẩn bị trận đấu với máy…';
+   }else if(kind==='local'){
+     applyOpp('pvp');newGame();
+     hint.textContent='Đang chuẩn bị bàn đấu hai người…';
+   }else{
+     throw new Error('Chế độ chơi không hợp lệ.');
+   }
+   menu.hidden=true;app.classList.remove('menu-open');document.body.style.overflow='';
+   var target=$('draft').hidden?$('frame'):$('draft');
+   target.scrollIntoView({behavior:'smooth',block:'center'});
+ }catch(err){
+   menu.hidden=false;app.classList.add('menu-open');document.body.style.overflow='hidden';
+   hint.textContent='Chưa mở được ván chơi: '+(err&&err.message?err.message:'Lỗi không xác định')+'. Hãy thử lại.';
+   if(window.console&&console.error)console.error('Cờ Thú menu error:',err);
+ }finally{
+   if(button)button.classList.remove('is-loading');
  }
- $('main-menu').hidden=true;$('app').classList.remove('menu-open');document.body.style.overflow='';
- $('online-card').hidden=true;
- if(kind==='single'){
-   applyOpp('ai');newGame();
-   $('home-hint').textContent='Đang chuẩn bị trận đấu với máy…';
- }else{
-   applyOpp('pvp');newGame();
-   $('home-hint').textContent='Đang chuẩn bị bàn đấu hai người…';
- }
- var target=$('draft').hidden?$('frame'):$('draft');
- target.scrollIntoView({behavior:'smooth',block:'center'});
 }
-$('menu-single').addEventListener('click',function(){this.classList.add('is-loading');enterMenuMode('single');});
-$('menu-local').addEventListener('click',function(){this.classList.add('is-loading');enterMenuMode('local');});
-$('menu-online').addEventListener('click',function(){this.classList.add('is-loading');enterMenuMode('online');});
+$('menu-single').addEventListener('click',function(){enterMenuMode('single');});
+$('menu-local').addEventListener('click',function(){enterMenuMode('local');});
+$('menu-online').addEventListener('click',function(){enterMenuMode('online');});
 $('menu-sound').addEventListener('click',function(){soundOn=!soundOn;store('cothu:sound',soundOn?'1':'0');updateMenuAudio();if(soundOn)sfx.select();});
 $('menu-music').addEventListener('click',function(){setMusic(!musicOn);});
 $('menu-info').addEventListener('click',function(){$('menu-modal').hidden=false;$('menu-modal-close').focus();});
