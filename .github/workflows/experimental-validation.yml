@@ -82,9 +82,11 @@ jobs:
           node pw16.js
 
       - name: Run online multiplayer browser regression
-        if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'feature/online-two-player-pvp'
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'fix/online-connection-and-top-panel'
         working-directory: tests
-        run: node pw17.js
+        run: |
+          node pw17.js
+          node pw18-live-online.js
 
       - name: Upload paired simulation results
         if: always()
