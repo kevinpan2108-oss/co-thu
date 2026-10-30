@@ -653,6 +653,40 @@ details.card summary::after{font-size:20px}
   .score{font-size:10px}
 }
 
+
+
+/* Main menu: use the game's existing visual language; feature-focused, not a separate theme. */
+.main-menu{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;overflow:auto;padding:24px 16px;background:var(--page,var(--bg));color:var(--ink)}
+.main-menu[hidden]{display:none}
+.menu-sky,.menu-land{display:none}
+.menu-content{position:relative;width:min(100%,460px);display:flex;flex-direction:column;align-items:stretch;gap:16px;padding:clamp(22px,5vw,34px);border:1px solid var(--edge);border-radius:22px;background:var(--panel,var(--card));box-shadow:var(--shadow,0 12px 36px rgba(20,35,50,.14));text-align:center}
+.menu-mascots{display:none}
+.menu-logo{display:block;color:var(--ink);font:900 clamp(32px,8vw,46px)/1 var(--font-display);letter-spacing:0;text-shadow:none;-webkit-text-stroke:0;transform:none}
+.menu-logo span{display:inline}
+.menu-logo span:last-child{font-size:inherit}
+.menu-subtitle{margin:0;color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.08em;text-shadow:none}
+.menu-actions{width:100%;display:grid;gap:10px;margin:6px 0}
+.menu-btn{min-height:52px;border:1px solid var(--edge);border-radius:12px;padding:10px 16px;background:var(--surface,var(--panel));color:var(--ink);font:800 16px/1.2 var(--font-display);letter-spacing:0;text-shadow:none;box-shadow:0 2px 5px rgba(20,35,50,.07);cursor:pointer;transition:transform .12s,background .12s}
+.menu-btn:before,.menu-btn:after{content:none}
+.menu-btn.online{background:var(--accent,var(--brand));color:white;border-color:transparent}
+.menu-btn span{font-size:1em;margin-right:8px}
+.menu-btn:active,.menu-tool:active{transform:translateY(1px);filter:brightness(.97);box-shadow:none}
+.menu-tools{display:flex;justify-content:center;gap:10px;margin:0}
+.menu-tool{width:84px;height:44px;border:1px solid var(--edge);border-radius:10px;background:var(--surface,var(--panel));color:var(--ink);font:700 22px var(--font-display);text-shadow:none;box-shadow:none;cursor:pointer}
+.menu-tool[aria-pressed="false"]{opacity:.58}
+.menu-footer{display:flex;justify-content:center;gap:10px}
+.menu-footer button{width:42px;height:42px;border:1px solid var(--edge);border-radius:50%;background:var(--surface,var(--panel));color:var(--ink);font:700 21px var(--font-body);text-shadow:none;box-shadow:none;cursor:pointer}
+.menu-version{margin:0;color:var(--muted);font:700 10px var(--font-body);letter-spacing:.12em}
+.menu-modal{position:fixed;inset:0;z-index:1100;display:grid;place-items:center;padding:20px;background:rgba(13,34,48,.55)}
+.menu-modal[hidden]{display:none}
+.menu-modal-card{position:relative;width:min(100%,420px);padding:24px;border:1px solid var(--edge);border-radius:18px;background:var(--panel,var(--card));color:var(--ink);box-shadow:var(--shadow,0 12px 36px rgba(0,0,0,.2));text-align:left}
+.menu-modal-card h2{margin:0 32px 10px 0;font:900 22px var(--font-display)}
+.menu-modal-card p,.menu-modal-card li{font-weight:500;line-height:1.5}
+.menu-modal-card ul{padding-left:22px}
+.menu-modal-close{position:absolute;right:12px;top:8px;border:0;background:transparent;color:var(--ink);font-size:28px;cursor:pointer}
+#btn-menu{margin-left:auto}
+@media(max-height:620px){.menu-content{gap:10px;padding:18px}.menu-actions{gap:7px}.menu-btn{min-height:44px}.menu-tool{height:40px}}
+
 </style>
 
 
@@ -786,6 +820,7 @@ details.card summary::after{font-size:20px}
           <button class="btn alt" id="btn-undo" type="button">Đi lại</button>
           <button class="btn alt" id="btn-hint" type="button">Gợi ý</button>
           <button class="btn alt" id="btn-sound" type="button" aria-pressed="true">Âm thanh: Bật</button>
+          <button class="btn alt" id="btn-menu" type="button">Menu chính</button>
         </div>
       </div>
 
@@ -798,7 +833,39 @@ details.card summary::after{font-size:20px}
     </aside>
   </div>
 </main>
-<div id="confetti" aria-hidden="true"></div>
+
+<section class="main-menu" id="main-menu" aria-label="Màn hình bắt đầu">
+  <div class="menu-sky" aria-hidden="true"></div>
+  <div class="menu-land" aria-hidden="true"></div>
+  <div class="menu-content">
+    <div class="menu-logo">CỜ THÚ</div>
+    <p class="menu-subtitle">CHỌN CÁCH BẠN MUỐN CHƠI</p>
+    <div class="menu-actions">
+      <button class="menu-btn" id="menu-single"><span>♟</span> SINGLE PLAY</button>
+      <button class="menu-btn online" id="menu-online"><span>🌐</span> PLAY ONLINE</button>
+      <button class="menu-btn" id="menu-local"><span>👥</span> LOCAL 2P</button>
+    </div>
+    <div class="menu-tools">
+      <button class="menu-tool" id="menu-sound" type="button" aria-pressed="true" aria-label="Bật tắt hiệu ứng âm thanh">🔊</button>
+      <button class="menu-tool" id="menu-music" type="button" aria-pressed="false" aria-label="Bật tắt nhạc nền">♫</button>
+    </div>
+    <div class="menu-footer">
+      <button id="menu-share" type="button" aria-label="Chia sẻ game">↗</button>
+      <button id="menu-info" type="button" aria-label="Thông tin game">ⓘ</button>
+    </div>
+    <p class="menu-version">CỜ THÚ · CHIẾN THUẬT · GIẢI TRÍ</p>
+  </div>
+</section>
+<section class="menu-modal" id="menu-modal" hidden role="dialog" aria-modal="true" aria-labelledby="menu-modal-title">
+  <div class="menu-modal-card">
+    <button class="menu-modal-close" id="menu-modal-close" aria-label="Đóng">×</button>
+    <h2 id="menu-modal-title">THÔNG TIN CỜ THÚ</h2>
+    <p>Cờ Thú – cuộc đấu trí chiến thuật giữa các loài vật.</p>
+    <ul><li>Single Play: đấu với máy, chọn cấp độ và chế độ chơi.</li><li>Play Online: tạo phòng hoặc nhập mã để đấu với bạn bè qua Internet.</li><li>Local 2P: hai người chơi luân phiên trên cùng một thiết bị.</li></ul>
+    <p>Đưa quân vào hang đối phương hoặc ăn hết quân chiến đấu của đối thủ để giành chiến thắng.</p>
+  </div>
+</section>
+\n<div id="confetti" aria-hidden="true"></div>
 
 <script>
 (function(){
@@ -1699,7 +1766,29 @@ var sfx={
   win:function(){[523,659,784,1046].forEach(function(f,i){tone(f,f*1.01,.2,'triangle',.13,i*.13);});},
   lose:function(){[392,330,262,196].forEach(function(f,i){tone(f,f*.98,.25,'triangle',.12,i*.16);});}
 };
-sfx.snipe=function(){tone(520,90,.2,'sawtooth',.12);};
+
+// Nhạc nền giai điệu ngắn, tạo bằng Web Audio (không tải thêm tệp ngoài).
+var musicOn=load('cothu:music','0')==='1', musicTimer=0, musicStep=0;
+function musicTick(){
+  if(!musicOn)return;
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    if(AC.state==='suspended')AC.resume();
+    var notes=[392,523.25,587.33,523.25,440,523.25,659.25,587.33], f=notes[musicStep%notes.length];
+    var o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime;
+    o.type='sine';o.frequency.setValueAtTime(f,t);
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.022,t+.04);g.gain.exponentialRampToValueAtTime(.0001,t+.42);
+    o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+.45);
+  }catch(e){}
+  musicStep++;musicTimer=setTimeout(musicTick,480);
+}
+function setMusic(on){
+  musicOn=!!on;store('cothu:music',musicOn?'1':'0');
+  if(musicTimer){clearTimeout(musicTimer);musicTimer=0;}
+  if(musicOn)musicTick();
+  updateMenuAudio();
+}
+\nsfx.snipe=function(){tone(520,90,.2,'sawtooth',.12);};
 sfx.swap=function(){tone(500,900,.1,'triangle',.1);tone(900,500,.1,'triangle',.1,.1);};
 var TRAP_SVG='<svg viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="23" rx="16" ry="12.5" fill="url(#pitG)" stroke="currentColor" stroke-width="3"/><g fill="#ecd9a8" stroke="#7a5a2c" stroke-width="1" stroke-linejoin="round"><path d="M9 26 L11.5 14 L14 26Z"/><path d="M16.5 28 L20 12 L23.5 28Z"/><path d="M26 26 L28.5 14 L31 26Z"/></g><ellipse cx="20" cy="23" rx="16" ry="12.5" fill="none" stroke="rgba(0,0,0,.4)" stroke-width="1"/></svg>';
 var OUT_SVG='<svg viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="34" rx="11" ry="3.4" fill="rgba(0,0,0,.3)"/><path d="M14 33 V6" stroke="#5a3a1c" stroke-width="3" stroke-linecap="round"/><path d="M14.5 7 L33 12.5 L14.5 19Z" fill="currentColor" stroke="#10263A" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 33 h10" stroke="#5a3a1c" stroke-width="2.4" stroke-linecap="round"/></svg>';
@@ -2769,6 +2858,40 @@ Array.prototype.forEach.call(document.querySelectorAll('input[name="opp"]'),func
 });
 $('btn-sound').textContent='Âm thanh: '+(soundOn?'Bật':'Tắt');
 $('btn-sound').setAttribute('aria-pressed',String(soundOn));
+function updateMenuAudio(){
+ var sm=$('menu-sound'),mm=$('menu-music');
+ if(sm){sm.textContent=soundOn?'🔊':'🔇';sm.setAttribute('aria-pressed',String(soundOn));}
+ if(mm){mm.textContent=musicOn?'♫':'♪';mm.setAttribute('aria-pressed',String(musicOn));}
+ $('btn-sound').textContent='Âm thanh: '+(soundOn?'Bật':'Tắt');
+ $('btn-sound').setAttribute('aria-pressed',String(soundOn));
+}
+function showMainMenu(){
+ $('main-menu').hidden=false;$('menu-modal').hidden=true;$('app').classList.add('menu-open');
+ $('online-card').hidden=true;document.body.style.overflow='hidden';
+}
+function enterMenuMode(kind){
+ $('main-menu').hidden=true;$('app').classList.remove('menu-open');document.body.style.overflow='';
+ $('online-card').hidden=kind!=='online';
+ if(kind==='single'){applyOpp('ai');newGame();}
+ else if(kind==='local'){applyOpp('pvp');newGame();}
+ else if(kind==='online')$('online-card').scrollIntoView({behavior:'smooth',block:'start'});
+}
+$('menu-single').addEventListener('click',function(){enterMenuMode('single');});
+$('menu-local').addEventListener('click',function(){enterMenuMode('local');});
+$('menu-online').addEventListener('click',function(){enterMenuMode('online');});
+$('menu-sound').addEventListener('click',function(){soundOn=!soundOn;store('cothu:sound',soundOn?'1':'0');updateMenuAudio();if(soundOn)sfx.select();});
+$('menu-music').addEventListener('click',function(){setMusic(!musicOn);});
+$('menu-info').addEventListener('click',function(){$('menu-modal').hidden=false;});
+$('menu-modal-close').addEventListener('click',function(){$('menu-modal').hidden=true;});
+$('menu-modal').addEventListener('click',function(e){if(e.target===$('menu-modal'))$('menu-modal').hidden=true;});
+$('menu-share').addEventListener('click',function(){
+ var data={title:'Cờ Thú',text:'Cùng chơi Safari Chess – Cờ Thú nhé!',url:location.href};
+ if(navigator.share)navigator.share(data).catch(function(){});
+ else if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(location.href);
+ else window.prompt('Sao chép liên kết game:',location.href);
+});
+$('btn-menu').addEventListener('click',showMainMenu);
+updateMenuAudio();
 if(window.matchMedia&&window.matchMedia('(min-width: 901px)').matches){ $('roster-box').open=true; }
 $('draft-go').addEventListener('click',function(){
   if(dr.idx<dr.sides.length-1){ dr.idx++; showDraft(); return; }
@@ -2788,6 +2911,7 @@ function start(data){
   layoutBoard();
   applyLevel(level); applyOpp(oppKey); renderRoster(); renderRules(); scheduleGround();
   newGame();
+  $('online-card').hidden=true;showMainMenu();
   requestAnimationFrame(function(){requestAnimationFrame(function(){boardEl.classList.add('ready');});});
 }
 if(window.claude&&window.claude.hot&&window.claude.hot.ready) window.claude.hot.ready(start);
