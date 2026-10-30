@@ -242,8 +242,12 @@ function onlineStartHostGame(){
   onlineLastResult=null; onlineReady=true; onlineOutSeq=0; onlineInSeq=0;
   begin(me,foe,null);
   onlineSetPerspective(1); onlineSetControls(true);
-  onlineStatus('Đã kết nối! Bạn đi trước. Mã phòng: '+onlineCode,'good');
-  setBubble('🌐','Đã kết nối đối thủ. Đội hình được chọn tự động cho ván online này.');
+  onlineStatus(onlineTurnStatus(),'good');
+  setBubble('🌐','Hai người đã kết nối. Người chơi 1 bắt đầu.');
+}
+function onlineTurnStatus(){
+  if(over)return 'Ván đã kết thúc.';
+  return 'Lượt của '+(turn>0?'Người chơi 1.':'Người chơi 2.');
 }
 function onlineSnapshot(){
   return {
@@ -292,7 +296,7 @@ function onlineApplySnapshot(s,isStart){
       else if(s.result.type==='draw')finishDraw(s.result.stuck,s.result.why);
     }
     onlineReady=true;
-    onlineStatus(over?'Ván đã kết thúc.':(turn===onlineSide?'Đến lượt bạn.':'Đang chờ đối thủ đi…'),'good');
+    onlineStatus(onlineTurnStatus(),'good');
     updateButtons();
   }catch(e){
     onlineStatus('Dữ liệu ván cờ không hợp lệ.','bad');
@@ -312,8 +316,8 @@ function onlineHandleData(msg){
     if(!msg.state||typeof msg.seq!=='number')return;
     onlineInSeq=msg.seq;
     if(onlineApplySnapshot(msg.state,true)){
-      onlineStatus(turn===onlineSide?'Đến lượt bạn.':'Đang chờ đối thủ đi…','good');
-      setBubble('🌐','Đã vào phòng! Đối thủ đang ở phía bên kia bàn cờ.');
+      onlineStatus(onlineTurnStatus(),'good');
+      setBubble('🌐','Hai người đã kết nối. Người chơi 1 bắt đầu.');
     }
     return;
   }
@@ -321,7 +325,7 @@ function onlineHandleData(msg){
     if(typeof msg.seq!=='number'||msg.seq<=onlineInSeq)return;
     onlineInSeq=msg.seq;
     onlineApplySnapshot(msg.state,false);
-    onlineStatus(over?'Ván đã kết thúc.':(turn===onlineSide?'Đến lượt bạn.':'Đang chờ đối thủ đi…'),'good');
+    onlineStatus(onlineTurnStatus(),'good');
     return;
   }
   if(msg.type==='rematch-request'&&onlineRole==='host'){
