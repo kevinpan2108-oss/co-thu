@@ -46,7 +46,7 @@ var WATER=new Uint8Array(N), TRAP=new Int8Array(N), DEN=new Int8Array(N), ROCK=n
    N+4+a: hoi chieu Lao Bo rung; N+6+a: hoi chieu Khi; N+8+a: tien don;
    N+10+a: hoi chieu Huc Bo rung; N+12+a: vi tri+1 cua quan dang choang. */
 var SL=N, ST=14, OUTCD=2, BONUS=true;
-var CLASSIC=false, TERR=true, REEDCAP=true;
+var CLASSIC=false, TERR=true, REEDCAP=false;
 var HK=new Array(19).fill('');
 var SLOTKEYS=[null,['rat'],['cat','fox'],['wolf','boar'],['dog','bear'],['leo','croc'],['tig','eagle'],['lio','bison'],['ele'],['','mon','tur']];
 var SQ=[[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]];
