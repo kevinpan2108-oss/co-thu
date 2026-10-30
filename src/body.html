@@ -143,35 +143,53 @@
   </div>
 </main>
 
-<section class="main-menu" id="main-menu" aria-label="Màn hình bắt đầu">
-  <div class="menu-sky" aria-hidden="true"></div>
-  <div class="menu-land" aria-hidden="true"></div>
-  <div class="menu-content">
-    <div class="menu-logo">CỜ THÚ</div>
-    <p class="menu-subtitle">CHỌN CÁCH BẠN MUỐN CHƠI</p>
-    <div class="menu-actions">
-      <button class="menu-btn" id="menu-single"><span>♟</span> SINGLE PLAY</button>
-      <button class="menu-btn online" id="menu-online"><span>🌐</span> PLAY ONLINE</button>
-      <button class="menu-btn" id="menu-local"><span>👥</span> LOCAL 2P</button>
+<section class="main-menu" id="main-menu" aria-label="Trang chủ Cờ Thú">
+  <div class="home-shell">
+    <header class="home-topbar">
+      <div class="home-brand"><span class="home-brand-mark">♟</span><span>CỜ THÚ</span></div>
+      <span class="home-version">CHIẾN THUẬT · PHIÊU LƯU · ĐỐI ĐẦU</span>
+    </header>
+    <div class="home-main">
+      <section class="home-intro">
+        <div class="home-eyebrow"><span class="home-live-dot"></span> SẴN SÀNG RA TRẬN</div>
+        <h1>Chào mừng<br/>đến với <span>Cờ Thú</span></h1>
+        <p class="home-lead">Chỉ huy đội quân muông thú, tận dụng địa hình và tuyệt kỹ để chiếm hang đối thủ.</p>
+        <div class="home-stats">
+          <div><b>♜</b><span>Chiến thuật</span></div>
+          <div><b>🐾</b><span>Nhiều đội hình</span></div>
+          <div><b>⚔</b><span>Đấu cùng bạn bè</span></div>
+        </div>
+        <div class="home-quick">
+          <button class="home-utility" id="menu-sound" type="button" aria-pressed="true"><span class="utility-icon">🔊</span><span class="utility-label">Âm thanh bật</span></button>
+          <button class="home-utility" id="menu-music" type="button" aria-pressed="false"><span class="utility-icon">♫</span><span class="utility-label">Nhạc nền tắt</span></button>
+          <button class="home-utility" id="menu-share" type="button"><span class="utility-icon">↗</span><span class="utility-label">Chia sẻ</span></button>
+          <button class="home-utility" id="menu-info" type="button"><span class="utility-icon">ⓘ</span><span class="utility-label">Giới thiệu</span></button>
+        </div>
+      </section>
+      <section class="home-modes" aria-label="Chọn chế độ chơi">
+        <div class="home-section-heading"><div><span>BẮT ĐẦU</span><h2>Bạn muốn chơi thế nào?</h2></div><span class="home-paw">🐾</span></div>
+        <button class="mode-card" id="menu-single" type="button">
+          <span class="mode-symbol single-symbol">♟</span><span class="mode-copy"><b>Đấu với máy</b><small>Chọn đội hình, cấp độ và thử thách AI</small></span><span class="mode-arrow">→</span>
+        </button>
+        <button class="mode-card featured" id="menu-online" type="button">
+          <span class="mode-symbol online-symbol">◎</span><span class="mode-copy"><b>Chơi trực tuyến</b><small>Tạo phòng hoặc nhập mã để đấu với bạn bè</small></span><span class="mode-arrow">→</span>
+        </button>
+        <button class="mode-card" id="menu-local" type="button">
+          <span class="mode-symbol local-symbol">♟♟</span><span class="mode-copy"><b>Hai người cùng máy</b><small>Luân phiên điều khiển trên một thiết bị</small></span><span class="mode-arrow">→</span>
+        </button>
+        <p class="home-hint" id="home-hint" role="status" aria-live="polite">Chọn một chế độ để bắt đầu. Bạn có thể quay lại trang chủ bất cứ lúc nào.</p>
+      </section>
     </div>
-    <div class="menu-tools">
-      <button class="menu-tool" id="menu-sound" type="button" aria-pressed="true" aria-label="Bật tắt hiệu ứng âm thanh">🔊</button>
-      <button class="menu-tool" id="menu-music" type="button" aria-pressed="false" aria-label="Bật tắt nhạc nền">♫</button>
-    </div>
-    <div class="menu-footer">
-      <button id="menu-share" type="button" aria-label="Chia sẻ game">↗</button>
-      <button id="menu-info" type="button" aria-label="Thông tin game">ⓘ</button>
-    </div>
-    <p class="menu-version">CỜ THÚ · CHIẾN THUẬT · GIẢI TRÍ</p>
+    <footer class="home-footer"><span>© CỜ THÚ</span><span>Chọn chiến thuật của bạn.</span></footer>
   </div>
 </section>
 <section class="menu-modal" id="menu-modal" hidden role="dialog" aria-modal="true" aria-labelledby="menu-modal-title">
   <div class="menu-modal-card">
     <button class="menu-modal-close" id="menu-modal-close" aria-label="Đóng">×</button>
-    <h2 id="menu-modal-title">THÔNG TIN CỜ THÚ</h2>
-    <p>Cờ Thú – cuộc đấu trí chiến thuật giữa các loài vật.</p>
-    <ul><li>Single Play: đấu với máy, chọn cấp độ và chế độ chơi.</li><li>Play Online: tạo phòng hoặc nhập mã để đấu với bạn bè qua Internet.</li><li>Local 2P: hai người chơi luân phiên trên cùng một thiết bị.</li></ul>
-    <p>Đưa quân vào hang đối phương hoặc ăn hết quân chiến đấu của đối thủ để giành chiến thắng.</p>
+    <h2 id="menu-modal-title">GIỚI THIỆU CỜ THÚ</h2>
+    <p>Cờ Thú là trò chơi chiến thuật nơi mỗi loài vật có thứ hạng, khả năng và vai trò riêng.</p>
+    <ul><li><b>Đấu với máy:</b> luyện tập với AI, chọn cấp độ và đội hình.</li><li><b>Chơi trực tuyến:</b> tạo phòng hoặc nhập mã phòng của bạn bè.</li><li><b>Hai người cùng máy:</b> thay phiên nhau điều khiển hai đội.</li></ul>
+    <p>Mục tiêu là đưa quân vào hang đối phương hoặc đánh bại toàn bộ quân chiến đấu của đối thủ.</p>
   </div>
 </section>
 \n<div id="confetti" aria-hidden="true"></div>
