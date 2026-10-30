@@ -430,7 +430,7 @@ function showMainMenu(){
 }
 function enterMenuMode(kind){
  var menu=$('main-menu'), app=$('app'), online=$('online-card'), hint=$('home-hint');
- var button=kind==='single'?$ ('menu-single'):kind==='local'?$ ('menu-local'):$ ('menu-online');
+ var button=kind==='single'?$('menu-single'):kind==='local'?$('menu-local'):$('menu-online');
  try{
    if(kind==='online'){
      menu.hidden=true;app.classList.remove('menu-open');document.body.style.overflow='';
