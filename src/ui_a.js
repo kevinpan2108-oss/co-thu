@@ -6,6 +6,11 @@ var engineSrc=makeEngine.toString();
 
 /* ---------- Du lieu quan co ---------- */
 function H(k,n,e,s,ep,br,t){return {k:k,n:n,e:e,s:s,ep:ep,br:br,t:t};}
+/* Icon thu (SVG don sac trong sprite #ic-<k>); chi chen HTML khi dung dung dinh dang nay */
+function ico(h){return '<svg class="ico" aria-hidden="true"><use href="#ic-'+h.k+'"/></svg>';}
+function ie(h){return h.k?ico(h):h.e;}
+var IC_RE=/^<svg class="ico" aria-hidden="true"><use href="#ic-[a-z]+"\/><\/svg>$/;
+function setIc(el,v){ if(IC_RE.test(v)) el.innerHTML=v; else el.textContent=v; }
 var HEROES=[null,
  [H('rat','Chuột','🐭','Chít chít!','Thợ lặn','Bơi hồ · ăn Voi trên bờ',[
    ['g','Bơi hồ; trên bờ ăn được Voi.'],

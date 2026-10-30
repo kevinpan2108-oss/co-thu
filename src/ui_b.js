@@ -84,7 +84,7 @@ var markEls=[], pieceEls={}, rankEls={}, miniEls={};
   });
   var lad=$('ladder'), q;
   for(q=1;q<=8;q++){
-    var span=document.createElement('span'); span.className='mini'; span.id='lad-'+q; span.textContent=HEROES[q][0].e;
+    var span=document.createElement('span'); span.className='mini'; span.id='lad-'+q; span.innerHTML=ico(HEROES[q][0]);
     lad.appendChild(span);
     if(q<8){var ar=document.createElement('span'); ar.textContent='›'; lad.appendChild(ar);}
   }

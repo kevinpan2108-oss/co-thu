@@ -158,9 +158,9 @@ function finish(winner,why,code){
   else if(why==='pieces') sub=(pn(loser)==='Máy'?'Máy':pn(loser))+' chỉ còn lại Rùa hoặc đã hết quân.';
   else if(why==='rep') sub=pn(loser)+' chỉ còn nước lặp thế lần thứ 3 (bị cấm) nên không còn nước đi hợp lệ.';
   else sub=pn(loser)+' không còn nước đi nào.';
-  if(pvp()){ title=pn(winner)+' thắng!'; emoji=why==='den'?hero(code).e:'🏆'; }
-  else{ title=mine?'Bạn thắng rồi!':'Máy thắng ván này'; emoji=why==='den'?hero(code).e:(mine?'🏆':'🐾'); if(!mine) sub+=' Thử lại nhé, đàn thú của bạn sẽ khá hơn.'; }
-  $('res-emoji').textContent=emoji; $('res-title').textContent=title; $('res-sub').textContent=sub;
+  if(pvp()){ title=pn(winner)+' thắng!'; emoji=why==='den'?ico(hero(code)):'🏆'; }
+  else{ title=mine?'Bạn thắng rồi!':'Máy thắng ván này'; emoji=why==='den'?ico(hero(code)):(mine?'🏆':'🐾'); if(!mine) sub+=' Thử lại nhé, đàn thú của bạn sẽ khá hơn.'; }
+  setIc($('res-emoji'),emoji); $('res-title').textContent=title; $('res-sub').textContent=sub;
   setTimeout(function(){resultEl.hidden=false;},650);
   if(pvp()){
     if(mine){p1w++;store('cothu:p1',String(p1w));}else{p2w++;store('cothu:p2',String(p2w));}
@@ -308,14 +308,14 @@ function showDraft(){
 function showDraftInfo(h){
   var el=$('draft-info'); if(!el) return;
   if(!h.t){ el.innerHTML='<b>Không dùng quân ngoài bậc</b>: mỗi bên chơi với 8 quân.'; return; }
-  el.innerHTML='<b>'+h.e+' '+h.n+'</b> · '+h.br+'. '+h.t.filter(function(t){return t[0]==='g';}).slice(0,2).map(function(t){return t[1];}).join(' ');
+  el.innerHTML='<b>'+ie(h)+' '+h.n+'</b> · '+h.br+'. '+h.t.filter(function(t){return t[0]==='g';}).slice(0,2).map(function(t){return t[1];}).join(' ');
 }
 function renderDraft(){
   var box=$('draft-rows'); box.innerHTML='';
   var s=dr.sides[dr.idx], pick=dr.picks[s];
   [1,2,3,4,5,6,7,8,9].forEach(function(r){
     var row=document.createElement('div'), opts, many;
-    if(r===9) opts=[{e:'🚫',n:'Không dùng',br:'8 quân'},{e:H_MON.e,n:H_MON.n,br:H_MON.br},{e:H_TUR.e,n:H_TUR.n,br:H_TUR.br}];
+    if(r===9) opts=[{e:'⊘',n:'Không dùng',br:'8 quân'},H_MON,H_TUR];
     else opts=HEROES[r];
     many=opts.length>1;
     row.className='dr'; row.style.setProperty('--n',opts.length);
@@ -326,7 +326,7 @@ function renderDraft(){
       if(many&&!locked) b.type='button';
       b.className='opt'+(pick[r]===idx?' on':'')+(many?'':' fixed')+(locked&&pick[r]!==idx?' lock':'');
       b.title=h.br;
-      b.innerHTML='<b>'+h.e+' '+h.n+'</b><small>'+h.br+'</small>';
+      b.innerHTML='<b>'+ie(h)+' '+h.n+'</b><small>'+h.br+'</small>';
       b.addEventListener('mouseenter',function(){showDraftInfo(h);});
       if(many&&!locked) b.addEventListener('click',function(){pick[r]=idx;renderDraft();showDraftInfo(h);});
       else b.addEventListener('click',function(){showDraftInfo(h);});
@@ -366,7 +366,7 @@ function doHint(){
     if(my!==token||over||turn!==side||!mv) return;
     hint={f:mv.f,t:destOf(mv.f,mv.t,mv.k)};
     var h=hero(cells[mv.f]);
-    setBubble(h.e,'Gợi ý: thử đi '+h.n+' tới ô đang nhấp nháy'+(mv.bf!==undefined&&mv.bf!==mv.bt?', rồi dùng bước thưởng tiền đồn.':'.'));
+    setBubble(ico(h),'Gợi ý: thử đi '+h.n+' tới ô đang nhấp nháy'+(mv.bf!==undefined&&mv.bf!==mv.bt?', rồi dùng bước thưởng tiền đồn.':'.'));
     updateMarks();
     clearTimeout(hintTimer); hintTimer=setTimeout(function(){hint=null;updateMarks();},7000);
   });
