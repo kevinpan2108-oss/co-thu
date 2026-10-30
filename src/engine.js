@@ -219,6 +219,16 @@ function movesFrom(cells,i,out){
       if(inW(cells,i)&&cells[t]*s<0&&!DEN[t]&&(!TERR||(!BUSH[t]&&!MARSH[t]))&&!isTur(cells[t])&&effRank(cells,t)<=4) out.push(i|(t<<7)|(6<<14));
     }
   }
+  /* Lach lau say: quan bat dau o bui co the buoc cheo 1 o trong; khong an quan. */
+  if(!CLASSIC&&!lock&&BUSH[i]){
+    r=(i/COLS)|0; c=i%COLS;
+    for(dr=-1;dr<=1;dr+=2)for(dc=-1;dc<=1;dc+=2){
+      nr=r+dr; nc=c+dc;
+      if(nr<0||nr>ROWS-1||nc<0||nc>COLS-1) continue;
+      t=nr*COLS+nc;
+      if(cells[t]===0&&!WATER[t]&&!DEN[t]&&!ROCK[t]) out.push(i|(t<<7)|(10<<14));
+    }
+  }
   if(!CLASSIC&&!lock&&K==='leo'){
     r=(i/COLS)|0; c=i%COLS;
     for(dr=-1;dr<=1;dr+=2)for(dc=-1;dc<=1;dc+=2){
