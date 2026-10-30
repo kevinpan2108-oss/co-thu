@@ -482,9 +482,6 @@ select.sel{width:100%;padding:8px;border-radius:12px;border:3px solid var(--edge
 .online-status{margin:0;padding:8px 10px;border-radius:11px;background:var(--bg);color:var(--muted);font-size:12.5px;font-weight:800;line-height:1.35;overflow-wrap:anywhere}
 .online-status.good{color:#247a3e;background:rgba(95,208,104,.14)}
 .online-status.bad{color:#b4233d;background:rgba(255,77,109,.12)}
-.board.online-flipped{transform:rotate(180deg)}
-.board.online-flipped .emo,.board.online-flipped .rank{transform:rotate(180deg)}
-.board.online-flipped > .result{transform:rotate(180deg)}
 /* Online multiplayer: prominent room panel above the board */
 .online-card{
   width:100%;margin:0 0 14px;padding:16px 20px;
@@ -584,9 +581,6 @@ details.card summary::after{font-size:20px}
 
 /* Only the board is mirrored for the second player. Page chrome stays upright. */
 .board{transition:transform .18s ease}
-.board.online-flipped{transform:rotate(180deg)}
-.board.online-flipped .emo,.board.online-flipped .rank{transform:rotate(180deg)}
-.board.online-flipped .result{transform:rotate(180deg)}
 
 @media(max-width:960px){
   body{padding-block:10px 26px}
@@ -2571,7 +2565,6 @@ function onCell(i){
 boardEl.addEventListener('click',function(e){
   var rect=boardEl.getBoundingClientRect();
   var c=Math.floor((e.clientX-rect.left)/rect.width*COLS), r=Math.floor((e.clientY-rect.top)/rect.height*ROWS);
-  if(onlineActive&&onlineSide<0){c=COLS-1-c;r=ROWS-1-r;}
   if(c<0||c>COLS-1||r<0||r>ROWS-1) return;
   onCell(r*COLS+c);
 });
@@ -2797,8 +2790,8 @@ var onlinePreviousOpp='ai', onlinePreviousMode='draft';
 
 var localPvp=pvp, localPn=pn, localPnl=pnl, localHumanTurn=humanTurn, localIsHumanSide=isHumanSide;
 pvp=function(){ return onlineActive||localPvp(); };
-pn=function(side){ return onlineActive?(side===onlineSide?'Bạn':'Đối thủ'):localPn(side); };
-pnl=function(side){ return onlineActive?(side===onlineSide?'bạn':'đối thủ'):localPnl(side); };
+pn=function(side){ return onlineActive?(side>0?'Người chơi 1':'Người chơi 2'):localPn(side); };
+pnl=function(side){ return onlineActive?(side>0?'người chơi 1':'người chơi 2'):localPnl(side); };
 humanTurn=function(){ return onlineActive?(!over&&!thinking&&onlineReady&&turn===onlineSide):localHumanTurn(); };
 isHumanSide=function(side){ return onlineActive?(onlineReady&&side===onlineSide):localIsHumanSide(side); };
 
@@ -2812,28 +2805,26 @@ updateStatus=function(){
 };
 var localUpdateScore=updateScore;
 updateScore=function(){
+  /* Both clients see the same fixed Player 1 / Player 2 score columns. */
   localUpdateScore();
   if(onlineActive){
-    /* Always present the score from the local player's point of view. */
-    $('sc1-l').textContent='Bạn';
-    $('sc2-l').textContent='Đối thủ';
-    var myWins=onlineSide===1?p1w:p2w;
-    var foeWins=onlineSide===1?p2w:p1w;
-    $('wins').textContent=myWins;
-    $('losses').textContent=foeWins;
+    $('sc1-l').textContent='Người 1';
+    $('sc2-l').textContent='Người 2';
+    $('wins').textContent=p1w;
+    $('losses').textContent=p2w;
   }
 };
 var localUpdateStrips=updateStrips;
 updateStrips=function(){
+  /* The board always has Player 2 at the top (-1) and Player 1 at the bottom (+1). */
   localUpdateStrips();
   if(onlineActive){
-    $('who-me').textContent='Bạn';
-    $('who-foe').textContent='Đối thủ';
-    if(onlineSide===-1){
-      var a=$('cnt-me').textContent, b=$('cnt-foe').textContent;
-      $('cnt-me').textContent=b; $('cnt-foe').textContent=a;
-      setOc('oc-me',-1); setOc('oc-foe',1);
-    }
+    $('who-foe').textContent='Người chơi 2';
+    $('who-me').textContent='Người chơi 1';
+    $('foe-team').setAttribute('aria-label','Đội hình Người chơi 2 ở phía trên');
+    $('me-team').setAttribute('aria-label','Đội hình Người chơi 1 ở phía dưới');
+    setOc('oc-me',1);
+    setOc('oc-foe',-1);
   }
 };
 var localUpdateButtons=updateButtons;
@@ -2998,17 +2989,19 @@ function onlineSwapStrips(){
   b.appendChild(frag);
 }
 function onlineSetPerspective(side){
-  /* Keep the page layout identical. Only mirror the board and exchange
-     the two miniature rosters so the local player is always at the bottom. */
-  if(side<0&&!onlineSwappedStrips){onlineSwapStrips();onlineSwappedStrips=true;}
-  else if(side>0&&onlineSwappedStrips){onlineSwapStrips();onlineSwappedStrips=false;}
+  /*
+   * Shared north-up board: Player 2 always stays at the top and Player 1
+   * always stays at the bottom on EVERY device. Never rotate the board or
+   * swap the rosters based on which player is viewing it.
+   */
   onlineSide=side;
-  boardEl.classList.toggle('online-flipped',side<0);
-  $('app').classList.toggle('online-guest',side<0);
-  $('who-me').textContent='Bạn';
-  $('who-foe').textContent='Đối thủ';
-  $('me-team').setAttribute('aria-label','Đội hình của bạn ở phía dưới');
-  $('foe-team').setAttribute('aria-label','Đội hình đối thủ ở phía trên');
+  onlineSwappedStrips=false;
+  boardEl.classList.remove('online-flipped');
+  $('app').classList.remove('online-guest');
+  $('who-me').textContent='Người chơi 1';
+  $('who-foe').textContent='Người chơi 2';
+  $('me-team').setAttribute('aria-label','Đội hình Người chơi 1 ở phía dưới');
+  $('foe-team').setAttribute('aria-label','Đội hình Người chơi 2 ở phía trên');
 }
 function onlineActivate(side,role){
   onlineActive=true; onlineReady=false; onlineRole=role; onlineSetPerspective(side);
@@ -3032,8 +3025,12 @@ function onlineStartHostGame(){
   onlineLastResult=null; onlineReady=true; onlineOutSeq=0; onlineInSeq=0;
   begin(me,foe,null);
   onlineSetPerspective(1); onlineSetControls(true);
-  onlineStatus('Đã kết nối! Bạn đi trước. Mã phòng: '+onlineCode,'good');
-  setBubble('🌐','Đã kết nối đối thủ. Đội hình được chọn tự động cho ván online này.');
+  onlineStatus(onlineTurnStatus(),'good');
+  setBubble('🌐','Hai người đã kết nối. Người chơi 1 bắt đầu.');
+}
+function onlineTurnStatus(){
+  if(over)return 'Ván đã kết thúc.';
+  return 'Lượt của '+(turn>0?'Người chơi 1.':'Người chơi 2.');
 }
 function onlineSnapshot(){
   return {
@@ -3082,7 +3079,7 @@ function onlineApplySnapshot(s,isStart){
       else if(s.result.type==='draw')finishDraw(s.result.stuck,s.result.why);
     }
     onlineReady=true;
-    onlineStatus(over?'Ván đã kết thúc.':(turn===onlineSide?'Đến lượt bạn.':'Đang chờ đối thủ đi…'),'good');
+    onlineStatus(onlineTurnStatus(),'good');
     updateButtons();
   }catch(e){
     onlineStatus('Dữ liệu ván cờ không hợp lệ.','bad');
@@ -3102,8 +3099,8 @@ function onlineHandleData(msg){
     if(!msg.state||typeof msg.seq!=='number')return;
     onlineInSeq=msg.seq;
     if(onlineApplySnapshot(msg.state,true)){
-      onlineStatus(turn===onlineSide?'Đến lượt bạn.':'Đang chờ đối thủ đi…','good');
-      setBubble('🌐','Đã vào phòng! Đối thủ đang ở phía bên kia bàn cờ.');
+      onlineStatus(onlineTurnStatus(),'good');
+      setBubble('🌐','Hai người đã kết nối. Người chơi 1 bắt đầu.');
     }
     return;
   }
@@ -3111,7 +3108,7 @@ function onlineHandleData(msg){
     if(typeof msg.seq!=='number'||msg.seq<=onlineInSeq)return;
     onlineInSeq=msg.seq;
     onlineApplySnapshot(msg.state,false);
-    onlineStatus(over?'Ván đã kết thúc.':(turn===onlineSide?'Đến lượt bạn.':'Đang chờ đối thủ đi…'),'good');
+    onlineStatus(onlineTurnStatus(),'good');
     return;
   }
   if(msg.type==='rematch-request'&&onlineRole==='host'){
