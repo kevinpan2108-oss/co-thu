@@ -24,9 +24,13 @@ var localUpdateScore=updateScore;
 updateScore=function(){
   localUpdateScore();
   if(onlineActive){
-    $('sc1-l').textContent=onlineSide===1?'Bạn':'Đối thủ';
-    $('sc2-l').textContent=onlineSide===-1?'Bạn':'Đối thủ';
-    if(onlineSide<0){var v1=$('wins').textContent,v2=$('losses').textContent;$('wins').textContent=v2;$('losses').textContent=v1;}
+    /* Always present the score from the local player's point of view. */
+    $('sc1-l').textContent='Bạn';
+    $('sc2-l').textContent='Đối thủ';
+    var myWins=onlineSide===1?p1w:p2w;
+    var foeWins=onlineSide===1?p2w:p1w;
+    $('wins').textContent=myWins;
+    $('losses').textContent=foeWins;
   }
 };
 var localUpdateStrips=updateStrips;
@@ -185,14 +189,17 @@ function onlineCopyLink(){
   }
 }
 function onlineSetControls(locked){
-  Array.prototype.forEach.call(document.querySelectorAll('input[name="opp"],input[name="mode"],input[name="lvl"]'),function(el){el.disabled=!!locked;});
-  $('btn-new').disabled=!!locked;
-  $('online-create').disabled=!!locked;
-  $('online-join').disabled=!!locked;
+  locked=!!locked;
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="opp"],input[name="mode"],input[name="lvl"]'),function(el){el.disabled=locked;});
+  $('btn-new').disabled=locked;
+  $('online-create').disabled=locked;
+  $('online-join').disabled=locked;
   $('online-leave').hidden=!locked;
-  $('online-room-code').readOnly=!!locked;
+  $('online-room-code').readOnly=locked;
   $('online-copy').hidden=!(locked&&onlineRole==='host'&&!!onlineCode);
   $('online-rematch').hidden=true;
+  $('app').classList.toggle('online-mode',locked);
+  $('game-settings-title').textContent=locked?'Tùy chọn online':'Tùy chọn';
 }
 function onlineSwapStrips(){
   var a=$('strip-me'), b=$('strip-foe'), frag=document.createDocumentFragment();
@@ -201,11 +208,17 @@ function onlineSwapStrips(){
   b.appendChild(frag);
 }
 function onlineSetPerspective(side){
+  /* Keep the page layout identical. Only mirror the board and exchange
+     the two miniature rosters so the local player is always at the bottom. */
   if(side<0&&!onlineSwappedStrips){onlineSwapStrips();onlineSwappedStrips=true;}
   else if(side>0&&onlineSwappedStrips){onlineSwapStrips();onlineSwappedStrips=false;}
   onlineSide=side;
   boardEl.classList.toggle('online-flipped',side<0);
-  $('who-me').textContent='Bạn'; $('who-foe').textContent='Đối thủ';
+  $('app').classList.toggle('online-guest',side<0);
+  $('who-me').textContent='Bạn';
+  $('who-foe').textContent='Đối thủ';
+  $('me-team').setAttribute('aria-label','Đội hình của bạn ở phía dưới');
+  $('foe-team').setAttribute('aria-label','Đội hình đối thủ ở phía trên');
 }
 function onlineActivate(side,role){
   onlineActive=true; onlineReady=false; onlineRole=role; onlineSetPerspective(side);
@@ -458,6 +471,6 @@ onlineStatus('Chưa kết nối. Tạo phòng hoặc nhập mã phòng để ch�
 window.__ONLINE_TEST__={
   snapshot:onlineSnapshot,
   apply:function(s){return onlineApplySnapshot(s,true);},
-  activate:function(s,side){onlineActive=true;onlineReady=true;onlineRole='guest';onlineSetPerspective(side||-1);return onlineApplySnapshot(s,true);},
+  activate:function(s,side){onlineActivate(side||-1,'guest');return onlineApplySnapshot(s,true);},
   get:function(){return {active:onlineActive,ready:onlineReady,side:onlineSide,turn:turn,over:over,cells:Array.from(cells)};}
 };

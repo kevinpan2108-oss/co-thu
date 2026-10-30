@@ -50,7 +50,7 @@
         <button class="btn alt" id="btn-skip" type="button" hidden>Bỏ qua thưởng</button>
       </div>
 
-      <div class="team" aria-label="Quân bên trên"><span class="who"><em id="who-foe">Máy</em> <small id="cnt-foe">8/8</small></span><div class="strip" id="strip-foe"></div><span class="oc" id="oc-foe"></span></div>
+      <div class="team team-foe" id="foe-team" aria-label="Đội hình đối thủ ở phía trên"><span class="who"><em id="who-foe">Máy</em> <small id="cnt-foe">8/8</small></span><div class="strip" id="strip-foe"></div><span class="oc" id="oc-foe"></span></div>
 
       <div class="frame" id="frame">
         <div class="board" id="board" tabindex="0" role="application" aria-label="Bàn cờ thú. Dùng phím mũi tên để chọn ô, Enter để chọn quân hoặc đi quân, Esc để bỏ chọn.">
@@ -83,7 +83,7 @@
         </div>
       </div>
 
-      <div class="team" aria-label="Quân bên dưới"><span class="who"><em id="who-me">Bạn</em> <small id="cnt-me">8/8</small></span><div class="strip" id="strip-me"></div><span class="oc" id="oc-me"></span></div>
+      <div class="team team-me" id="me-team" aria-label="Đội hình của bạn ở phía dưới"><span class="who"><em id="who-me">Bạn</em> <small id="cnt-me">8/8</small></span><div class="strip" id="strip-me"></div><span class="oc" id="oc-me"></span></div>
     </section>
 
     <aside class="side">
@@ -94,22 +94,26 @@
         <div class="roster" id="roster"></div>
       </details>
 
-      <div class="card">
-        <h2>Ván chơi</h2>
-        <div class="field-label">Đối thủ</div>
-        <div class="seg" role="radiogroup" aria-label="Đối thủ">
-          <input type="radio" name="opp" id="opp-ai" value="ai" checked><label for="opp-ai">Chơi với máy</label>
-          <input type="radio" name="opp" id="opp-pvp" value="pvp"><label for="opp-pvp">2 người chơi</label>
+      <div class="card game-settings" id="game-settings">
+        <h2 id="game-settings-title">Tùy chọn</h2>
+        <div id="opponent-setting" class="game-setting">
+          <div class="field-label">Đối thủ</div>
+          <div class="seg" role="radiogroup" aria-label="Đối thủ">
+            <input type="radio" name="opp" id="opp-ai" value="ai" checked><label for="opp-ai">Chơi với máy</label>
+            <input type="radio" name="opp" id="opp-pvp" value="pvp"><label for="opp-pvp">2 người chơi</label>
+          </div>
         </div>
-        <div class="field-label">Chế độ</div>
-        <div class="seg wrap" role="radiogroup" aria-label="Chế độ chơi">
-          <input type="radio" name="mode" id="mode-basic" value="basic"><label for="mode-basic">Cổ điển</label>
-          <input type="radio" name="mode" id="mode-draft" value="draft" checked><label for="mode-draft">Chọn tướng</label>
-          <input type="radio" name="mode" id="mode-chal" value="chal"><label for="mode-chal">Thử thách</label>
+        <div id="mode-setting" class="game-setting">
+          <div class="field-label">Chế độ</div>
+          <div class="seg wrap" role="radiogroup" aria-label="Chế độ chơi">
+            <input type="radio" name="mode" id="mode-basic" value="basic"><label for="mode-basic">Cổ điển</label>
+            <input type="radio" name="mode" id="mode-draft" value="draft" checked><label for="mode-draft">Chọn tướng</label>
+            <input type="radio" name="mode" id="mode-chal" value="chal"><label for="mode-chal">Thử thách</label>
+          </div>
+          <p class="mode-desc" id="mode-desc"></p>
+          <div id="chal-box" hidden><div class="field-label">Thử thách</div><select id="chal-sel" class="sel" aria-label="Chọn thử thách"></select><p class="mode-desc" id="chal-desc"></p></div>
         </div>
-        <p class="mode-desc" id="mode-desc"></p>
-        <div id="chal-box" hidden><div class="field-label">Thử thách</div><select id="chal-sel" class="sel" aria-label="Chọn thử thách"></select><p class="mode-desc" id="chal-desc"></p></div>
-        <div id="lvl-box">
+        <div id="lvl-box" class="game-setting">
           <div class="field-label">Cấp độ của máy</div>
           <div class="seg wrap" role="radiogroup" aria-label="Cấp độ của máy">
             <input type="radio" name="lvl" id="lvl-1" value="1"><label for="lvl-1">1 · Tập sự</label>
@@ -120,7 +124,7 @@
           </div>
           <p class="lvl-note" id="lvl-note"></p>
         </div>
-        <div class="btns">
+        <div class="btns game-toolbar">
           <button class="btn" id="btn-new" type="button">Ván mới</button>
           <button class="btn alt" id="btn-undo" type="button">Đi lại</button>
           <button class="btn alt" id="btn-hint" type="button">Gợi ý</button>
