@@ -82,6 +82,26 @@ scn('bridge',{},[[5,1,4]],c=>{ c.ck('Cho buoc len cau hep',c.any(c.sg,5,1,4,1));
 scn('bridge',{7:0},[[4,5,8]],c=>{ c.ck('Voi o bai can (4,5) van di duoc',c.any(c.sg,4,5,3,5));});
 // ---------- Da / bui ----------
 scn('rock',{},[[3,1,4]],c=>{ c.ck('Quan khong buoc vao da (3,2)',!c.any(c.sg,3,1,3,2));});
+// ---------- Lach lau say ----------
+scn('bush diagonal slip',{},[[2,1,3]],c=>{
+  c.ck('buoc cheo tu bui den dat trong (1,0)',c.has(c.sg,10,2,1,1,0));
+  c.ck('buoc cheo tu bui sang o bui (1,2)',c.has(c.sg,10,2,1,1,2));
+  c.ck('buoc cheo xuong dat (3,0)',c.has(c.sg,10,2,1,3,0));
+  c.ck('khong lach vao nui da (3,2)',!c.has(c.sg,10,2,1,3,2));
+  c.ck('chi buoc cheo, khong thay the buoc ngang (2,0)',!c.has(c.sg,10,2,1,2,0));
+});
+scn('bush diagonal slip occupied',{},[[2,1,3],[1,0,-2]],c=>{
+  c.ck('khong dung buoc cheo de an quan dich',!c.has(c.sg,10,2,1,1,0));
+});
+scn('bush diagonal slip from land',{},[[3,3,3]],c=>{
+  c.ck('quan ngoai bui khong co buoc cheo',!c.has(c.sg,10,3,3,2,2));
+});
+scn('bush diagonal slip into water',{},[[3,8,3]],c=>{
+  c.ck('khong lach vao song (4,7)',!c.has(c.sg,10,3,8,4,7));
+});
+scn('bush diagonal slip outpost',{},[[2,2,3]],c=>{
+  c.ck('buoc cheo vao tien don van du dieu kien nhan thuong',E.bonusEligible(c.cells,c.sg,c.I(2,2),c.I(3,1),10));
+});
 // ---------- Bac hieu luc ----------
 scn('eff wolf',WOLF,[[6,4,3],[6,5,2],[3,0,3]],c=>{ c.ck('Soi co dong doi ke: 4',c.eff(6,4)===4); c.ck('Soi di le: 3',c.eff(3,0)===3);});
 scn('eff boar',{3:1},[[3,3,3],[6,4,3]],c=>{ c.ck('Lon rung sat song that: 4',c.eff(3,3)===4); c.ck('Lon rung xa song: 3',c.eff(6,4)===3);});
