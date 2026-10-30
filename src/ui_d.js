@@ -415,6 +415,40 @@ Array.prototype.forEach.call(document.querySelectorAll('input[name="opp"]'),func
 });
 $('btn-sound').textContent='Âm thanh: '+(soundOn?'Bật':'Tắt');
 $('btn-sound').setAttribute('aria-pressed',String(soundOn));
+function updateMenuAudio(){
+ var sm=$('menu-sound'),mm=$('menu-music');
+ if(sm){sm.textContent=soundOn?'🔊':'🔇';sm.setAttribute('aria-pressed',String(soundOn));}
+ if(mm){mm.textContent=musicOn?'♫':'♪';mm.setAttribute('aria-pressed',String(musicOn));}
+ $('btn-sound').textContent='Âm thanh: '+(soundOn?'Bật':'Tắt');
+ $('btn-sound').setAttribute('aria-pressed',String(soundOn));
+}
+function showMainMenu(){
+ $('main-menu').hidden=false;$('menu-modal').hidden=true;$('app').classList.add('menu-open');
+ $('online-card').hidden=true;document.body.style.overflow='hidden';
+}
+function enterMenuMode(kind){
+ $('main-menu').hidden=true;$('app').classList.remove('menu-open');document.body.style.overflow='';
+ $('online-card').hidden=kind!=='online';
+ if(kind==='single'){applyOpp('ai');newGame();}
+ else if(kind==='local'){applyOpp('pvp');newGame();}
+ else if(kind==='online')$('online-card').scrollIntoView({behavior:'smooth',block:'start'});
+}
+$('menu-single').addEventListener('click',function(){enterMenuMode('single');});
+$('menu-local').addEventListener('click',function(){enterMenuMode('local');});
+$('menu-online').addEventListener('click',function(){enterMenuMode('online');});
+$('menu-sound').addEventListener('click',function(){soundOn=!soundOn;store('cothu:sound',soundOn?'1':'0');updateMenuAudio();if(soundOn)sfx.select();});
+$('menu-music').addEventListener('click',function(){setMusic(!musicOn);});
+$('menu-info').addEventListener('click',function(){$('menu-modal').hidden=false;});
+$('menu-modal-close').addEventListener('click',function(){$('menu-modal').hidden=true;});
+$('menu-modal').addEventListener('click',function(e){if(e.target===$('menu-modal'))$('menu-modal').hidden=true;});
+$('menu-share').addEventListener('click',function(){
+ var data={title:'Cờ Thú',text:'Cùng chơi Safari Chess – Cờ Thú nhé!',url:location.href};
+ if(navigator.share)navigator.share(data).catch(function(){});
+ else if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(location.href);
+ else window.prompt('Sao chép liên kết game:',location.href);
+});
+$('btn-menu').addEventListener('click',showMainMenu);
+updateMenuAudio();
 if(window.matchMedia&&window.matchMedia('(min-width: 901px)').matches){ $('roster-box').open=true; }
 $('draft-go').addEventListener('click',function(){
   if(dr.idx<dr.sides.length-1){ dr.idx++; showDraft(); return; }
@@ -434,6 +468,7 @@ function start(data){
   layoutBoard();
   applyLevel(level); applyOpp(oppKey); renderRoster(); renderRules(); scheduleGround();
   newGame();
+  $('online-card').hidden=true;showMainMenu();
   requestAnimationFrame(function(){requestAnimationFrame(function(){boardEl.classList.add('ready');});});
 }
 if(window.claude&&window.claude.hot&&window.claude.hot.ready) window.claude.hot.ready(start);

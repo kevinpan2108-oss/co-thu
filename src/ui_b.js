@@ -34,7 +34,29 @@ var sfx={
   win:function(){[523,659,784,1046].forEach(function(f,i){tone(f,f*1.01,.2,'triangle',.13,i*.13);});},
   lose:function(){[392,330,262,196].forEach(function(f,i){tone(f,f*.98,.25,'triangle',.12,i*.16);});}
 };
-sfx.snipe=function(){tone(520,90,.2,'sawtooth',.12);};
+
+// Nhạc nền giai điệu ngắn, tạo bằng Web Audio (không tải thêm tệp ngoài).
+var musicOn=load('cothu:music','0')==='1', musicTimer=0, musicStep=0;
+function musicTick(){
+  if(!musicOn)return;
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    if(AC.state==='suspended')AC.resume();
+    var notes=[392,523.25,587.33,523.25,440,523.25,659.25,587.33], f=notes[musicStep%notes.length];
+    var o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime;
+    o.type='sine';o.frequency.setValueAtTime(f,t);
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.022,t+.04);g.gain.exponentialRampToValueAtTime(.0001,t+.42);
+    o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+.45);
+  }catch(e){}
+  musicStep++;musicTimer=setTimeout(musicTick,480);
+}
+function setMusic(on){
+  musicOn=!!on;store('cothu:music',musicOn?'1':'0');
+  if(musicTimer){clearTimeout(musicTimer);musicTimer=0;}
+  if(musicOn)musicTick();
+  updateMenuAudio();
+}
+\nsfx.snipe=function(){tone(520,90,.2,'sawtooth',.12);};
 sfx.swap=function(){tone(500,900,.1,'triangle',.1);tone(900,500,.1,'triangle',.1,.1);};
 var TRAP_SVG='<svg viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="23" rx="16" ry="12.5" fill="url(#pitG)" stroke="currentColor" stroke-width="3"/><g fill="#ecd9a8" stroke="#7a5a2c" stroke-width="1" stroke-linejoin="round"><path d="M9 26 L11.5 14 L14 26Z"/><path d="M16.5 28 L20 12 L23.5 28Z"/><path d="M26 26 L28.5 14 L31 26Z"/></g><ellipse cx="20" cy="23" rx="16" ry="12.5" fill="none" stroke="rgba(0,0,0,.4)" stroke-width="1"/></svg>';
 var OUT_SVG='<svg viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="34" rx="11" ry="3.4" fill="rgba(0,0,0,.3)"/><path d="M14 33 V6" stroke="#5a3a1c" stroke-width="3" stroke-linecap="round"/><path d="M14.5 7 L33 12.5 L14.5 19Z" fill="currentColor" stroke="#10263A" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 33 h10" stroke="#5a3a1c" stroke-width="2.4" stroke-linecap="round"/></svg>';
