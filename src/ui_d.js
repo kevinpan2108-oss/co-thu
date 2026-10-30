@@ -442,7 +442,7 @@ $('menu-info').addEventListener('click',function(){$('menu-modal').hidden=false;
 $('menu-modal-close').addEventListener('click',function(){$('menu-modal').hidden=true;});
 $('menu-modal').addEventListener('click',function(e){if(e.target===$('menu-modal'))$('menu-modal').hidden=true;});
 $('menu-share').addEventListener('click',function(){
- var data={title:'Safari Chess – Cờ Thú',text:'Cùng chơi Safari Chess – Cờ Thú nhé!',url:location.href};
+ var data={title:'Cờ Thú',text:'Cùng chơi Safari Chess – Cờ Thú nhé!',url:location.href};
  if(navigator.share)navigator.share(data).catch(function(){});
  else if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(location.href);
  else window.prompt('Sao chép liên kết game:',location.href);
