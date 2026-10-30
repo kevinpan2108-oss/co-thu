@@ -52,11 +52,11 @@ const path = require('path');
   }));
   chk('Host co giao dien online dong bo',hostUi.settings&&hostUi.soundVisible&&hostUi.aiSettingsHidden&&!hostUi.boardFlipped);
   chk('Host dung nhan Ban va Doi thu',JSON.stringify(hostUi.score)===JSON.stringify(['Người 1','Người 2'])&&JSON.stringify(hostUi.teams)===JSON.stringify(['Người chơi 2','Người chơi 1']));
-  const guestState={...state,turn:-1};
+  const guestState={...state};
   const applied=await page.evaluate(s=>window.__ONLINE_TEST__.activate(s,-1),guestState);
   chk('Guest nhan va khoi phuc duoc trang thai',applied===true);
   chk('Guest sees the exact same unflipped board direction',!(await page.locator('#board').evaluate(el=>el.classList.contains('online-flipped'))));
-  chk('Guest duoc di khi den luot minh',await page.evaluate(()=>window.__E('humanTurn()')===true));
+  chk('Guest waits while Player 1 has the turn',await page.evaluate(()=>window.__E('humanTurn()')===false));
   const guestUi=await page.evaluate(()=>({
     score:[document.querySelector('#sc1-l').textContent,document.querySelector('#sc2-l').textContent],
     teams:[document.querySelector('#who-foe').textContent,document.querySelector('#who-me').textContent],
@@ -71,6 +71,9 @@ const path = require('path');
   chk('Hai ben co cung nhan va thu tu giao dien',JSON.stringify(hostUi.score)===JSON.stringify(guestUi.score)&&JSON.stringify(hostUi.teams)===JSON.stringify(guestUi.teams));
   chk('Hai ben thay cung mot huong ban co',hostUi.boardTransform===guestUi.boardTransform&&hostUi.boardFlipped===guestUi.boardFlipped);
   chk('Hai ben hien thi cung mot trang thai luot di',hostUi.status===guestUi.status&&hostUi.status==='Lượt của Người chơi 1.');
+  const playerTwoTurn={...state,turn:-1};
+  await page.evaluate(s=>window.__ONLINE_TEST__.apply(s),playerTwoTurn);
+  chk('Guest can move when Player 2 has the turn',await page.evaluate(()=>window.__E('humanTurn()')===true));
   chk('Undo va hint bi khoa trong online',await page.locator('#btn-undo').isDisabled()&&await page.locator('#btn-hint').isDisabled());
   chk('Nut thoat phong hien thi',await page.locator('#online-leave').isVisible());
   console.log('online ui/state ok',ok,'bad',bad,'errors',JSON.stringify(errors));
