@@ -81,6 +81,10 @@ jobs:
           node pw14.js
           node pw16.js
 
+      - name: Run home menu smoke test (no JS errors, every item responds)
+        working-directory: tests
+        run: node smoke_menu.js
+
       - name: Run online multiplayer browser regression
         if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'fix/shared-board-orientation'
         working-directory: tests

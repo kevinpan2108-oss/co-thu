@@ -469,6 +469,7 @@ try{
   if(roomFromUrl&&/^[A-Za-z0-9]{8}$/.test(roomFromUrl)){
     $('online-room-code').value=roomFromUrl.toUpperCase();
     onlineStatus('Đã nhận mã phòng từ liên kết. Nhấn “Vào phòng” để tham gia.');
+    try{enterMenuMode('online');}catch(e2){}
   }
 }catch(e){}
 onlineStatus('Chưa kết nối. Tạo phòng hoặc nhập mã phòng để chơi.');

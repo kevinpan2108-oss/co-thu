@@ -22,6 +22,7 @@
 
       <section class="card online-card" id="online-card" aria-labelledby="online-title">
         <div class="online-copy">
+          <button class="online-back" id="online-back" type="button">← Trang chủ</button>
           <span class="online-kicker">THÁCH ĐẤU BẠN BÈ</span>
           <h2 id="online-title">Chơi online 2 người</h2>
           <p class="mode-desc">Mỗi người mở game trên một thiết bị. Tạo phòng, chia sẻ mã và bắt đầu đấu trực tuyến.</p>
@@ -152,13 +153,13 @@
     <div class="home-main">
       <section class="home-intro">
         <div class="home-eyebrow"><span class="home-live-dot"></span> SẴN SÀNG RA TRẬN</div>
-        <h1>Chào mừng<br/>đến với <span>Cờ Thú</span></h1>
+        <h1>Chào mừng<br/>đến với <span class="nowrap">Cờ Thú</span></h1>
         <p class="home-lead">Chỉ huy đội quân muông thú, tận dụng địa hình và tuyệt kỹ để chiếm hang đối thủ.</p>
-        <div class="home-stats">
-          <div><b>♜</b><span>Chiến thuật</span></div>
-          <div><b>🐾</b><span>Nhiều đội hình</span></div>
-          <div><b>⚔</b><span>Đấu cùng bạn bè</span></div>
-        </div>
+        <ul class="home-stats" aria-label="Điểm nổi bật">
+          <li><b>♜</b><span>Chiến thuật</span></li>
+          <li><b>🐾</b><span>Nhiều đội hình</span></li>
+          <li><b>⚔</b><span>Đấu cùng bạn bè</span></li>
+        </ul>
         <div class="home-quick">
           <button class="home-utility" id="menu-sound" type="button" aria-pressed="true"><span class="utility-icon">🔊</span><span class="utility-label">Âm thanh bật</span></button>
           <button class="home-utility" id="menu-music" type="button" aria-pressed="false"><span class="utility-icon">♫</span><span class="utility-label">Nhạc nền tắt</span></button>
@@ -192,4 +193,4 @@
     <p>Mục tiêu là đưa quân vào hang đối phương hoặc đánh bại toàn bộ quân chiến đấu của đối thủ.</p>
   </div>
 </section>
-\n<div id="confetti" aria-hidden="true"></div>
+<div id="confetti" aria-hidden="true"></div>

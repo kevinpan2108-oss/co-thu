@@ -3,7 +3,7 @@ const { chromium } = require('playwright');
   const b=await chromium.launch(); const errs=[];
   const ctx=await b.newContext({viewport:{width:390,height:800}}); const p=await ctx.newPage();
   p.on('pageerror',e=>errs.push(e.message)); p.on('console',m=>{if(m.type()==='error'&&!/ERR_|fonts/.test(m.text()))errs.push(m.text())});
-  await p.goto('file://'+require('path').join(__dirname,'..','dist','game_local.html')); await p.waitForTimeout(500);
+  await p.goto('file://'+require('path').join(__dirname,'..','dist','game_local.html')); await p.waitForTimeout(500); await p.click('#menu-single'); await p.waitForTimeout(300);
   await p.click('#draft-go'); await p.waitForTimeout(700);
   const ev=(fn,arg)=>p.evaluate(([src,a])=>window.__E('('+src+')')(a),[fn.toString(),arg]);
   // mobile overflow

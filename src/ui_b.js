@@ -56,7 +56,7 @@ function setMusic(on){
   if(musicOn)musicTick();
   updateMenuAudio();
 }
-\nsfx.snipe=function(){tone(520,90,.2,'sawtooth',.12);};
+sfx.snipe=function(){tone(520,90,.2,'sawtooth',.12);};
 sfx.swap=function(){tone(500,900,.1,'triangle',.1);tone(900,500,.1,'triangle',.1,.1);};
 var TRAP_SVG='<svg viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="23" rx="16" ry="12.5" fill="url(#pitG)" stroke="currentColor" stroke-width="3"/><g fill="#ecd9a8" stroke="#7a5a2c" stroke-width="1" stroke-linejoin="round"><path d="M9 26 L11.5 14 L14 26Z"/><path d="M16.5 28 L20 12 L23.5 28Z"/><path d="M26 26 L28.5 14 L31 26Z"/></g><ellipse cx="20" cy="23" rx="16" ry="12.5" fill="none" stroke="rgba(0,0,0,.4)" stroke-width="1"/></svg>';
 var OUT_SVG='<svg viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="34" rx="11" ry="3.4" fill="rgba(0,0,0,.3)"/><path d="M14 33 V6" stroke="#5a3a1c" stroke-width="3" stroke-linecap="round"/><path d="M14.5 7 L33 12.5 L14.5 19Z" fill="currentColor" stroke="#10263A" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 33 h10" stroke="#5a3a1c" stroke-width="2.4" stroke-linecap="round"/></svg>';
