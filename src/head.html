@@ -485,5 +485,39 @@ select.sel{width:100%;padding:8px;border-radius:12px;border:3px solid var(--edge
 .board.online-flipped{transform:rotate(180deg)}
 .board.online-flipped .emo,.board.online-flipped .rank{transform:rotate(180deg)}
 .board.online-flipped > .result{transform:rotate(180deg)}
+/* Online multiplayer: prominent room panel above the board */
+.online-card{
+  width:100%;margin:0 0 14px;padding:16px 20px;
+  display:grid;grid-template-columns:minmax(0,.9fr) minmax(360px,1.1fr);
+  align-items:center;gap:12px 24px;border-width:3px;
+}
+.online-copy{display:grid;gap:5px;min-width:0}
+.online-kicker{font-size:11px;font-weight:900;letter-spacing:.14em;color:var(--muted)}
+.online-copy h2{margin:0;font-size:22px;line-height:1.15}
+.online-copy .mode-desc{margin:0;max-width:48ch;font-size:13px;line-height:1.4}
+.online-controls{display:grid;gap:7px;min-width:0}
+.online-controls .field-label{margin:0}
+.online-entry{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:stretch}
+.online-entry .btn{min-width:116px}
+.online-actions{display:flex;flex-wrap:wrap;gap:7px}
+.online-actions .btn{font-size:13px;padding:8px 11px}
+.online-code{min-width:0;letter-spacing:.14em}
+.online-status{min-height:36px;display:flex;align-items:center}
+.online-status.good{color:#247a3e;background:rgba(95,208,104,.14)}
+.online-status.bad{color:#b4233d;background:rgba(255,77,109,.12)}
+@media(max-width:900px){
+  .online-card{grid-template-columns:minmax(0,1fr);gap:10px;padding:12px 14px;margin-bottom:9px}
+  .online-copy h2{font-size:20px}
+  .online-copy .mode-desc{font-size:12.5px}
+}
+@media(max-width:480px){
+  .online-entry{grid-template-columns:minmax(0,1fr) auto;gap:6px}
+  .online-entry .btn{min-width:92px;padding:8px 10px;font-size:13px}
+  .online-code{font-size:15px;padding:8px 9px;letter-spacing:.1em}
+  .online-actions{gap:5px}
+  .online-actions .btn{font-size:12px;padding:7px 9px}
+  .online-status{font-size:11.5px;min-height:32px}
+}
+
 
 </style>

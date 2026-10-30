@@ -22,12 +22,11 @@ const path = require('path');
   const chk=(name,pass)=>{if(pass)ok++;else{bad++;console.log('FAIL',name);}};
   await page.click('#online-create');
   await page.waitForTimeout(100);
-  console.log('ONLINE_DEBUG',JSON.stringify(await page.evaluate(()=>({peerType:typeof window.Peer,fake:!!window.__FAKE_PEER_INSTANCE__,status:document.querySelector('#online-status').textContent,createDisabled:document.querySelector('#online-create').disabled}))));
   await page.waitForFunction(()=>!!window.__FAKE_PEER_INSTANCE__);
   await page.waitForTimeout(30);
   const code=await page.locator('#online-room-code').inputValue();
   chk('Host tao ma phong 8 ky tu',/^[A-Z0-9]{8}$/.test(code));
-  chk('Host hien trang thai cho doi thu',/Đã tạo phòng|Đang chờ người chơi/.test(await page.locator('#online-status').textContent()));
+  chk('Host hien trang thai cho doi thu',/Phòng [A-Z0-9]{8} đã sẵn sàng|Đã tạo phòng|Đang chờ người chơi/i.test(await page.locator('#online-status').textContent()));
   await page.evaluate(()=>{
     const c={open:false,handlers:{},sent:[],on(n,f){(this.handlers[n]||(this.handlers[n]=[])).push(f);return this;},
       fire(n,v){if(n==='open')this.open=true;(this.handlers[n]||[]).forEach(f=>f(v));},
