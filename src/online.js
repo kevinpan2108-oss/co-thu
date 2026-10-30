@@ -280,7 +280,7 @@ function onlineCreateRoom(){
       },20000);
     });
     onlinePeer.on('connection',function(conn){
-      if(onlineConn&&onlineConn.open){try{conn.close();}catch(e){}return;}
+      if(onlineConn){try{conn.close();}catch(e){}return;}
       onlineAttachConnection(conn,'host');
     });
     onlinePeer.on('error',function(e){
