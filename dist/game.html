@@ -666,16 +666,19 @@ details.card summary::after{font-size:20px}
 .home-brand-mark{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--fg);color:var(--surface);font-size:20px}
 .home-version{color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.14em}
 .home-main{flex:1;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(24px,5vw,64px);align-items:center;padding:clamp(26px,5vw,56px) 0}
-.home-intro{max-width:430px}
+.home-intro{max-width:470px}
 .home-eyebrow{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:11px;font-weight:900;letter-spacing:.16em}
 .home-live-dot{width:8px;height:8px;border-radius:50%;background:#3aab83;box-shadow:0 0 0 4px rgba(58,171,131,.13)}
 .home-intro h1{margin:18px 0 14px;color:var(--fg);font:900 clamp(38px,5.6vw,64px)/.98 var(--font-display);letter-spacing:-.045em}
 .home-intro h1 span{color:#268b91}
 .home-lead{max-width:36ch;margin:0;color:var(--muted);font-size:15px;line-height:1.65}
-.home-stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
-.home-stats div{display:flex;align-items:center;gap:7px;padding:8px 10px;border:1px solid var(--edge);border-radius:10px;color:var(--muted);font-size:11px;font-weight:800}
-.home-stats b{color:var(--fg);font-size:15px}
-.home-quick{display:flex;flex-wrap:wrap;gap:8px;margin-top:30px}
+.home-stats{display:flex;flex-wrap:wrap;gap:6px 18px;margin:24px 0 0;padding:0;list-style:none;color:var(--muted);font-size:12px;font-weight:800}
+.home-stats li{display:flex;align-items:center;gap:7px;cursor:default}
+.home-stats b{display:grid;place-items:center;width:26px;height:26px;border-radius:8px;background:color-mix(in srgb,#268b91 14%,transparent);color:#268b91;font-size:13px}
+.nowrap{white-space:nowrap}
+.online-back{justify-self:start;margin:0 0 8px;padding:5px 10px;border:1px solid var(--edge);border-radius:999px;background:transparent;color:var(--muted);font:800 11px var(--font-body);cursor:pointer;transition:background .15s,color .15s}
+.online-back:hover{background:color-mix(in srgb,var(--fg) 7%,var(--surface));color:var(--fg)}
+.home-quick{display:flex;flex-wrap:wrap;gap:6px;margin-top:26px;padding-top:22px;border-top:1px dashed var(--edge)}
 .home-utility{display:flex;align-items:center;gap:7px;min-height:38px;padding:7px 10px;border:1px solid var(--edge);border-radius:10px;background:transparent;color:var(--fg);font:700 11px var(--font-body);cursor:pointer;transition:background .15s,border-color .15s,transform .15s}
 .home-utility:hover{background:color-mix(in srgb,var(--fg) 5%,var(--surface));transform:translateY(-1px)}
 .home-utility[aria-pressed="false"]{color:var(--muted)}
@@ -687,6 +690,9 @@ details.card summary::after{font-size:20px}
 .home-paw{font-size:28px;opacity:.75}
 .mode-card{width:100%;display:flex;align-items:center;gap:14px;min-height:88px;padding:14px 16px;border:1px solid var(--edge);border-radius:15px;background:var(--surface);color:var(--fg);text-align:left;cursor:pointer;transition:transform .16s,border-color .16s,box-shadow .16s,background .16s}
 .mode-card:hover{transform:translateY(-2px);border-color:#268b91;box-shadow:0 8px 18px rgba(16,38,58,.09)}
+.mode-card:hover .mode-symbol{background:rgba(38,139,145,.18);color:#268b91}
+.mode-card.featured:after{content:"PHỔ BIẾN";position:absolute;top:-8px;right:14px;padding:2px 8px;border-radius:999px;background:#268b91;color:#fff;font:900 8px var(--font-body);letter-spacing:.12em}
+.mode-card{position:relative}
 .mode-card:focus-visible,.home-utility:focus-visible{outline:3px solid #268b91;outline-offset:3px}
 .mode-card:active{transform:scale(.985)}
 .mode-card.featured{border-color:#268b91;background:linear-gradient(110deg,color-mix(in srgb,#268b91 12%,var(--surface)),var(--surface) 70%)}
@@ -709,9 +715,11 @@ details.card summary::after{font-size:20px}
 .menu-modal-close{position:absolute;right:13px;top:10px;width:34px;height:34px;border:0;border-radius:9px;background:transparent;color:var(--fg);font-size:26px;cursor:pointer}
 #btn-menu{margin-left:auto}
 @media(max-width:760px){.main-menu{padding:10px}.home-shell{min-height:calc(100dvh - 20px);padding:20px;border-radius:18px}.home-main{grid-template-columns:1fr;gap:22px;padding:24px 0}.home-intro{max-width:none}.home-intro h1{font-size:clamp(38px,10vw,52px);margin:12px 0}.home-lead{font-size:13px}.home-stats{margin-top:16px}.home-quick{margin-top:18px}.home-modes{padding:16px;gap:9px}.mode-card{min-height:74px;padding:11px 12px}.home-version{font-size:8px;text-align:right}.home-shell:before{width:130px;height:130px;right:-18px;top:90px}}
-@media(max-width:390px){.home-shell{padding:15px}.home-topbar{padding-bottom:12px}.home-version{max-width:125px;line-height:1.4}.home-stats div{font-size:10px;padding:6px 7px}.home-quick{gap:6px}.home-utility{font-size:10px;padding:6px 8px}.home-modes{padding:13px}.mode-copy b{font-size:14px}.mode-copy small{font-size:10px}.mode-symbol{flex-basis:40px;width:40px;height:40px}}
+@media(max-width:390px){.home-shell{padding:15px}.home-topbar{padding-bottom:12px}.home-version{max-width:125px;line-height:1.4}.home-stats{gap:6px 12px;font-size:11px}.home-quick{gap:6px}.home-utility{font-size:10px;padding:6px 8px}.home-modes{padding:13px}.mode-copy b{font-size:14px}.mode-copy small{font-size:10px}.mode-symbol{flex-basis:40px;width:40px;height:40px}}
 @media(prefers-reduced-motion:reduce){.mode-card,.home-utility,.mode-arrow{transition:none}}
 
+.app.online-lobby:not(.online-mode) .layout{display:none}
+.app.online-lobby:not(.online-mode) .online-card{max-width:760px;margin:6vh auto 0;grid-template-columns:minmax(0,1fr);padding:22px 24px;box-shadow:0 18px 50px rgba(16,38,58,.18)}
 </style>
 
 
@@ -738,6 +746,7 @@ details.card summary::after{font-size:20px}
 
       <section class="card online-card" id="online-card" aria-labelledby="online-title">
         <div class="online-copy">
+          <button class="online-back" id="online-back" type="button">← Trang chủ</button>
           <span class="online-kicker">THÁCH ĐẤU BẠN BÈ</span>
           <h2 id="online-title">Chơi online 2 người</h2>
           <p class="mode-desc">Mỗi người mở game trên một thiết bị. Tạo phòng, chia sẻ mã và bắt đầu đấu trực tuyến.</p>
@@ -868,13 +877,13 @@ details.card summary::after{font-size:20px}
     <div class="home-main">
       <section class="home-intro">
         <div class="home-eyebrow"><span class="home-live-dot"></span> SẴN SÀNG RA TRẬN</div>
-        <h1>Chào mừng<br/>đến với <span>Cờ Thú</span></h1>
+        <h1>Chào mừng<br/>đến với <span class="nowrap">Cờ Thú</span></h1>
         <p class="home-lead">Chỉ huy đội quân muông thú, tận dụng địa hình và tuyệt kỹ để chiếm hang đối thủ.</p>
-        <div class="home-stats">
-          <div><b>♜</b><span>Chiến thuật</span></div>
-          <div><b>🐾</b><span>Nhiều đội hình</span></div>
-          <div><b>⚔</b><span>Đấu cùng bạn bè</span></div>
-        </div>
+        <ul class="home-stats" aria-label="Điểm nổi bật">
+          <li><b>♜</b><span>Chiến thuật</span></li>
+          <li><b>🐾</b><span>Nhiều đội hình</span></li>
+          <li><b>⚔</b><span>Đấu cùng bạn bè</span></li>
+        </ul>
         <div class="home-quick">
           <button class="home-utility" id="menu-sound" type="button" aria-pressed="true"><span class="utility-icon">🔊</span><span class="utility-label">Âm thanh bật</span></button>
           <button class="home-utility" id="menu-music" type="button" aria-pressed="false"><span class="utility-icon">♫</span><span class="utility-label">Nhạc nền tắt</span></button>
@@ -908,7 +917,7 @@ details.card summary::after{font-size:20px}
     <p>Mục tiêu là đưa quân vào hang đối phương hoặc đánh bại toàn bộ quân chiến đấu của đối thủ.</p>
   </div>
 </section>
-\n<div id="confetti" aria-hidden="true"></div>
+<div id="confetti" aria-hidden="true"></div>
 
 <script>
 (function(){
@@ -1831,7 +1840,7 @@ function setMusic(on){
   if(musicOn)musicTick();
   updateMenuAudio();
 }
-\nsfx.snipe=function(){tone(520,90,.2,'sawtooth',.12);};
+sfx.snipe=function(){tone(520,90,.2,'sawtooth',.12);};
 sfx.swap=function(){tone(500,900,.1,'triangle',.1);tone(900,500,.1,'triangle',.1,.1);};
 var TRAP_SVG='<svg viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="23" rx="16" ry="12.5" fill="url(#pitG)" stroke="currentColor" stroke-width="3"/><g fill="#ecd9a8" stroke="#7a5a2c" stroke-width="1" stroke-linejoin="round"><path d="M9 26 L11.5 14 L14 26Z"/><path d="M16.5 28 L20 12 L23.5 28Z"/><path d="M26 26 L28.5 14 L31 26Z"/></g><ellipse cx="20" cy="23" rx="16" ry="12.5" fill="none" stroke="rgba(0,0,0,.4)" stroke-width="1"/></svg>';
 var OUT_SVG='<svg viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="34" rx="11" ry="3.4" fill="rgba(0,0,0,.3)"/><path d="M14 33 V6" stroke="#5a3a1c" stroke-width="3" stroke-linecap="round"/><path d="M14.5 7 L33 12.5 L14.5 19Z" fill="currentColor" stroke="#10263A" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 33 h10" stroke="#5a3a1c" stroke-width="2.4" stroke-linecap="round"/></svg>';
@@ -2910,7 +2919,7 @@ function updateMenuAudio(){
 }
 function showMainMenu(){
  $('main-menu').hidden=false;$('menu-modal').hidden=true;
- $('app').classList.add('menu-open');$('online-card').hidden=true;
+ $('app').classList.add('menu-open');$('app').classList.remove('online-lobby');$('online-card').hidden=true;
  document.body.style.overflow='hidden';
  $('home-hint').textContent='Chọn một chế độ để bắt đầu. Bạn có thể quay lại trang chủ bất cứ lúc nào.';
 }
@@ -2920,13 +2929,13 @@ function enterMenuMode(kind){
  try{
    if(kind==='online'){
      menu.hidden=true;app.classList.remove('menu-open');document.body.style.overflow='';
-     online.hidden=false;
+     online.hidden=false;app.classList.add('online-lobby');
      online.scrollIntoView({behavior:'smooth',block:'start'});
      hint.textContent='Đang mở khu vực chơi trực tuyến…';
      setTimeout(function(){var inp=$('online-room-code');if(inp)inp.focus();},350);
      return;
    }
-   online.hidden=true;
+   online.hidden=true;app.classList.remove('online-lobby');
    if(kind==='single'){
      applyOpp('ai');newGame();
      hint.textContent='Đang chuẩn bị trận đấu với máy…';
@@ -2947,6 +2956,7 @@ function enterMenuMode(kind){
    if(button)button.classList.remove('is-loading');
  }
 }
+$('online-back').addEventListener('click',showMainMenu);
 $('menu-single').addEventListener('click',function(){enterMenuMode('single');});
 $('menu-local').addEventListener('click',function(){enterMenuMode('local');});
 $('menu-online').addEventListener('click',function(){enterMenuMode('online');});
@@ -3460,6 +3470,7 @@ try{
   if(roomFromUrl&&/^[A-Za-z0-9]{8}$/.test(roomFromUrl)){
     $('online-room-code').value=roomFromUrl.toUpperCase();
     onlineStatus('Đã nhận mã phòng từ liên kết. Nhấn “Vào phòng” để tham gia.');
+    try{enterMenuMode('online');}catch(e2){}
   }
 }catch(e){}
 onlineStatus('Chưa kết nối. Tạo phòng hoặc nhập mã phòng để chơi.');
