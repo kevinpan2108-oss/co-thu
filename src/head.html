@@ -734,4 +734,93 @@ details.card summary::after{font-size:20px}
 
 .app.online-lobby:not(.online-mode) .layout{display:none}
 .app.online-lobby:not(.online-mode) .online-card{max-width:760px;margin:6vh auto 0;grid-template-columns:minmax(0,1fr);padding:22px 24px;box-shadow:0 18px 50px rgba(16,38,58,.18)}
+
+/* ================= Phong cach Nhat cho van choi va phong online ================= */
+:root{
+  --bg:#f5f0e6;--dot:transparent;--surface:#fbf8f1;--fg:#1d1d1f;--muted:#5b5850;
+  --edge:rgba(29,29,31,.28);--ink:#1d1d1f;--pop:transparent;
+  --me:#c8402f;--me-soft:#f1d6d0;--foe:#3d4d82;--foe-soft:#d3d8ea;
+  --sun:#e8dcc0;--hit:#c8402f;--leaf:#6f8f5e;
+  --frame:#e9e1d0;--frame-dark:#ddd3bd;--frame-light:#f1ebdc;
+  --w1:#b9d3dc;--w2:#8fb5c4;--w3:#6c97a9;--w4:#557f92;
+  --font-display:'Noto Serif','Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',Georgia,serif;
+  --font-body:'Noto Serif','Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',Georgia,serif;
+  --jp-btn-bg:#1d1d1f;--jp-btn-fg:#f5f0e6;
+}
+:root[data-theme="dark"]{
+  --bg:#17181b;--surface:#1e2024;--fg:#ece7dc;--muted:#a39e92;
+  --edge:rgba(236,231,220,.24);--ink:#ece7dc;
+  --me:#e5604d;--me-soft:#4a2a26;--foe:#8196dc;--foe-soft:#262d4a;
+  --sun:#34373d;--hit:#e5604d;--leaf:#8fb27b;
+  --frame:#25272c;--frame-dark:#202226;--frame-light:#2b2d33;
+  --w1:#4b7387;--w2:#3b6075;--w3:#2d4d60;--w4:#23404f;
+  --jp-btn-bg:#ece7dc;--jp-btn-fg:#17181b;
+}
+html,body{background-color:var(--bg)}
+body{background-image:repeating-linear-gradient(0deg,rgba(120,100,60,.025) 0 2px,transparent 2px 5px);font-family:var(--font-body)}
+:root[data-theme="dark"] body{background-image:none}
+/* header */
+.logo{gap:0;font:600 clamp(17px,2.4vw,22px)/1 var(--font-display);letter-spacing:.34em;align-items:center}
+.logo::before{content:"獣";display:grid;place-items:center;width:34px;height:34px;margin-right:14px;background:var(--me);color:#fff;font:700 20px/1 'Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',serif;letter-spacing:0;border-radius:3px;transform:rotate(-3deg)}
+.logo span,.logo span:nth-child(n){display:inline;min-width:0;height:auto;border:0;border-radius:0;box-shadow:none;background:none;color:var(--fg);transform:none;animation:none}
+.logo span:nth-child(3){display:inline-block;width:.6em;min-width:.6em}
+.tag{font:400 12px/1.5 var(--font-body);color:var(--muted)}
+.score{gap:14px;font:600 13px var(--font-body)}
+.score span,.score span.pv{padding:2px 0;border:0;border-bottom:1px solid var(--edge);border-radius:0;background:none;box-shadow:none}
+.score b{color:var(--me);font-size:1.1em}
+.theme-toggle{display:flex;align-items:center;gap:7px;padding:6px 0;border:0;background:none;color:var(--muted);font:600 12px var(--font-body);letter-spacing:.04em;cursor:pointer}
+.theme-toggle:before{content:"";width:6px;height:6px;border-radius:50%;border:1px solid var(--muted)}
+.theme-toggle[aria-pressed="true"]:before{background:var(--me);border-color:var(--me)}
+.theme-toggle:hover{color:var(--fg)}
+.theme-toggle:focus-visible{outline:2px solid var(--me);outline-offset:3px}
+.top{padding-bottom:12px;border-bottom:1px solid var(--edge)}
+.top-right{display:flex;align-items:center;gap:6px 20px;flex-wrap:wrap}
+/* trang thai */
+.pill{padding:5px 12px;border:1px solid var(--fg);border-radius:999px;background:transparent;color:var(--fg);box-shadow:none;font:600 13px var(--font-display);letter-spacing:.04em}
+.pill .dot{border:0;width:9px;height:9px}
+.bubble{padding:6px 12px;border:0;border-left:2px solid var(--me);border-radius:0;background:transparent;color:var(--fg);font:400 13px var(--font-body)}
+.team .who{font:600 13px var(--font-display);letter-spacing:.06em}
+.mini{border:1px solid var(--fg)}
+/* khung ban co: tatami + vien muc */
+.frame{padding:8px;border:1px solid var(--fg);border-radius:3px;background:var(--frame);box-shadow:none}
+.frame::before{display:none}
+.board{border-radius:1px;box-shadow:none}
+.board::after{border-radius:1px;background:none;box-shadow:inset 0 0 0 1px rgba(29,29,31,.35)}
+#ground{filter:saturate(.42) sepia(.22) brightness(1.06) contrast(.94)}
+:root[data-theme="dark"] #ground{filter:saturate(.4) brightness(.95)}
+.lake{filter:saturate(.55)}
+/* the, nut, hop thoai */
+.card{border:1px solid var(--edge);border-radius:3px;background:var(--surface);box-shadow:none;padding:14px 16px}
+.card h2,details.card summary{font:600 15px/1.3 var(--font-display);letter-spacing:.08em}
+.btn{border:1px solid var(--jp-btn-bg);border-radius:2px;background:var(--jp-btn-bg);color:var(--jp-btn-fg);box-shadow:none;font:600 14px/1 var(--font-display);letter-spacing:.05em;padding:10px 16px}
+.btn:hover{transform:none;opacity:.88}
+.btn:active{transform:none;box-shadow:none;opacity:.75}
+.btn:disabled{box-shadow:none;opacity:.35}
+.btn.alt{background:transparent;color:var(--fg);border-color:var(--edge)}
+.btn.alt:hover{border-color:var(--fg);opacity:1}
+.seg label,.opt,select.sel,.row{border:1px solid var(--edge);border-radius:2px;background:transparent;box-shadow:none}
+.seg input:checked + label,.opt.on{background:var(--fg);color:var(--bg);border-color:var(--fg);box-shadow:none}
+.opt.on small{color:var(--bg)}
+.row:hover{transform:none;border-color:var(--me)}
+.row .mini,.ladder .mini{background:var(--sun)}
+.field-label{font:600 11px var(--font-display);letter-spacing:.18em}
+.draft-card,.result-card{border:1px solid var(--fg);border-radius:3px;box-shadow:none;background:var(--surface)}
+.draft-card h2,.result-card h2{font:600 18px/1.2 var(--font-display);letter-spacing:.06em}
+.result{background:rgba(23,24,27,.6)}
+.draft-info,.info .now{border-radius:2px;border-left:2px solid var(--me);background:var(--me-soft)}
+.info-token{border:1px solid var(--fg);box-shadow:none}
+.info h3{font:600 18px/1.2 var(--font-display)}
+.oc{border:1px solid var(--edge)}
+.tip{border-radius:2px}
+/* phong online */
+.online-card{border:1px solid var(--edge)!important;border-radius:3px!important;box-shadow:none!important;background:var(--surface)}
+.online-kicker{color:var(--me);font:600 11px var(--font-display);letter-spacing:.3em}
+.online-copy h2{font:300 clamp(26px,3.2vw,36px)/1.15 var(--font-display);letter-spacing:-.01em}
+.online-code{border:1px solid var(--fg);border-radius:2px;background:transparent;font:500 17px/1.2 var(--font-display);box-shadow:none}
+.online-code:focus{outline:2px solid var(--me);outline-offset:2px}
+.online-status{border-radius:2px;border-left:2px solid var(--edge);background:transparent;font:400 12.5px/1.5 var(--font-body)}
+.online-status.bad{border-left-color:var(--me);background:rgba(200,64,47,.08);color:var(--me)}
+.online-back{border:0;border-radius:0;padding:0;margin:0 0 10px;color:var(--muted);font:600 12px var(--font-body);letter-spacing:.06em;background:none}
+.app.online-lobby:not(.online-mode) .online-card{box-shadow:none;margin-top:5vh}
+.menu-modal-card{border-radius:3px}
 </style>

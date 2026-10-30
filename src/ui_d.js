@@ -465,12 +465,16 @@ function applyTheme(t){
  document.documentElement.setAttribute('data-theme',t);
  var b=$('menu-theme');
  if(b){b.setAttribute('aria-pressed',String(t==='dark'));b.querySelector('.utility-label').textContent='Giao diện: '+(t==='dark'?'Tối':'Mặc định');}
+ var b2=$('btn-theme');
+ if(b2){b2.setAttribute('aria-pressed',String(t==='dark'));b2.textContent='Giao diện: '+(t==='dark'?'Tối':'Mặc định');}
 }
 (function(){var t='light';try{t=localStorage.getItem('cothu:theme')==='dark'?'dark':'light';}catch(e){}applyTheme(t);})();
-$('menu-theme').addEventListener('click',function(){
+function toggleTheme(){
  var t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
  applyTheme(t);try{localStorage.setItem('cothu:theme',t);}catch(e){}
-});
+}
+$('menu-theme').addEventListener('click',toggleTheme);
+$('btn-theme').addEventListener('click',toggleTheme);
 $('online-back').addEventListener('click',showMainMenu);
 $('menu-single').addEventListener('click',function(){enterMenuMode('single');});
 $('menu-local').addEventListener('click',function(){enterMenuMode('local');});
