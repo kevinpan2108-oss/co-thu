@@ -82,10 +82,10 @@ jobs:
           node pw16.js
 
       - name: Run online multiplayer browser regression
-        if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'fix/peerjs-cloud-room-join'
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'design/symmetrical-compact-web-ui'
         working-directory: tests
         run: |
-          node pw17.js
+          node pw20-ui-symmetry.js
           node pw19-room-link.js
 
       - name: Upload paired simulation results
