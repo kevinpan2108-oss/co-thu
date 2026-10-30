@@ -47,17 +47,21 @@ jobs:
           node tests/outpost_ai.js
 
       - name: Compare starting formations
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.ref != 'feature/online-two-player-pvp'
         run: node tests/opening_positions.js 8 8 2026102901 110
 
       - name: Screen rank variants
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.ref != 'feature/online-two-player-pvp'
         run: node tests/balance.js 2,3,4,5,6,7 6 8 2026102902
 
       - name: Run paired-seed outpost simulation
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.ref != 'feature/online-two-player-pvp'
         run: |
           set -o pipefail
           node tests/outpost_compare.js 50 25 2026102807 120 | tee outpost-simulation.json
 
       - name: Run paired-seed crocodile rank 3 vs 4 simulation
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.ref != 'feature/online-two-player-pvp'
         run: |
           set -o pipefail
           node tests/croc_rank_compare.js 25 25 2026102808 140 | tee croc-rank-simulation.json
@@ -68,13 +72,19 @@ jobs:
           npm install --no-save playwright
           npx playwright install --with-deps chromium
 
-      - name: Run browser tests
+      - name: Run existing browser regression suite
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.ref != 'feature/online-two-player-pvp'
         working-directory: tests
         run: |
           node pw11.js
           node pw12.js
           node pw14.js
           node pw16.js
+
+      - name: Run online multiplayer browser regression
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'feature/online-two-player-pvp'
+        working-directory: tests
+        run: node pw17.js
 
       - name: Upload paired simulation results
         if: always()

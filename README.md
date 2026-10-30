@@ -37,3 +37,10 @@ node balance.js 2,3,4,5,6,7 8 100 501   # đổi phe, thống kê thắng/số n
 - Bản đồ: sông giữa bàn (cầu hẹp Voi không qua được, bãi cạn giữa), đầm lầy bên phải đi được, rừng bụi/đá bên trái. Hổ/Đại bàng chỉ nhảy qua nước thật; Hổ giữ bậc 7 sau khi nhảy cho đến khi chính Hổ di chuyển lần tiếp theo; Cáo/Sư tử/Bò rừng không lao/vồ xuyên đầm lầy; quân trong đầm lầy miễn nhiễm Sư tử vồ và Cá sấu phục kích.
 - Tiền đồn (3,1) và (5,1): chiếm ô thì được đi thêm 1 ô thường trong cùng lượt (không ăn quân, không vào hang, không cộng dồn); sau khi nhận, phe đó hồi 2 lượt của mình; hai phe hồi riêng; bỏ qua thì không bị hồi.
 - Nước đi mã hóa: `from | to<<7 | kind<<14`, nước kép thêm `bf<<18 | bt<<25`. Ô trạng thái sau 81 ô : `SL+0/1` hổ, `+2/3` hồi chiêu Sư tử, `+4/5` hồi chiêu **lao** Bò rừng, `+6/7` Khỉ, `+8/9` tiền đồn, `+10/11` hồi chiêu **húc** Bò rừng, `+12/13` quân đang **choáng** (ô+1) của phe dưới/trên (`ST=14`). Chỉ số chẵn = phe dưới, lẻ = phe trên.
+
+
+## Chơi online 2 người
+- Mở game trên hai thiết bị có Internet. Người tạo phòng bấm **Tạo phòng**, gửi mã 8 ký tự hoặc liên kết phòng cho đối thủ.
+- Người còn lại nhập mã hoặc mở liên kết rồi bấm **Vào phòng**. Hai bên chơi luân phiên; người tham gia sẽ thấy bàn cờ được lật để quân mình ở phía dưới.
+- Kết nối dùng PeerJS Cloud để signaling và WebRTC data channel để truyền trạng thái ván cờ; thư viện PeerJS được tải từ CDN khi cần nên không cần cài npm trong quy trình build.
+- PeerJS Cloud là dịch vụ signaling dùng chung. Một số mạng NAT nghiêm ngặt có thể cần TURN relay riêng; kiểm thử giả lập trên CI không thay thế việc thử kết nối thật giữa hai thiết bị.

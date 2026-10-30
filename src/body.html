@@ -106,6 +106,23 @@
         </div>
       </div>
 
+      <div class="card" id="online-card">
+        <h2>Chơi online 2 người</h2>
+        <p class="mode-desc">Tạo phòng rồi gửi mã cho bạn, hoặc nhập mã phòng để tham gia. Mỗi người chơi trên một thiết bị riêng.</p>
+        <div class="field-label">Mã phòng</div>
+        <input id="online-room-code" class="online-code" type="text" maxlength="8" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="NHẬP 8 KÝ TỰ">
+        <div class="btns">
+          <button class="btn" id="online-create" type="button">Tạo phòng</button>
+          <button class="btn alt" id="online-join" type="button">Vào phòng</button>
+        </div>
+        <p class="online-status" id="online-status" role="status" aria-live="polite">Chưa kết nối. Tạo phòng hoặc nhập mã phòng để chơi.</p>
+        <div class="btns">
+          <button class="btn alt" id="online-copy" type="button" hidden>Sao chép liên kết</button>
+          <button class="btn alt" id="online-rematch" type="button" hidden>Ván mới cho cả hai</button>
+          <button class="btn alt" id="online-leave" type="button" hidden>Thoát phòng</button>
+        </div>
+      </div>
+
       <details class="card" id="rules">
         <summary>Luật chung</summary>
         <div class="ladder" id="ladder" aria-label="Thứ tự bậc từ thấp đến cao"></div>

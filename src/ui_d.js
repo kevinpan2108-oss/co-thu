@@ -223,6 +223,7 @@ function onCell(i){
 boardEl.addEventListener('click',function(e){
   var rect=boardEl.getBoundingClientRect();
   var c=Math.floor((e.clientX-rect.left)/rect.width*COLS), r=Math.floor((e.clientY-rect.top)/rect.height*ROWS);
+  if(onlineActive&&onlineSide<0){c=COLS-1-c;r=ROWS-1-r;}
   if(c<0||c>COLS-1||r<0||r>ROWS-1) return;
   onCell(r*COLS+c);
 });
