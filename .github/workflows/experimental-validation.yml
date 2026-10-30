@@ -48,21 +48,21 @@ jobs:
           node tests/reed_capture.js
 
       - name: Compare starting formations
-        if: github.event_name != 'pull_request' || (github.event.pull_request.head.ref != 'feature/online-two-player-pvp' && github.event.pull_request.head.ref != 'fix/online-connection-and-top-panel' && github.event.pull_request.head.ref != 'fix/peerjs-cloud-room-join' && github.event.pull_request.head.ref != 'design/symmetrical-compact-web-ui' && github.event.pull_request.head.ref != 'fix/shared-board-orientation' && github.event.pull_request.head.ref != 'feat/bush-diagonal-slip')
+        if: github.event_name != 'pull_request' || (github.event.pull_request.head.ref != 'feature/online-two-player-pvp' && github.event.pull_request.head.ref != 'fix/online-connection-and-top-panel' && github.event.pull_request.head.ref != 'fix/peerjs-cloud-room-join' && github.event.pull_request.head.ref != 'design/symmetrical-compact-web-ui' && github.event.pull_request.head.ref != 'fix/shared-board-orientation' && github.event.pull_request.head.ref != 'feat/bush-diagonal-slip' && github.event.pull_request.head.ref != 'exp/reed-diagonal-capture')
         run: node tests/opening_positions.js 8 8 2026102901 110
 
       - name: Screen rank variants
-        if: github.event_name != 'pull_request' || (github.event.pull_request.head.ref != 'feature/online-two-player-pvp' && github.event.pull_request.head.ref != 'fix/online-connection-and-top-panel' && github.event.pull_request.head.ref != 'fix/peerjs-cloud-room-join' && github.event.pull_request.head.ref != 'design/symmetrical-compact-web-ui' && github.event.pull_request.head.ref != 'fix/shared-board-orientation' && github.event.pull_request.head.ref != 'feat/bush-diagonal-slip')
+        if: github.event_name != 'pull_request' || (github.event.pull_request.head.ref != 'feature/online-two-player-pvp' && github.event.pull_request.head.ref != 'fix/online-connection-and-top-panel' && github.event.pull_request.head.ref != 'fix/peerjs-cloud-room-join' && github.event.pull_request.head.ref != 'design/symmetrical-compact-web-ui' && github.event.pull_request.head.ref != 'fix/shared-board-orientation' && github.event.pull_request.head.ref != 'feat/bush-diagonal-slip' && github.event.pull_request.head.ref != 'exp/reed-diagonal-capture')
         run: node tests/balance.js 2,3,4,5,6,7 6 8 2026102902
 
       - name: Run paired-seed outpost simulation
-        if: github.event_name != 'pull_request' || (github.event.pull_request.head.ref != 'feature/online-two-player-pvp' && github.event.pull_request.head.ref != 'fix/online-connection-and-top-panel' && github.event.pull_request.head.ref != 'fix/peerjs-cloud-room-join' && github.event.pull_request.head.ref != 'design/symmetrical-compact-web-ui' && github.event.pull_request.head.ref != 'fix/shared-board-orientation' && github.event.pull_request.head.ref != 'feat/bush-diagonal-slip')
+        if: github.event_name != 'pull_request' || (github.event.pull_request.head.ref != 'feature/online-two-player-pvp' && github.event.pull_request.head.ref != 'fix/online-connection-and-top-panel' && github.event.pull_request.head.ref != 'fix/peerjs-cloud-room-join' && github.event.pull_request.head.ref != 'design/symmetrical-compact-web-ui' && github.event.pull_request.head.ref != 'fix/shared-board-orientation' && github.event.pull_request.head.ref != 'feat/bush-diagonal-slip' && github.event.pull_request.head.ref != 'exp/reed-diagonal-capture')
         run: |
           set -o pipefail
           node tests/outpost_compare.js 50 25 2026102807 120 | tee outpost-simulation.json
 
       - name: Run paired-seed crocodile rank 3 vs 4 simulation
-        if: github.event_name != 'pull_request' || (github.event.pull_request.head.ref != 'feature/online-two-player-pvp' && github.event.pull_request.head.ref != 'fix/online-connection-and-top-panel' && github.event.pull_request.head.ref != 'fix/peerjs-cloud-room-join' && github.event.pull_request.head.ref != 'design/symmetrical-compact-web-ui' && github.event.pull_request.head.ref != 'fix/shared-board-orientation' && github.event.pull_request.head.ref != 'feat/bush-diagonal-slip')
+        if: github.event_name != 'pull_request' || (github.event.pull_request.head.ref != 'feature/online-two-player-pvp' && github.event.pull_request.head.ref != 'fix/online-connection-and-top-panel' && github.event.pull_request.head.ref != 'fix/peerjs-cloud-room-join' && github.event.pull_request.head.ref != 'design/symmetrical-compact-web-ui' && github.event.pull_request.head.ref != 'fix/shared-board-orientation' && github.event.pull_request.head.ref != 'feat/bush-diagonal-slip' && github.event.pull_request.head.ref != 'exp/reed-diagonal-capture')
         run: |
           set -o pipefail
           node tests/croc_rank_compare.js 25 25 2026102808 140 | tee croc-rank-simulation.json
