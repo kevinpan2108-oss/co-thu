@@ -13,6 +13,11 @@ await p.click('#menu-info');ok(await p.evaluate(()=>!document.getElementById('me
 await p.click('#menu-modal-close');ok(await p.evaluate(()=>document.getElementById('menu-modal').hidden),'dong hop thoai');
 await p.click('#menu-sound');const s1=await p.evaluate(()=>document.getElementById('menu-sound').getAttribute('aria-pressed'));await p.click('#menu-sound');ok(s1!==await p.evaluate(()=>document.getElementById('menu-sound').getAttribute('aria-pressed')),'nut Am thanh doi trang thai');
 await p.click('#menu-music');ok(await p.evaluate(()=>document.getElementById('menu-music').getAttribute('aria-pressed'))==='true','nut Nhac bat nhac');
+const th0=await p.evaluate(()=>document.documentElement.getAttribute('data-theme'));ok(th0==='light','giao dien mac dinh la sang (khong theo he thong)');
+await p.click('#menu-theme');ok(await p.evaluate(()=>document.documentElement.getAttribute('data-theme'))==='dark','nut Giao dien chuyen sang Toi');
+ok(await p.evaluate(()=>getComputedStyle(document.getElementById('main-menu')).backgroundColor)!==await p.evaluate(()=>'rgb(245, 240, 230)'),'nen menu doi mau khi Toi');
+await p.reload();await p.waitForTimeout(400);ok(await p.evaluate(()=>document.documentElement.getAttribute('data-theme'))==='dark','giao dien Toi duoc nho sau khi tai lai');
+await p.click('#menu-theme');ok(await p.evaluate(()=>document.documentElement.getAttribute('data-theme'))==='light','chuyen lai Mac dinh');
 await p.click('#menu-single');ok(!await menuVisible(),'Dau voi may: vao game');
 ok(await p.evaluate(()=>!document.getElementById('online-card').offsetParent),'Dau voi may: an khung online');
 await p.click('#btn-menu');ok(await menuVisible(),'Menu chinh quay lai trang chu');
