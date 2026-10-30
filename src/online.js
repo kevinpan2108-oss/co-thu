@@ -252,7 +252,7 @@ function onlineAttachConnection(conn,role){
   conn.on('data',onlineHandleData);
   conn.on('close',function(){
     if(onlineConn===conn)onlineConn=null;
-    if(onlineActive){onlineReady=false;onlineStatus('Đối thủ đã ngắt kết nối. Có thể kết nối lại bằng cùng mã phòng.','bad');refresh();}
+    if(onlineActive){onlineReady=false;onlineStatus('Đối thủ đã ngắt kết nối. Nhấn “Thoát phòng”, rồi nhập lại cùng mã để kết nối lại.','bad');refresh();}
   });
   conn.on('error',function(e){onlineStatus('Lỗi kết nối: '+(e&&e.message?e.message:'không xác định'),'bad');});
 }
@@ -276,7 +276,7 @@ function onlineCreateRoom(){
       },20000);
     });
     onlinePeer.on('connection',function(conn){
-      if(onlineConn){try{conn.close();}catch(e){}return;}
+      if(onlineConn&&onlineConn.open){try{conn.close();}catch(e){}return;}
       onlineAttachConnection(conn,'host');
     });
     onlinePeer.on('error',function(e){
