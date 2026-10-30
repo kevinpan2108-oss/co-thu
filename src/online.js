@@ -137,7 +137,8 @@ function onlineActivate(side,role){
   onlineActive=true; onlineReady=false; onlineRole=role; onlineSetPerspective(side);
   oppKey='pvp'; $('opp-pvp').checked=true;
   onlineSetControls(true);
-  updateScore(); refresh();
+  updateScore();
+  if(typeof cells!=='undefined'&&cells&&cells.length) refresh();
   onlineStatus(role==='host'?'Đang chờ người chơi tham gia phòng '+onlineCode+'…':'Đang kết nối phòng…');
   setBubble('🌐',role==='host'?'Đã tạo phòng. Gửi mã phòng cho bạn của bạn.':'Đang kết nối với đối thủ…');
 }
