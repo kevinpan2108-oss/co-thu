@@ -378,6 +378,7 @@ if(window.__E){
   window.__ONLINE_TEST__={
     snapshot:onlineSnapshot,
     apply:function(s){return onlineApplySnapshot(s,true);},
+    activate:function(s,side){onlineActive=true;onlineReady=true;onlineRole='guest';onlineSetPerspective(side||-1);return onlineApplySnapshot(s,true);},
     get:function(){return {active:onlineActive,ready:onlineReady,side:onlineSide,turn:turn,over:over,cells:Array.from(cells)};}
   };
 }
