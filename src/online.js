@@ -3,6 +3,7 @@ var onlineActive=false, onlineReady=false, onlineSide=1, onlineRole='', onlineCo
 var onlinePeer=null, onlineConn=null, onlineInSeq=0, onlineOutSeq=0;
 var onlineApplying=false, onlineSwappedStrips=false, onlineLastResult=null, onlineMode='draft';
 var onlineConnectTimer=0, onlineLoadBusy=false, onlineLoadQueue=[];
+var onlinePreviousOpp='ai', onlinePreviousMode='draft';
 
 var localPvp=pvp, localPn=pn, localPnl=pnl, localHumanTurn=humanTurn, localIsHumanSide=isHumanSide;
 pvp=function(){ return onlineActive||localPvp(); };
@@ -25,6 +26,7 @@ updateScore=function(){
   if(onlineActive){
     $('sc1-l').textContent=onlineSide===1?'Bạn':'Đối thủ';
     $('sc2-l').textContent=onlineSide===-1?'Bạn':'Đối thủ';
+    if(onlineSide<0){var v1=$('wins').textContent,v2=$('losses').textContent;$('wins').textContent=v2;$('losses').textContent=v1;}
   }
 };
 var localUpdateStrips=updateStrips;
@@ -249,12 +251,14 @@ function onlineAttachConnection(conn,role){
   });
   conn.on('data',onlineHandleData);
   conn.on('close',function(){
-    if(onlineActive){onlineReady=false;onlineStatus('Đối thủ đã ngắt kết nối. Ván cờ đang tạm dừng.','bad');refresh();}
+    if(onlineConn===conn)onlineConn=null;
+    if(onlineActive){onlineReady=false;onlineStatus('Đối thủ đã ngắt kết nối. Có thể kết nối lại bằng cùng mã phòng.','bad');refresh();}
   });
   conn.on('error',function(e){onlineStatus('Lỗi kết nối: '+(e&&e.message?e.message:'không xác định'),'bad');});
 }
 function onlineCreateRoom(){
   if(onlineActive)return;
+  onlinePreviousOpp=oppKey; onlinePreviousMode=modeKey;
   onlineStatus('Đang tải thư viện kết nối online…');
   onlineLoadPeer(function(err){
     if(err||!window.Peer){onlineStatus('Không tải được PeerJS từ CDN. Hãy thử đổi mạng hoặc tải lại trang.','bad');return;}
@@ -285,11 +289,12 @@ function onlineCreateRoom(){
 }
 function onlineJoinRoom(){
   if(onlineActive)return;
+  onlinePreviousOpp=oppKey; onlinePreviousMode=modeKey;
   var code=String($('online-room-code').value||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
   if(!/^[A-Z0-9]{8}$/.test(code)){onlineStatus('Mã phòng cần đúng 8 ký tự.','bad');return;}
   onlineCode=code; onlineRole='guest'; onlineActivate(-1,'guest');
   onlineLoadPeer(function(err){
-    if(err||!window.Peer){onlineActive=false;onlineReady=false;onlineSetPerspective(1);onlineSetControls(false);onlineStatus('Không tải được PeerJS từ CDN. Hãy thử đổi mạng hoặc tải lại trang.','bad');return;}
+    if(err||!window.Peer){onlineDisconnect(false);onlineStatus('Không tải được PeerJS từ CDN. Hãy thử đổi mạng hoặc tải lại trang.','bad');return;}
     try{onlinePeer=new window.Peer({debug:1});}
     catch(e){onlineDisconnect(false);onlineStatus('Không khởi tạo được kết nối online: '+e.message,'bad');return;}
     onlinePeer.on('open',function(){
@@ -316,13 +321,11 @@ function onlineDisconnect(resetGame){
   onlineInSeq=0;onlineOutSeq=0;onlineLastResult=null;onlineMode='draft';
   onlineSetPerspective(1);onlineSetControls(false);
   $('online-copy').hidden=true; $('online-room-code').value='';
+  applyOpp(onlinePreviousOpp,true);
+  applyMode(onlinePreviousMode);
   updateScore(); refresh();
-  onlineStatus('Chưa kết nối. Tạo phòng hoặc nhập mã phòng để chơi.');
-  if(resetGame){
-    applyOpp('ai',true);
-    if(modeKey==='chal')applyMode('draft');
-    newGame();
-  }
+  onlineStatus('Đã thoát phòng. Có thể chơi lại hoặc tạo phòng mới.');
+  newGame();
 }
 function onlineAskRematch(){
   if(!onlineActive||!onlineReady||!over)return;
