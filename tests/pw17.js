@@ -8,12 +8,16 @@ const path = require('path');
   const errors=[];
   page.on('pageerror',e=>errors.push(e.message));
   page.on('console',m=>{if(m.type()==='error'&&!/ERR_|fonts/.test(m.text()))errors.push(m.text());});
-  await page.route('https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js',route=>route.fulfill({
-    contentType:'application/javascript',
-    body:"(function(){function Peer(id){this.id=id||'fake-guest';this.handlers={};window.__FAKE_PEER_INSTANCE__=this;setTimeout(()=>this.emit('open',this.id),5);}Peer.prototype.on=function(n,f){(this.handlers[n]||(this.handlers[n]=[])).push(f);return this;};Peer.prototype.emit=function(n,v){(this.handlers[n]||[]).forEach(f=>f(v));};Peer.prototype.destroy=function(){};window.Peer=Peer;})();"
-  }));
+  await page.addInitScript(()=>{
+    function Peer(id){this.id=id||'fake-guest';this.handlers={};window.__FAKE_PEER_INSTANCE__=this;setTimeout(()=>this.emit('open',this.id),5);}
+    Peer.prototype.on=function(n,f){(this.handlers[n]||(this.handlers[n]=[])).push(f);return this;};
+    Peer.prototype.emit=function(n,v){(this.handlers[n]||[]).forEach(f=>f(v));};
+    Peer.prototype.destroy=function(){};
+    window.Peer=Peer;
+  });
   await page.goto('file://'+path.join(__dirname,'..',process.env.DIST||'dist','game_local.html'));
   await page.waitForTimeout(250);
+  if(!(await page.evaluate(()=>!!window.__ONLINE_TEST__))) throw new Error('Online module was not included in the build');
   let ok=0,bad=0;
   const chk=(name,pass)=>{if(pass)ok++;else{bad++;console.log('FAIL',name);}};
   await page.click('#online-create');
