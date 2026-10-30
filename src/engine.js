@@ -46,7 +46,7 @@ var WATER=new Uint8Array(N), TRAP=new Int8Array(N), DEN=new Int8Array(N), ROCK=n
    N+4+a: hoi chieu Lao Bo rung; N+6+a: hoi chieu Khi; N+8+a: tien don;
    N+10+a: hoi chieu Huc Bo rung; N+12+a: vi tri+1 cua quan dang choang. */
 var SL=N, ST=14, OUTCD=2, BONUS=true;
-var CLASSIC=false, TERR=true;
+var CLASSIC=false, TERR=true, REEDCAP=true;
 var HK=new Array(19).fill('');
 var SLOTKEYS=[null,['rat'],['cat','fox'],['wolf','boar'],['dog','bear'],['leo','croc'],['tig','eagle'],['lio','bison'],['ele'],['','mon','tur']];
 var SQ=[[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]];
@@ -219,14 +219,14 @@ function movesFrom(cells,i,out){
       if(inW(cells,i)&&cells[t]*s<0&&!DEN[t]&&(!TERR||(!BUSH[t]&&!MARSH[t]))&&!isTur(cells[t])&&effRank(cells,t)<=4) out.push(i|(t<<7)|(6<<14));
     }
   }
-  /* Lach lau say: quan bat dau o bui co the buoc cheo 1 o trong; khong an quan. */
+  /* Lach lau say: quan bat dau o bui co the buoc cheo 1 o; ban thu nghiem cho phep an neu dung luat cap bac. */
   if(!CLASSIC&&!lock&&BUSH[i]){
     r=(i/COLS)|0; c=i%COLS;
     for(dr=-1;dr<=1;dr+=2)for(dc=-1;dc<=1;dc+=2){
       nr=r+dr; nc=c+dc;
       if(nr<0||nr>ROWS-1||nc<0||nc>COLS-1) continue;
       t=nr*COLS+nc;
-      if(cells[t]===0&&!WATER[t]&&!DEN[t]&&!ROCK[t]) out.push(i|(t<<7)|(10<<14));
+      if(!WATER[t]&&!DEN[t]&&!ROCK[t]&&(cells[t]===0||(REEDCAP&&cells[t]*s<0&&stepOK(cells,i,t,0)))) out.push(i|(t<<7)|(10<<14));
     }
   }
   if(!CLASSIC&&!lock&&K==='leo'){
@@ -737,6 +737,6 @@ return {
   hasMate:hasMate,inW:inW,nearWater:nearWater,advanced:advanced,guarding:guarding,isTur:isTur,
   probe:probe,getH:function(){return H1;},
   negamax:function(c,s,d,a,b){nodes=0;aborted=false;deadline=Date.now()+1e9;return negamax(c,s,d,a,b,0);},
-  setTerr:function(v){TERR=!!v;},setQ:function(v){useQ=v;},setTT:function(v){useTT=v;},clearTT:function(){ttDepth.fill(-1);}
+  setTerr:function(v){TERR=!!v;},setReedCapture:function(v){REEDCAP=!!v;},setQ:function(v){useQ=v;},setTT:function(v){useTT=v;},clearTT:function(){ttDepth.fill(-1);}
 };
 }
