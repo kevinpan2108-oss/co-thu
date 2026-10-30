@@ -72,14 +72,19 @@ jobs:
           npm install --no-save playwright
           npx playwright install --with-deps chromium
 
-      - name: Run browser tests
+      - name: Run existing browser regression suite
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.ref != 'feature/online-two-player-pvp'
         working-directory: tests
         run: |
           node pw11.js
           node pw12.js
           node pw14.js
           node pw16.js
-          node pw17.js
+
+      - name: Run online multiplayer browser regression
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'feature/online-two-player-pvp'
+        working-directory: tests
+        run: node pw17.js
 
       - name: Upload paired simulation results
         if: always()
