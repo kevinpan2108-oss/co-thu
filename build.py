@@ -7,7 +7,7 @@ os.makedirs(O,exist_ok=True)
 rd=lambda f:open(os.path.join(S,f),encoding='utf8').read()
 h=rd('head.html'); body=rd('body.html')
 js=rd('engine.js')+'\n'
-for f in ['ui_a.js','ui_b.js','ui_c.js','ui_d.js']: js+=rd(f)+'\n'
+for f in ['ui_a.js','ui_b.js','ui_c.js','ui_d.js','online.js']: js+=rd(f)+'\n'
 out=h+'\n'+body+'\n<script>\n(function(){\n\'use strict\';\n'+js+'\n})();\n</script>\n'
 open(os.path.join(O,'game.html'),'w',encoding='utf8').write(out)
 skel='<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box}body{margin:0;padding:0;font:14px -apple-system,sans-serif;background:#fff;color:#000}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>'
