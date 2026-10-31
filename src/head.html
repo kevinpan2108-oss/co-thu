@@ -1,7 +1,7 @@
 <title>Cờ Thú</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=Noto+Serif:wght@300;400;500;600&family=Noto+Serif+JP:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=Noto+Serif:wght@300;400;500;600&family=Noto+Serif+TC:wght@500;600&display=swap">
 <style>
 /* Layout: a realistic wooden-framed jungle board (painted on canvas, animated water) beside a sticker-style control column. */
 :root{
@@ -658,12 +658,12 @@ details.card summary::after{font-size:20px}
 
 /* Cờ Thú home hub */
 /* ---- Trang chu (hm-*): toi gian kieu Nhat ---- */
-.main-menu{--paper:#f5f0e6;--paper2:#ece5d6;--sumi:#1d1d1f;--sumi2:#5b5850;--shu:#c8402f;--line:rgba(29,29,31,.16);position:fixed;inset:0;z-index:1000;overflow:auto;color:var(--sumi);background:radial-gradient(ellipse at 20% 0%,rgba(255,255,255,.7),transparent 55%),repeating-linear-gradient(0deg,rgba(120,100,60,.025) 0 2px,transparent 2px 5px),var(--paper);font-family:'Noto Serif','Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',Georgia,serif}
+.main-menu{--paper:#f5f0e6;--paper2:#ece5d6;--sumi:#1d1d1f;--sumi2:#5b5850;--shu:#c8402f;--line:rgba(29,29,31,.16);position:fixed;inset:0;z-index:1000;overflow:auto;color:var(--sumi);background:radial-gradient(ellipse at 20% 0%,rgba(255,255,255,.7),transparent 55%),repeating-linear-gradient(0deg,rgba(120,100,60,.025) 0 2px,transparent 2px 5px),var(--paper);font-family:'Noto Serif','Noto Serif TC','Songti TC','PMingLiU','Noto Serif CJK TC',Georgia,serif}
 .main-menu[hidden]{display:none}
 .hm-wrap{min-height:100%;width:min(100%,1080px);margin:0 auto;padding:clamp(16px,3vw,30px) clamp(18px,4vw,40px);display:flex;flex-direction:column;gap:clamp(12px,3vh,34px)}
 .hm-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
 .hm-mark{display:flex;align-items:center;gap:12px}
-.hm-seal{display:grid;place-items:center;width:34px;height:34px;background:var(--shu);color:#fff;font:700 20px/1 'Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',serif;border-radius:3px;transform:rotate(-3deg)}
+.hm-seal{display:grid;place-items:center;width:34px;height:34px;background:var(--shu);color:#fff;font:700 20px/1 'Noto Serif TC','Songti TC','PMingLiU','Noto Serif CJK TC',serif;border-radius:3px;transform:rotate(-3deg)}
 .hm-word{font:600 13px/1 'Noto Serif',serif;letter-spacing:.32em;white-space:nowrap}
 .hm-util{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:2px 18px}
 .home-utility{display:flex;align-items:center;gap:7px;padding:6px 0;border:0;background:none;color:var(--sumi2);font:600 12px 'Noto Serif',serif;letter-spacing:.04em;cursor:pointer;transition:color .15s}
@@ -680,7 +680,7 @@ details.card summary::after{font-size:20px}
 .hm-menu{margin:0;padding:0;list-style:none;max-width:460px;border-top:1px solid var(--sumi)}
 .hm-menu li{border-bottom:1px solid var(--line)}
 .hm-row{width:100%;display:flex;align-items:center;gap:18px;padding:16px 6px;border:0;background:none;color:var(--sumi);text-align:left;cursor:pointer;transition:padding .25s ease,background .2s}
-.hm-no{flex:0 0 26px;color:var(--shu);font:400 22px/1 'Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',serif}
+.hm-no{flex:0 0 26px;color:var(--shu);font:400 14px/1 'Noto Serif TC','Songti TC','PMingLiU','Noto Serif CJK TC',serif}
 .hm-rt{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0}
 .hm-rt b{font:600 clamp(17px,2vw,20px)/1.2 'Noto Serif',serif;letter-spacing:.02em}
 .hm-rt small{color:var(--sumi2);font:400 12px/1.4 'Noto Serif',serif}
@@ -698,7 +698,8 @@ details.card summary::after{font-size:20px}
 .hm-svg .den{fill:none;stroke-width:1.6}.hm-svg .den.m{fill:rgba(200,64,47,.12);stroke:var(--shu)}.hm-svg .den.f{fill:rgba(29,29,31,.08);stroke:currentColor}
 .hm-svg .trap{fill:none;stroke:currentColor;stroke-opacity:.5;stroke-width:1.2}
 .hm-svg .pc circle{fill:var(--paper);stroke-width:1.6}
-.hm-svg .pc text{font:600 17px 'Noto Serif JP','Hiragino Mincho ProN','Yu Mincho','Noto Serif',serif;text-anchor:middle}
+.hm-svg .pc use{color:var(--sumi)}.hm-svg .pc.m use{color:var(--shu)}.hm-svg .pc.f use{color:var(--sumi)}.hm-svg .pc.w use{color:#4f7e93}
+.hm-svg .pc text{font:600 17px 'Noto Serif TC','Songti TC','PMingLiU','Noto Serif CJK TC','Noto Serif',serif;text-anchor:middle}
 .hm-svg .pc.m circle{stroke:var(--shu)}.hm-svg .pc.m text{fill:var(--shu)}
 .hm-svg .pc.f circle{stroke:var(--sumi)}.hm-svg .pc.f text{fill:var(--sumi)}
 .hm-svg .pc.w circle{stroke:#4f7e93}.hm-svg .pc.w text{fill:#4f7e93}
@@ -711,7 +712,7 @@ details.card summary::after{font-size:20px}
 .hm-rl em{margin-left:8px;font-style:normal;font-weight:400;letter-spacing:.04em;color:var(--sumi2)}
 .hm-roster ul{display:flex;flex-wrap:wrap;gap:10px 14px;margin:0;padding:0;list-style:none}
 .hm-roster li{display:flex;align-items:baseline;gap:3px}
-.hm-roster li span{font:500 20px/1 'Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',serif}
+.hm-roster li .ico{width:26px;height:26px;color:var(--sumi)}
 .hm-roster li em{color:var(--shu);font:600 10px 'Noto Serif',serif;font-style:normal}
 @media(max-width:860px){.hm-hero{grid-template-columns:1fr;gap:20px}.hm-stage{display:none}.hm-menu,.home-hint{max-width:none}}
 @media(max-width:560px){.hm-wrap{padding:14px 18px 20px}.hm-top{padding-bottom:10px}.hm-util{gap:0 12px}.home-utility{font-size:11px}.hm-word{letter-spacing:.2em}.hm-sub{margin:12px 0 18px}.hm-row{padding:14px 4px}.hm-roster{gap:10px}.hm-roster li span{font-size:18px}.hm-rl em{display:block;margin:4px 0 0}}
@@ -734,4 +735,100 @@ details.card summary::after{font-size:20px}
 
 .app.online-lobby:not(.online-mode) .layout{display:none}
 .app.online-lobby:not(.online-mode) .online-card{max-width:760px;margin:6vh auto 0;grid-template-columns:minmax(0,1fr);padding:22px 24px;box-shadow:0 18px 50px rgba(16,38,58,.18)}
+
+/* ================= Phong cach Nhat cho van choi va phong online ================= */
+.ico{width:1em;height:1em;display:inline-block;vertical-align:-.14em;fill:currentColor;overflow:visible}
+.piece .emo{color:var(--bg);filter:none}.piece .emo .ico{width:1.12em;height:1.12em}
+.mini{color:var(--fg)}.mini.me,.mini.foe{color:var(--bg)}
+.info-token{color:var(--fg)}.info-token.me,.info-token.foe{color:var(--bg)}
+.b-emo .ico,.result-emoji .ico{width:1em;height:1em}
+.mvgrid i.c .ico{width:12px;height:12px}
+:root[data-theme="dark"] .hm-svg .pc.w use{color:#8fb8cc}
+:root{
+  --bg:#f5f0e6;--dot:transparent;--surface:#fbf8f1;--fg:#1d1d1f;--muted:#5b5850;
+  --edge:rgba(29,29,31,.28);--ink:#1d1d1f;--pop:transparent;
+  --me:#c8402f;--me-soft:#f1d6d0;--foe:#3d4d82;--foe-soft:#d3d8ea;
+  --sun:#e8dcc0;--hit:#c8402f;--leaf:#6f8f5e;
+  --frame:#e9e1d0;--frame-dark:#ddd3bd;--frame-light:#f1ebdc;
+  --w1:#b9d3dc;--w2:#8fb5c4;--w3:#6c97a9;--w4:#557f92;
+  --font-display:'Noto Serif','Noto Serif TC','Songti TC','PMingLiU','Noto Serif CJK TC',Georgia,serif;
+  --font-body:'Noto Serif','Noto Serif TC','Songti TC','PMingLiU','Noto Serif CJK TC',Georgia,serif;
+  --jp-btn-bg:#1d1d1f;--jp-btn-fg:#f5f0e6;
+}
+:root[data-theme="dark"]{
+  --bg:#17181b;--surface:#1e2024;--fg:#ece7dc;--muted:#a39e92;
+  --edge:rgba(236,231,220,.24);--ink:#ece7dc;
+  --me:#e5604d;--me-soft:#4a2a26;--foe:#8196dc;--foe-soft:#262d4a;
+  --sun:#34373d;--hit:#e5604d;--leaf:#8fb27b;
+  --frame:#25272c;--frame-dark:#202226;--frame-light:#2b2d33;
+  --w1:#4b7387;--w2:#3b6075;--w3:#2d4d60;--w4:#23404f;
+  --jp-btn-bg:#ece7dc;--jp-btn-fg:#17181b;
+}
+html,body{background-color:var(--bg)}
+body{background-image:repeating-linear-gradient(0deg,rgba(120,100,60,.025) 0 2px,transparent 2px 5px);font-family:var(--font-body)}
+:root[data-theme="dark"] body{background-image:none}
+/* header */
+.logo{gap:0;font:600 clamp(17px,2.4vw,22px)/1 var(--font-display);letter-spacing:.34em;align-items:center}
+.logo::before{content:"獸";display:grid;place-items:center;width:34px;height:34px;margin-right:14px;background:var(--me);color:#fff;font:700 20px/1 'Noto Serif TC','Songti TC','PMingLiU','Noto Serif CJK TC',serif;letter-spacing:0;border-radius:3px;transform:rotate(-3deg)}
+.logo span,.logo span:nth-child(n){display:inline;min-width:0;height:auto;border:0;border-radius:0;box-shadow:none;background:none;color:var(--fg);transform:none;animation:none}
+.logo span:nth-child(3){display:inline-block;width:.6em;min-width:.6em}
+.tag{font:400 12px/1.5 var(--font-body);color:var(--muted)}
+.score{gap:14px;font:600 13px var(--font-body)}
+.score span,.score span.pv{padding:2px 0;border:0;border-bottom:1px solid var(--edge);border-radius:0;background:none;box-shadow:none}
+.score b{color:var(--me);font-size:1.1em}
+.theme-toggle{display:flex;align-items:center;gap:7px;padding:6px 0;border:0;background:none;color:var(--muted);font:600 12px var(--font-body);letter-spacing:.04em;cursor:pointer}
+.theme-toggle:before{content:"";width:6px;height:6px;border-radius:50%;border:1px solid var(--muted)}
+.theme-toggle[aria-pressed="true"]:before{background:var(--me);border-color:var(--me)}
+.theme-toggle:hover{color:var(--fg)}
+.theme-toggle:focus-visible{outline:2px solid var(--me);outline-offset:3px}
+.top{padding-bottom:12px;border-bottom:1px solid var(--edge)}
+.top-right{display:flex;align-items:center;gap:6px 20px;flex-wrap:wrap}
+/* trang thai */
+.pill{padding:5px 12px;border:1px solid var(--fg);border-radius:999px;background:transparent;color:var(--fg);box-shadow:none;font:600 13px var(--font-display);letter-spacing:.04em}
+.pill .dot{border:0;width:9px;height:9px}
+.bubble{padding:6px 12px;border:0;border-left:2px solid var(--me);border-radius:0;background:transparent;color:var(--fg);font:400 13px var(--font-body)}
+.team .who{font:600 13px var(--font-display);letter-spacing:.06em}
+.mini{border:1px solid var(--fg)}
+/* khung ban co: tatami + vien muc */
+.frame{padding:8px;border:1px solid var(--fg);border-radius:3px;background:var(--frame);box-shadow:none}
+.frame::before{display:none}
+.board{border-radius:1px;box-shadow:none}
+.board::after{border-radius:1px;background:none;box-shadow:inset 0 0 0 1px rgba(29,29,31,.35)}
+#ground{filter:saturate(.42) sepia(.22) brightness(1.06) contrast(.94)}
+:root[data-theme="dark"] #ground{filter:saturate(.4) brightness(.95)}
+.lake{filter:saturate(.55)}
+/* the, nut, hop thoai */
+.card{border:1px solid var(--edge);border-radius:3px;background:var(--surface);box-shadow:none;padding:14px 16px}
+.card h2,details.card summary{font:600 15px/1.3 var(--font-display);letter-spacing:.08em}
+.btn{border:1px solid var(--jp-btn-bg);border-radius:2px;background:var(--jp-btn-bg);color:var(--jp-btn-fg);box-shadow:none;font:600 14px/1 var(--font-display);letter-spacing:.05em;padding:10px 16px}
+.btn:hover{transform:none;opacity:.88}
+.btn:active{transform:none;box-shadow:none;opacity:.75}
+.btn:disabled{box-shadow:none;opacity:.35}
+.btn.alt{background:transparent;color:var(--fg);border-color:var(--edge)}
+.btn.alt:hover{border-color:var(--fg);opacity:1}
+.seg label,.opt,select.sel,.row{border:1px solid var(--edge);border-radius:2px;background:transparent;box-shadow:none}
+.seg input:checked + label,.opt.on{background:var(--fg);color:var(--bg);border-color:var(--fg);box-shadow:none}
+.opt.on small{color:var(--bg)}
+.row:hover{transform:none;border-color:var(--me)}
+.row .mini,.ladder .mini{background:var(--sun)}
+.field-label{font:600 11px var(--font-display);letter-spacing:.18em}
+.draft-card,.result-card{border:1px solid var(--fg);border-radius:3px;box-shadow:none;background:var(--surface)}
+.draft-card h2,.result-card h2{font:600 18px/1.2 var(--font-display);letter-spacing:.06em}
+.result{background:rgba(23,24,27,.6)}
+.draft-info,.info .now{border-radius:2px;border-left:2px solid var(--me);background:var(--me-soft)}
+.info-token{border:1px solid var(--fg);box-shadow:none}
+.info h3{font:600 18px/1.2 var(--font-display)}
+.oc{border:1px solid var(--edge)}
+.tip{border-radius:2px}
+/* phong online */
+.online-card{border:1px solid var(--edge)!important;border-radius:3px!important;box-shadow:none!important;background:var(--surface)}
+.online-kicker{color:var(--me);font:600 11px var(--font-display);letter-spacing:.3em}
+.online-copy h2{font:300 clamp(26px,3.2vw,36px)/1.15 var(--font-display);letter-spacing:-.01em}
+.online-code{border:1px solid var(--fg);border-radius:2px;background:transparent;font:500 17px/1.2 var(--font-display);box-shadow:none}
+.online-code:focus{outline:2px solid var(--me);outline-offset:2px}
+.online-status{border-radius:2px;border-left:2px solid var(--edge);background:transparent;font:400 12.5px/1.5 var(--font-body)}
+.online-status.bad{border-left-color:var(--me);background:rgba(200,64,47,.08);color:var(--me)}
+.online-back{border:0;border-radius:0;padding:0;margin:0 0 10px;color:var(--muted);font:600 12px var(--font-body);letter-spacing:.06em;background:none}
+.app.online-lobby:not(.online-mode) .online-card{box-shadow:none;margin-top:5vh}
+.menu-modal-card{border-radius:3px}
 </style>

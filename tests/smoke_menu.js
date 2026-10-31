@@ -19,6 +19,8 @@ ok(await p.evaluate(()=>getComputedStyle(document.getElementById('main-menu')).b
 await p.reload();await p.waitForTimeout(400);ok(await p.evaluate(()=>document.documentElement.getAttribute('data-theme'))==='dark','giao dien Toi duoc nho sau khi tai lai');
 await p.click('#menu-theme');ok(await p.evaluate(()=>document.documentElement.getAttribute('data-theme'))==='light','chuyen lai Mac dinh');
 await p.click('#menu-single');ok(!await menuVisible(),'Dau voi may: vao game');
+await p.click('#btn-theme');ok(await p.evaluate(()=>document.documentElement.getAttribute('data-theme'))==='dark'&&await p.evaluate(()=>document.getElementById('btn-theme').textContent.includes('Tối')),'nut Giao dien trong van choi chuyen sang Toi');
+await p.click('#btn-theme');ok(await p.evaluate(()=>document.documentElement.getAttribute('data-theme'))==='light','nut Giao dien trong van choi chuyen lai Mac dinh');
 ok(await p.evaluate(()=>!document.getElementById('online-card').offsetParent),'Dau voi may: an khung online');
 await p.click('#btn-menu');ok(await menuVisible(),'Menu chinh quay lai trang chu');
 await p.click('#menu-local');ok(!await menuVisible(),'Hai nguoi cung may: vao game');
@@ -27,6 +29,7 @@ await p.click('#btn-menu');
 await p.click('#menu-online');ok(!await menuVisible(),'Choi truc tuyen: roi trang chu');
 ok(await p.evaluate(()=>!!document.getElementById('online-card').offsetParent),'Choi truc tuyen: hien khung phong');
 ok(await p.evaluate(()=>!document.querySelector('.layout').offsetParent),'Choi truc tuyen: an ban co khi chua ket noi');
+ok(await p.evaluate(()=>!!document.getElementById('btn-theme').offsetParent),'phong online co nut Giao dien');
 await p.click('#online-back');ok(await menuVisible(),'Nut Trang chu quay lai menu');
 ok(p._errs.length===0,'khong loi JS sau khi bam het cac muc');
 await p.close();

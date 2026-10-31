@@ -98,7 +98,7 @@ function updateOutposts(){
 }
 function startHas(code){ return !EN.isClassic()&&SQ[code>0?0:1][9]>0; }
 function setBubble(emo,text){
-  bubbleEl.querySelector('.b-emo').textContent=emo;
+  setIc(bubbleEl.querySelector('.b-emo'),emo);
   bubbleEl.querySelector('.b-text').textContent=text;
   bubbleEl.classList.remove('pop'); void bubbleEl.offsetWidth; bubbleEl.classList.add('pop');
 }
@@ -179,9 +179,9 @@ function eatsList(r,side,K){
   if(r===9) return '<i>không ăn được quân nào</i>';
   if(K==='croc'&&!EN.isClassic()) r=5;
   for(q=1;q<=8;q++){
-    if(r===1?(q===1||q===8):(r===8?(q>=2):(q<=r))) out.push(hero(hc*q).e);
+    if(r===1?(q===1||q===8):(r===8?(q>=2):(q<=r))) out.push(ico(hero(hc*q)));
   }
-  if(!EN.isClassic()&&SQ[side>0?1:0][9]===1) out.push('🐒');
+  if(!EN.isClassic()&&SQ[side>0?1:0][9]===1) out.push(ico(H_MON));
   return out.join(' ');
 }
 function updateInfo(){
@@ -201,10 +201,10 @@ function updateInfo(){
     if(ip>=0){ ie=effRank(cells,ip); rankTxt=ie; rcls=ie>nominal(inspectCode)?' buff':ie<nominal(inspectCode)?' nerf':''; if(ie!==r) subRank='bậc gốc '+nominal(inspectCode)+' · hiện tại '+ie; }
   }
   var lis=hh.t.map(function(t){return '<li class="'+t[0]+'">'+t[1]+'</li>';}).join('');
-  el.innerHTML='<div class="info-head"><div class="info-token '+cls+'">'+hh.e+'<span class="rank'+rcls+'">'+rankTxt+'</span></div>'+
+  el.innerHTML='<div class="info-head"><div class="info-token '+cls+'">'+ico(hh)+'<span class="rank'+rcls+'">'+rankTxt+'</span></div>'+
     '<div><h3>'+hh.n+'<em>'+hh.ep+'</em></h3><small>'+label+' · '+subRank+'</small></div></div>'+
     '<p class="eats"><span>Ăn được</span> '+eatsList(r,side,hh.k)+'</p>'+extra+
-    '<div class="info-body"><ul class="traits">'+lis+'</ul>'+diagram(hh.k,r,hh.e)+'</div>'+
+    '<div class="info-body"><ul class="traits">'+lis+'</ul>'+diagram(hh.k,r,ico(hh))+'</div>'+
     (!previewHero&&selected>=0&&inspectCode*turn>0&&humanTurn()?'<p><b>'+legal.length+'</b> nước đi hợp lệ</p>':'');
 }
 function updateButtons(){
@@ -224,7 +224,7 @@ function refresh(){
 function syncHeroes(){
   var c, h, k;
   for(c in pieceEls){
-    h=hero(+c); pieceEls[c].querySelector('.emo').textContent=h.e; miniEls[c].textContent=h.e; miniEls[c].title=h.n;
+    h=hero(+c); pieceEls[c].querySelector('.emo').innerHTML=ico(h); miniEls[c].innerHTML=ico(h); miniEls[c].title=h.n;
   }
 }
 
@@ -241,7 +241,7 @@ function renderRoster(){
   rosterList=list;
   list.forEach(function(it,ix){
     h=it[1]; b=document.createElement('button'); b.type='button'; b.className='row'; b.setAttribute('data-i',ix);
-    b.innerHTML='<span class="mini">'+h.e+'</span><span><b>'+h.n+' · '+h.ep+'</b><small>'+(it[0]<=8?'Bậc '+it[0]+' · ':'Ngoài bậc · ')+h.br+'</small></span>';
+    b.innerHTML='<span class="mini">'+ico(h)+'</span><span><b>'+h.n+' · '+h.ep+'</b><small>'+(it[0]<=8?'Bậc '+it[0]+' · ':'Ngoài bậc · ')+h.br+'</small></span>';
     ros.appendChild(b);
   });
 }
@@ -275,7 +275,7 @@ function renderRules(){
 /* ---------- Mo ta nuoc di ---------- */
 function describe(f,t,code,tcode,k){
   var s=code>0?1:-1, rk=Math.abs(code), K=HK[code+9], owner=pnl(s), foeName=pnl(-s);
-  var h=hero(code), emo=h.e, snd=h.s, who=h.n+' của '+owner, th=tcode?hero(tcode).n:'';
+  var h=hero(code), emo=ico(h), snd=h.s, who=h.n+' của '+owner, th=tcode?hero(tcode).n:'';
   if(k===5) return {emo:emo,text:snd+' '+who+' đổi chỗ với '+th+(tcode*s>0?'':' của '+foeName)+'.'};
   if(k===6) return {emo:emo,text:snd+' '+who+' '+(K==='croc'?'bắt mồi':'tấn công từ bờ')+', ăn '+th+' của '+foeName+' mà không rời chỗ.'};
   if(k===7) return {emo:emo,text:snd+' '+who+' vồ xa, ăn '+th+' của '+foeName+' mà không rời chỗ.'};
