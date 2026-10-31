@@ -58,7 +58,8 @@ scn('rat',CROC,[[6,6,5],[5,6,-1]],c=>{ c.ck('Ca sau tren bo an Chuot dang boi tr
 scn('lion',{},[[7,6,7],[5,6,-3]],c=>{ c.ck('Su tu khong vo quan trong dam lay',!c.has(c.sg,7,7,6,5,6));});
 scn('lion',{},[[6,7,7],[4,7,-3]],c=>{ c.ck('Su tu khong vo xuyen o giua la dam lay',!c.has(c.sg,7,6,7,4,7));});
 scn('lion',{},[[7,3,7],[5,3,-3]],c=>{ c.ck('Su tu vo quan tren bo trong thuong',c.has(c.sg,7,7,3,5,3));});
-scn('lion',{},[[7,4,7],[5,4,-3]],c=>{ c.ck('Su tu vo qua o trong (6,4) toi (5,4)',c.has(c.sg,7,7,4,5,4));});
+scn('lion',{},[[7,5,7],[5,5,-3]],c=>{ c.ck('Su tu vo qua o trong (6,5) toi (5,5)',c.has(c.sg,7,7,5,5,5));});
+scn('lion',{},[[7,4,7],[5,4,-3]],c=>{ c.ck('Su tu khong vo quan dung trong bui moi o (5,4)',!c.has(c.sg,7,7,4,5,4));});
 // ---------- Cao / Bo rung lao qua dam lay ----------
 scn('fox',{2:1},[[5,5,2]],c=>{ c.ck('Cao khong nuoc rut xuyen dam lay (5,5)->(5,7)',!c.has(c.sg,3,5,5,5,7));});
 scn('fox',{2:1},[[7,6,2]],c=>{ c.ck('Cao nuoc rut dap xuong dam lay (7,6)->(5,6)',c.has(c.sg,3,7,6,5,6));});

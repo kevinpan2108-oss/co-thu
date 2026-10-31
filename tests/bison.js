@@ -4,6 +4,8 @@
    Bay phe + : (7,4) (8,3) (8,5). Bo rung huc quan dich VE PHIA bay cua phe minh khi huc ve phia hang minh. */
 const fs=require('fs'),path=require('path');
 const E=new Function(fs.readFileSync(process.env.ENGINE||path.join(__dirname,'..','src','engine.js'),'utf8')+';return makeEngine();')();
+// Kich ban dung cot giua; bui moi (3,4),(5,4) la dia hinh rieng nen xoa o day de cac kich ban cu giu nguyen y nghia.
+E.BUSH[3*9+4]=0;E.BUSH[5*9+4]=0;
 const {N,ST,COLS,ROWS,SL}=E; const Z=[0,0,0,0,0,0,0,0,0,0];
 let pass=0,fails=0; const ok=(n,c)=>{if(c)pass++;else{fails++;console.log('FAIL',n);}};
 const sq=o=>{const a=Z.slice();Object.keys(o).forEach(k=>a[k]=o[k]);return a;};
