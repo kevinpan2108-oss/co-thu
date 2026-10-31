@@ -17,6 +17,8 @@ const { chromium } = require('playwright'); const path=require('path');
   const waitHuman=async()=>{for(let i=0;i<40;i++){const t=await ev(()=>({turn,over,th:thinking}));if(t.turn===1||t.over)return t;await p.waitForTimeout(250);}return null;};
   let ok=0,bad=0;const chk=(n,c)=>{if(c)ok++;else{bad++;console.log('FAIL',n);}};
   const BASE=[[0,0,-1],[8,8,1]];
+  // Bui moi o E4/E6 (cot giua) chan Lao/Huc ha canh o do; cac kich ban Bo rung cu dung cot giua nen go hai o bui nay (giong tests/bison.js).
+  await ev(()=>{EN.BUSH[3*9+4]=0;EN.BUSH[5*9+4]=0;});
   const info=()=>ev(()=>$('info').textContent);
   const bpos=()=>ev(()=>{for(var i=0;i<N;i++) if(cells[i]===7) return i; return -1;});
 

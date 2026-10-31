@@ -45,6 +45,8 @@ jobs:
           node tests/ai_tactics.js
           node tests/bison.js
           node tests/outpost_ai.js
+          node tests/bush_layout.js
+          node tests/bush_groups.js
 
       - name: Compare starting formations
         if: github.event_name != 'pull_request' || (github.event.pull_request.head.ref != 'feature/online-two-player-pvp' && github.event.pull_request.head.ref != 'fix/online-connection-and-top-panel' && github.event.pull_request.head.ref != 'fix/peerjs-cloud-room-join' && github.event.pull_request.head.ref != 'design/symmetrical-compact-web-ui' && github.event.pull_request.head.ref != 'fix/shared-board-orientation' && github.event.pull_request.head.ref != 'feat/bush-diagonal-slip' && github.event.pull_request.head.ref != 'feat/safari-style-main-menu' && github.event.pull_request.head.ref != 'feat/redesign-main-menu-hub')
@@ -83,7 +85,9 @@ jobs:
 
       - name: Run home menu smoke test (no JS errors, every item responds)
         working-directory: tests
-        run: node smoke_menu.js
+        run: |
+          node smoke_menu.js
+          node pw_bush_ui.js
 
       - name: Run online multiplayer browser regression
         if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'fix/shared-board-orientation'
