@@ -831,4 +831,18 @@ body{background-image:repeating-linear-gradient(0deg,rgba(120,100,60,.025) 0 2px
 .online-back{border:0;border-radius:0;padding:0;margin:0 0 10px;color:var(--muted);font:600 12px var(--font-body);letter-spacing:.06em;background:none}
 .app.online-lobby:not(.online-mode) .online-card{box-shadow:none;margin-top:5vh}
 .menu-modal-card{border-radius:3px}
+
+/* So bac tren quan: to, tuong phan cao ca sang lan toi */
+.rank{right:-10%;bottom:-10%;width:46%;height:46%;background:#fbf8f1;color:#1d1d1f;border:2px solid #1d1d1f;font:800 max(12px,calc(100cqw / var(--cols) * .3))/1 var(--font-display);box-shadow:0 1px 3px rgba(0,0,0,.45);letter-spacing:0}
+.rank.buff{background:#d3f0cb;color:#12401b}
+.rank.nerf{background:#f9cbd3;color:#6b1226}
+.rank.none{background:#fbf8f1;color:#5b5850}
+.rank.buff::after,.rank.nerf::after{top:-42%;font-size:.8em;text-shadow:0 0 2px #fff,0 0 2px #fff}
+:root[data-theme="dark"] .rank{background:#14161a;color:#f4efe4;border-color:#f4efe4}
+:root[data-theme="dark"] .rank.buff{background:#24502c;color:#d9f6d3}
+:root[data-theme="dark"] .rank.nerf{background:#6a2838;color:#ffdde3}
+:root[data-theme="dark"] .rank.none{background:#14161a;color:#a39e92}
+:root[data-theme="dark"] .rank.buff::after,:root[data-theme="dark"] .rank.nerf::after{text-shadow:0 0 2px #000,0 0 2px #000}
+.info-token .rank{width:30px;height:30px;font-size:15px;right:-8px;bottom:-8px}
+@media(max-width:600px){.info-token .rank{width:24px;height:24px;font-size:12px}}
 </style>
