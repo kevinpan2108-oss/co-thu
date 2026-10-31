@@ -1,7 +1,7 @@
 <title>Cờ Thú</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=Noto+Serif:wght@300;400;500;600&family=Noto+Serif+JP:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=Noto+Serif:wght@300;400;500;600&family=Noto+Serif+TC:wght@500;600&display=swap">
 <style>
 /* Layout: a realistic wooden-framed jungle board (painted on canvas, animated water) beside a sticker-style control column. */
 :root{
@@ -658,12 +658,12 @@ details.card summary::after{font-size:20px}
 
 /* Cờ Thú home hub */
 /* ---- Trang chu (hm-*): toi gian kieu Nhat ---- */
-.main-menu{--paper:#f5f0e6;--paper2:#ece5d6;--sumi:#1d1d1f;--sumi2:#5b5850;--shu:#c8402f;--line:rgba(29,29,31,.16);position:fixed;inset:0;z-index:1000;overflow:auto;color:var(--sumi);background:radial-gradient(ellipse at 20% 0%,rgba(255,255,255,.7),transparent 55%),repeating-linear-gradient(0deg,rgba(120,100,60,.025) 0 2px,transparent 2px 5px),var(--paper);font-family:'Noto Serif','Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',Georgia,serif}
+.main-menu{--paper:#f5f0e6;--paper2:#ece5d6;--sumi:#1d1d1f;--sumi2:#5b5850;--shu:#c8402f;--line:rgba(29,29,31,.16);position:fixed;inset:0;z-index:1000;overflow:auto;color:var(--sumi);background:radial-gradient(ellipse at 20% 0%,rgba(255,255,255,.7),transparent 55%),repeating-linear-gradient(0deg,rgba(120,100,60,.025) 0 2px,transparent 2px 5px),var(--paper);font-family:'Noto Serif','Noto Serif TC','Songti TC','PMingLiU','Noto Serif CJK TC',Georgia,serif}
 .main-menu[hidden]{display:none}
 .hm-wrap{min-height:100%;width:min(100%,1080px);margin:0 auto;padding:clamp(16px,3vw,30px) clamp(18px,4vw,40px);display:flex;flex-direction:column;gap:clamp(12px,3vh,34px)}
 .hm-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
 .hm-mark{display:flex;align-items:center;gap:12px}
-.hm-seal{display:grid;place-items:center;width:34px;height:34px;background:var(--shu);color:#fff;font:700 20px/1 'Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',serif;border-radius:3px;transform:rotate(-3deg)}
+.hm-seal{display:grid;place-items:center;width:34px;height:34px;background:var(--shu);color:#fff;font:700 20px/1 'Noto Serif TC','Songti TC','PMingLiU','Noto Serif CJK TC',serif;border-radius:3px;transform:rotate(-3deg)}
 .hm-word{font:600 13px/1 'Noto Serif',serif;letter-spacing:.32em;white-space:nowrap}
 .hm-util{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:2px 18px}
 .home-utility{display:flex;align-items:center;gap:7px;padding:6px 0;border:0;background:none;color:var(--sumi2);font:600 12px 'Noto Serif',serif;letter-spacing:.04em;cursor:pointer;transition:color .15s}
@@ -680,7 +680,7 @@ details.card summary::after{font-size:20px}
 .hm-menu{margin:0;padding:0;list-style:none;max-width:460px;border-top:1px solid var(--sumi)}
 .hm-menu li{border-bottom:1px solid var(--line)}
 .hm-row{width:100%;display:flex;align-items:center;gap:18px;padding:16px 6px;border:0;background:none;color:var(--sumi);text-align:left;cursor:pointer;transition:padding .25s ease,background .2s}
-.hm-no{flex:0 0 26px;color:var(--shu);font:400 22px/1 'Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',serif}
+.hm-no{flex:0 0 26px;color:var(--shu);font:400 14px/1 'Noto Serif TC','Songti TC','PMingLiU','Noto Serif CJK TC',serif}
 .hm-rt{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0}
 .hm-rt b{font:600 clamp(17px,2vw,20px)/1.2 'Noto Serif',serif;letter-spacing:.02em}
 .hm-rt small{color:var(--sumi2);font:400 12px/1.4 'Noto Serif',serif}
@@ -698,7 +698,8 @@ details.card summary::after{font-size:20px}
 .hm-svg .den{fill:none;stroke-width:1.6}.hm-svg .den.m{fill:rgba(200,64,47,.12);stroke:var(--shu)}.hm-svg .den.f{fill:rgba(29,29,31,.08);stroke:currentColor}
 .hm-svg .trap{fill:none;stroke:currentColor;stroke-opacity:.5;stroke-width:1.2}
 .hm-svg .pc circle{fill:var(--paper);stroke-width:1.6}
-.hm-svg .pc text{font:600 17px 'Noto Serif JP','Hiragino Mincho ProN','Yu Mincho','Noto Serif',serif;text-anchor:middle}
+.hm-svg .pc use{color:var(--sumi)}.hm-svg .pc.m use{color:var(--shu)}.hm-svg .pc.f use{color:var(--sumi)}.hm-svg .pc.w use{color:#4f7e93}
+.hm-svg .pc text{font:600 17px 'Noto Serif TC','Songti TC','PMingLiU','Noto Serif CJK TC','Noto Serif',serif;text-anchor:middle}
 .hm-svg .pc.m circle{stroke:var(--shu)}.hm-svg .pc.m text{fill:var(--shu)}
 .hm-svg .pc.f circle{stroke:var(--sumi)}.hm-svg .pc.f text{fill:var(--sumi)}
 .hm-svg .pc.w circle{stroke:#4f7e93}.hm-svg .pc.w text{fill:#4f7e93}
@@ -711,7 +712,7 @@ details.card summary::after{font-size:20px}
 .hm-rl em{margin-left:8px;font-style:normal;font-weight:400;letter-spacing:.04em;color:var(--sumi2)}
 .hm-roster ul{display:flex;flex-wrap:wrap;gap:10px 14px;margin:0;padding:0;list-style:none}
 .hm-roster li{display:flex;align-items:baseline;gap:3px}
-.hm-roster li span{font:500 20px/1 'Noto Serif JP','Hiragino Mincho ProN','Yu Mincho',serif}
+.hm-roster li .ico{width:26px;height:26px;color:var(--sumi)}
 .hm-roster li em{color:var(--shu);font:600 10px 'Noto Serif',serif;font-style:normal}
 @media(max-width:860px){.hm-hero{grid-template-columns:1fr;gap:20px}.hm-stage{display:none}.hm-menu,.home-hint{max-width:none}}
 @media(max-width:560px){.hm-wrap{padding:14px 18px 20px}.hm-top{padding-bottom:10px}.hm-util{gap:0 12px}.home-utility{font-size:11px}.hm-word{letter-spacing:.2em}.hm-sub{margin:12px 0 18px}.hm-row{padding:14px 4px}.hm-roster{gap:10px}.hm-roster li span{font-size:18px}.hm-rl em{display:block;margin:4px 0 0}}
@@ -734,8 +735,105 @@ details.card summary::after{font-size:20px}
 
 .app.online-lobby:not(.online-mode) .layout{display:none}
 .app.online-lobby:not(.online-mode) .online-card{max-width:760px;margin:6vh auto 0;grid-template-columns:minmax(0,1fr);padding:22px 24px;box-shadow:0 18px 50px rgba(16,38,58,.18)}
+
+/* ================= Phong cach Nhat cho van choi va phong online ================= */
+.ico{width:1em;height:1em;display:inline-block;vertical-align:-.14em;fill:currentColor;overflow:visible}
+.piece .emo{color:var(--bg);filter:none}.piece .emo .ico{width:1.12em;height:1.12em}
+.mini{color:var(--fg)}.mini.me,.mini.foe{color:var(--bg)}
+.info-token{color:var(--fg)}.info-token.me,.info-token.foe{color:var(--bg)}
+.b-emo .ico,.result-emoji .ico{width:1em;height:1em}
+.mvgrid i.c .ico{width:12px;height:12px}
+:root[data-theme="dark"] .hm-svg .pc.w use{color:#8fb8cc}
+:root{
+  --bg:#f5f0e6;--dot:transparent;--surface:#fbf8f1;--fg:#1d1d1f;--muted:#5b5850;
+  --edge:rgba(29,29,31,.28);--ink:#1d1d1f;--pop:transparent;
+  --me:#c8402f;--me-soft:#f1d6d0;--foe:#3d4d82;--foe-soft:#d3d8ea;
+  --sun:#e8dcc0;--hit:#c8402f;--leaf:#6f8f5e;
+  --frame:#e9e1d0;--frame-dark:#ddd3bd;--frame-light:#f1ebdc;
+  --w1:#b9d3dc;--w2:#8fb5c4;--w3:#6c97a9;--w4:#557f92;
+  --font-display:'Noto Serif','Noto Serif TC','Songti TC','PMingLiU','Noto Serif CJK TC',Georgia,serif;
+  --font-body:'Noto Serif','Noto Serif TC','Songti TC','PMingLiU','Noto Serif CJK TC',Georgia,serif;
+  --jp-btn-bg:#1d1d1f;--jp-btn-fg:#f5f0e6;
+}
+:root[data-theme="dark"]{
+  --bg:#17181b;--surface:#1e2024;--fg:#ece7dc;--muted:#a39e92;
+  --edge:rgba(236,231,220,.24);--ink:#ece7dc;
+  --me:#e5604d;--me-soft:#4a2a26;--foe:#8196dc;--foe-soft:#262d4a;
+  --sun:#34373d;--hit:#e5604d;--leaf:#8fb27b;
+  --frame:#25272c;--frame-dark:#202226;--frame-light:#2b2d33;
+  --w1:#4b7387;--w2:#3b6075;--w3:#2d4d60;--w4:#23404f;
+  --jp-btn-bg:#ece7dc;--jp-btn-fg:#17181b;
+}
+html,body{background-color:var(--bg)}
+body{background-image:repeating-linear-gradient(0deg,rgba(120,100,60,.025) 0 2px,transparent 2px 5px);font-family:var(--font-body)}
+:root[data-theme="dark"] body{background-image:none}
+/* header */
+.logo{gap:0;font:600 clamp(17px,2.4vw,22px)/1 var(--font-display);letter-spacing:.34em;align-items:center}
+.logo::before{content:"獸";display:grid;place-items:center;width:34px;height:34px;margin-right:14px;background:var(--me);color:#fff;font:700 20px/1 'Noto Serif TC','Songti TC','PMingLiU','Noto Serif CJK TC',serif;letter-spacing:0;border-radius:3px;transform:rotate(-3deg)}
+.logo span,.logo span:nth-child(n){display:inline;min-width:0;height:auto;border:0;border-radius:0;box-shadow:none;background:none;color:var(--fg);transform:none;animation:none}
+.logo span:nth-child(3){display:inline-block;width:.6em;min-width:.6em}
+.tag{font:400 12px/1.5 var(--font-body);color:var(--muted)}
+.score{gap:14px;font:600 13px var(--font-body)}
+.score span,.score span.pv{padding:2px 0;border:0;border-bottom:1px solid var(--edge);border-radius:0;background:none;box-shadow:none}
+.score b{color:var(--me);font-size:1.1em}
+.theme-toggle{display:flex;align-items:center;gap:7px;padding:6px 0;border:0;background:none;color:var(--muted);font:600 12px var(--font-body);letter-spacing:.04em;cursor:pointer}
+.theme-toggle:before{content:"";width:6px;height:6px;border-radius:50%;border:1px solid var(--muted)}
+.theme-toggle[aria-pressed="true"]:before{background:var(--me);border-color:var(--me)}
+.theme-toggle:hover{color:var(--fg)}
+.theme-toggle:focus-visible{outline:2px solid var(--me);outline-offset:3px}
+.top{padding-bottom:12px;border-bottom:1px solid var(--edge)}
+.top-right{display:flex;align-items:center;gap:6px 20px;flex-wrap:wrap}
+/* trang thai */
+.pill{padding:5px 12px;border:1px solid var(--fg);border-radius:999px;background:transparent;color:var(--fg);box-shadow:none;font:600 13px var(--font-display);letter-spacing:.04em}
+.pill .dot{border:0;width:9px;height:9px}
+.bubble{padding:6px 12px;border:0;border-left:2px solid var(--me);border-radius:0;background:transparent;color:var(--fg);font:400 13px var(--font-body)}
+.team .who{font:600 13px var(--font-display);letter-spacing:.06em}
+.mini{border:1px solid var(--fg)}
+/* khung ban co: tatami + vien muc */
+.frame{padding:8px;border:1px solid var(--fg);border-radius:3px;background:var(--frame);box-shadow:none}
+.frame::before{display:none}
+.board{border-radius:1px;box-shadow:none}
+.board::after{border-radius:1px;background:none;box-shadow:inset 0 0 0 1px rgba(29,29,31,.35)}
+#ground{filter:saturate(.42) sepia(.22) brightness(1.06) contrast(.94)}
+:root[data-theme="dark"] #ground{filter:saturate(.4) brightness(.95)}
+.lake{filter:saturate(.55)}
+/* the, nut, hop thoai */
+.card{border:1px solid var(--edge);border-radius:3px;background:var(--surface);box-shadow:none;padding:14px 16px}
+.card h2,details.card summary{font:600 15px/1.3 var(--font-display);letter-spacing:.08em}
+.btn{border:1px solid var(--jp-btn-bg);border-radius:2px;background:var(--jp-btn-bg);color:var(--jp-btn-fg);box-shadow:none;font:600 14px/1 var(--font-display);letter-spacing:.05em;padding:10px 16px}
+.btn:hover{transform:none;opacity:.88}
+.btn:active{transform:none;box-shadow:none;opacity:.75}
+.btn:disabled{box-shadow:none;opacity:.35}
+.btn.alt{background:transparent;color:var(--fg);border-color:var(--edge)}
+.btn.alt:hover{border-color:var(--fg);opacity:1}
+.seg label,.opt,select.sel,.row{border:1px solid var(--edge);border-radius:2px;background:transparent;box-shadow:none}
+.seg input:checked + label,.opt.on{background:var(--fg);color:var(--bg);border-color:var(--fg);box-shadow:none}
+.opt.on small{color:var(--bg)}
+.row:hover{transform:none;border-color:var(--me)}
+.row .mini,.ladder .mini{background:var(--sun)}
+.field-label{font:600 11px var(--font-display);letter-spacing:.18em}
+.draft-card,.result-card{border:1px solid var(--fg);border-radius:3px;box-shadow:none;background:var(--surface)}
+.draft-card h2,.result-card h2{font:600 18px/1.2 var(--font-display);letter-spacing:.06em}
+.result{background:rgba(23,24,27,.6)}
+.draft-info,.info .now{border-radius:2px;border-left:2px solid var(--me);background:var(--me-soft)}
+.info-token{border:1px solid var(--fg);box-shadow:none}
+.info h3{font:600 18px/1.2 var(--font-display)}
+.oc{border:1px solid var(--edge)}
+.tip{border-radius:2px}
+/* phong online */
+.online-card{border:1px solid var(--edge)!important;border-radius:3px!important;box-shadow:none!important;background:var(--surface)}
+.online-kicker{color:var(--me);font:600 11px var(--font-display);letter-spacing:.3em}
+.online-copy h2{font:300 clamp(26px,3.2vw,36px)/1.15 var(--font-display);letter-spacing:-.01em}
+.online-code{border:1px solid var(--fg);border-radius:2px;background:transparent;font:500 17px/1.2 var(--font-display);box-shadow:none}
+.online-code:focus{outline:2px solid var(--me);outline-offset:2px}
+.online-status{border-radius:2px;border-left:2px solid var(--edge);background:transparent;font:400 12.5px/1.5 var(--font-body)}
+.online-status.bad{border-left-color:var(--me);background:rgba(200,64,47,.08);color:var(--me)}
+.online-back{border:0;border-radius:0;padding:0;margin:0 0 10px;color:var(--muted);font:600 12px var(--font-body);letter-spacing:.06em;background:none}
+.app.online-lobby:not(.online-mode) .online-card{box-shadow:none;margin-top:5vh}
+.menu-modal-card{border-radius:3px}
 </style>
 
+<svg class="defs" width="0" height="0" aria-hidden="true" style="position:absolute"><symbol id="ic-rat" viewBox="0 0 48 48"><mask id="mk-rat" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48"><rect width="48" height="48" fill="#fff"/><circle cx="12" cy="15" r="4.2" fill="#000"/><circle cx="36" cy="15" r="4.2" fill="#000"/><circle cx="19" cy="27" r="1.9" fill="#000"/><circle cx="29" cy="27" r="1.9" fill="#000"/><circle cx="24" cy="41.5" r="2.2" fill="#000"/><path d="M4 33 L15 35 M4 40 L15 38 M44 33 L33 35 M44 40 L33 38" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/></mask><g fill="currentColor" stroke="currentColor" mask="url(#mk-rat)"><circle cx="12" cy="15" r="8.5"/><circle cx="36" cy="15" r="8.5"/><ellipse cx="24" cy="29" rx="13.5" ry="12.5"/><path d="M17 36 L24 46 L31 36Z"/></g><g fill="currentColor" stroke="currentColor"></g></symbol><symbol id="ic-cat" viewBox="0 0 48 48"><mask id="mk-cat" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48"><rect width="48" height="48" fill="#fff"/><ellipse cx="18" cy="27" rx="2.1" ry="3.2" fill="#000"/><ellipse cx="30" cy="27" rx="2.1" ry="3.2" fill="#000"/><path d="M21.5 33 L26.5 33 L24 36Z" fill="#000"/><path d="M24 36 L24 38.5 M24 38.5 Q21 41 18.5 39 M24 38.5 Q27 41 29.5 39" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/><path d="M2 28 L12 31 M2 34 L12 34 M46 28 L36 31 M46 34 L36 34" fill="none" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/><path d="M10 10 L16 15 L10.5 20Z" fill="#000"/><path d="M38 10 L32 15 L37.5 20Z" fill="#000"/></mask><g fill="currentColor" stroke="currentColor" mask="url(#mk-cat)"><ellipse cx="24" cy="29" rx="16" ry="13.5"/><path d="M7 5 L21 16 L8 26Z"/><path d="M41 5 L27 16 L40 26Z"/></g><g fill="currentColor" stroke="currentColor"></g></symbol><symbol id="ic-fox" viewBox="0 0 48 48"><mask id="mk-fox" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48"><rect width="48" height="48" fill="#fff"/><ellipse cx="15.5" cy="26" rx="2.4" ry="1.7" transform="rotate(25 15.5 26)" fill="#000"/><ellipse cx="32.5" cy="26" rx="2.4" ry="1.7" transform="rotate(-25 32.5 26)" fill="#000"/><circle cx="24" cy="43" r="2.4" fill="#000"/><path d="M24 20 L18 26 L24 31 L30 26Z" fill="#000"/><path d="M11 31 L19 34 M37 31 L29 34" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/><path d="M8 9 L15 15 L9 22Z" fill="#000"/><path d="M40 9 L33 15 L39 22Z" fill="#000"/></mask><g fill="currentColor" stroke="currentColor" mask="url(#mk-fox)"><path d="M3 4 L20 15 L28 15 L45 4 L43 29 L24 46 L5 29Z"/></g><g fill="currentColor" stroke="currentColor"></g></symbol><symbol id="ic-wolf" viewBox="0 0 48 48"><mask id="mk-wolf" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48"><rect width="48" height="48" fill="#fff"/><path d="M12 21 L19 24 L12 27Z" fill="#000"/><path d="M36 21 L29 24 L36 27Z" fill="#000"/><path d="M20.5 38 L27.5 38 L24 43Z" fill="#000"/><path d="M24 28 L24 38" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/><path d="M8 8 L14 14 L8.5 19Z" fill="#000"/><path d="M40 8 L34 14 L39.5 19Z" fill="#000"/></mask><g fill="currentColor" stroke="currentColor" mask="url(#mk-wolf)"><path d="M4 3 L19 14 L29 14 L44 3 L46 20 L40 24 L44 31 L36 33 L36 41 L24 47 L12 41 L12 33 L4 31 L8 24 L2 20Z"/></g><g fill="currentColor" stroke="currentColor"></g></symbol><symbol id="ic-boar" viewBox="0 0 48 48"><mask id="mk-boar" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48"><rect width="48" height="48" fill="#fff"/><circle cx="15.5" cy="22" r="1.9" fill="#000"/><circle cx="32.5" cy="22" r="1.9" fill="#000"/><ellipse cx="24" cy="34" rx="9" ry="6.3" fill="#000"/><circle cx="20.5" cy="34" r="1.6" fill="#000"/><circle cx="27.5" cy="34" r="1.6" fill="#000"/><path d="M12 15 Q18 14 21 17 M36 15 Q30 14 27 17" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/></mask><g fill="currentColor" stroke="currentColor" mask="url(#mk-boar)"><ellipse cx="24" cy="25" rx="18" ry="15"/><path d="M4 31 Q-1 40 8 43 Q4 37 9 33Z"/><path d="M44 31 Q49 40 40 43 Q44 37 39 33Z"/><path d="M8 12 L18 15 L10 22Z"/><path d="M40 12 L30 15 L38 22Z"/></g><g fill="currentColor" stroke="currentColor"></g></symbol><symbol id="ic-dog" viewBox="0 0 48 48"><mask id="mk-dog" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48"><rect width="48" height="48" fill="#fff"/><circle cx="18.5" cy="22" r="2.1" fill="#000"/><circle cx="29.5" cy="22" r="2.1" fill="#000"/><ellipse cx="24" cy="34" rx="3.8" ry="2.8" fill="#000"/><path d="M24 37 L24 41 M24 41 Q20 44 17.5 41.5 M24 41 Q28 44 30.5 41.5" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/><path d="M14 16 Q18 14 21 16 M34 16 Q30 14 27 16" fill="none" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/></mask><g fill="currentColor" stroke="currentColor" mask="url(#mk-dog)"><ellipse cx="24" cy="27" rx="13" ry="15"/><ellipse cx="8" cy="27" rx="6.5" ry="13" transform="rotate(12 8 27)"/><ellipse cx="40" cy="27" rx="6.5" ry="13" transform="rotate(-12 40 27)"/><ellipse cx="24" cy="37" rx="8.5" ry="6.5"/></g><g fill="currentColor" stroke="currentColor"></g></symbol><symbol id="ic-bear" viewBox="0 0 48 48"><mask id="mk-bear" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48"><rect width="48" height="48" fill="#fff"/><circle cx="10.5" cy="12" r="2.8" fill="#000"/><circle cx="37.5" cy="12" r="2.8" fill="#000"/><circle cx="17" cy="23" r="2.1" fill="#000"/><circle cx="31" cy="23" r="2.1" fill="#000"/><ellipse cx="24" cy="32.5" rx="3.6" ry="2.5" fill="#000"/><path d="M24 35 L24 38.5 M24 38.5 Q21 41 18.5 39 M24 38.5 Q27 41 29.5 39" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/></mask><g fill="currentColor" stroke="currentColor" mask="url(#mk-bear)"><circle cx="10.5" cy="12" r="6.5"/><circle cx="37.5" cy="12" r="6.5"/><circle cx="24" cy="27" r="17"/><ellipse cx="24" cy="35" rx="8" ry="6"/></g><g fill="currentColor" stroke="currentColor"></g></symbol><symbol id="ic-leo" viewBox="0 0 48 48"><mask id="mk-leo" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48"><rect width="48" height="48" fill="#fff"/><circle cx="9" cy="12" r="2.2" fill="#000"/><circle cx="39" cy="12" r="2.2" fill="#000"/><ellipse cx="17.5" cy="25" rx="2.2" ry="2.8" fill="#000"/><ellipse cx="30.5" cy="25" rx="2.2" ry="2.8" fill="#000"/><path d="M21.5 31 L26.5 31 L24 34Z" fill="#000"/><path d="M24 34 L24 37 M24 37 Q21 39.5 18.5 37.5 M24 37 Q27 39.5 29.5 37.5" fill="none" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/><circle cx="11" cy="28" r="1.5" fill="#000"/><circle cx="14" cy="33" r="1.5" fill="#000"/><circle cx="37" cy="28" r="1.5" fill="#000"/><circle cx="34" cy="33" r="1.5" fill="#000"/><circle cx="18" cy="15.5" r="1.4" fill="#000"/><circle cx="24" cy="13.5" r="1.4" fill="#000"/><circle cx="30" cy="15.5" r="1.4" fill="#000"/><circle cx="10" cy="22" r="1.3" fill="#000"/><circle cx="38" cy="22" r="1.3" fill="#000"/></mask><g fill="currentColor" stroke="currentColor" mask="url(#mk-leo)"><ellipse cx="24" cy="28" rx="16" ry="14"/><circle cx="9" cy="12" r="5.5"/><circle cx="39" cy="12" r="5.5"/></g><g fill="currentColor" stroke="currentColor"></g></symbol><symbol id="ic-croc" viewBox="0 0 48 48"><mask id="mk-croc" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48"><rect width="48" height="48" fill="#fff"/><circle cx="18" cy="20" r="1.3" fill="#000"/><circle cx="30" cy="20" r="1.3" fill="#000"/><circle cx="22" cy="3.5" r="0.9" fill="#000"/><circle cx="26" cy="3.5" r="0.9" fill="#000"/><path d="M24 28 L24 44" fill="none" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/><path d="M17 33 L31 33 M16 38 L32 38" fill="none" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/></mask><g fill="currentColor" stroke="currentColor" mask="url(#mk-croc)"><ellipse cx="24" cy="10" rx="5.2" ry="10"/><ellipse cx="24" cy="24" rx="10" ry="7"/><ellipse cx="24" cy="35" rx="8.5" ry="9"/><path d="M17 40 Q24 43 31 40 L26 47 L22 47Z"/><ellipse cx="10" cy="22" rx="3.6" ry="6.5" transform="rotate(35 10 22)"/><ellipse cx="38" cy="22" rx="3.6" ry="6.5" transform="rotate(-35 38 22)"/><ellipse cx="10" cy="38" rx="3.6" ry="6.5" transform="rotate(-35 10 38)"/><ellipse cx="38" cy="38" rx="3.6" ry="6.5" transform="rotate(35 38 38)"/><circle cx="18" cy="20" r="3.4"/><circle cx="30" cy="20" r="3.4"/></g><g fill="currentColor" stroke="currentColor"></g></symbol><symbol id="ic-tig" viewBox="0 0 48 48"><mask id="mk-tig" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48"><rect width="48" height="48" fill="#fff"/><circle cx="9" cy="11" r="2.2" fill="#000"/><circle cx="39" cy="11" r="2.2" fill="#000"/><ellipse cx="17" cy="25" rx="2.2" ry="2.6" fill="#000"/><ellipse cx="31" cy="25" rx="2.2" ry="2.6" fill="#000"/><path d="M21 31 L27 31 L24 34.5Z" fill="#000"/><path d="M24 34.5 L24 38 M24 38 Q21 40.5 18.5 38.5 M24 38 Q27 40.5 29.5 38.5" fill="none" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/><path d="M24 14 L24 20 M19 15 L20.5 20 M29 15 L27.5 20" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/><path d="M7 25 L13 27 M7 31 L13 31 M41 25 L35 27 M41 31 L35 31" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/></mask><g fill="currentColor" stroke="currentColor" mask="url(#mk-tig)"><ellipse cx="24" cy="28" rx="17.5" ry="14.5"/><circle cx="9" cy="11" r="5.5"/><circle cx="39" cy="11" r="5.5"/></g><g fill="currentColor" stroke="currentColor"></g></symbol><symbol id="ic-eagle" viewBox="0 0 48 48"><mask id="mk-eagle" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48"><rect width="48" height="48" fill="#fff"/><circle cx="24.5" cy="18" r="2.6" fill="#000"/><path d="M18 13 Q25 11 31 15" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/><circle cx="40" cy="24" r="1.2" fill="#000"/><path d="M13 36 L16 41 M21 37 L24 43 M29 36 L31 42" fill="none" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/></mask><g fill="currentColor" stroke="currentColor" mask="url(#mk-eagle)"><circle cx="22" cy="21" r="14"/><path d="M32 19 Q46 20 44 33 Q40 28 34 29Z"/><path d="M10 30 L16 42 L22 32 L28 43 L34 31 L36 44 L8 44Z"/></g><g fill="currentColor" stroke="currentColor"></g></symbol><symbol id="ic-lio" viewBox="0 0 48 48"><mask id="mk-lio" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48"><rect width="48" height="48" fill="#fff"/><circle cx="24" cy="26" r="12.5" fill="#000"/></mask><g fill="currentColor" stroke="currentColor" mask="url(#mk-lio)"><circle cx="24" cy="24" r="20"/><circle cx="43.0" cy="24.0" r="6"/><circle cx="40.454471040075845" cy="33.500020146889455" r="6"/><circle cx="33.499959706178366" cy="40.45450593548732" r="6"/><circle cx="23.99993020910304" cy="42.99999999987182" r="6"/><circle cx="14.499919412527642" cy="40.454436144442354" r="6"/><circle cx="7.5454591693232125" cy="33.4998992653391" r="6"/><circle cx="5.000000000512713" cy="23.999860418206083" r="6"/><circle cx="7.545598751413149" cy="14.499858972072916" r="6"/><circle cx="14.500161175628334" cy="7.5454242743557565" r="6"/><circle cx="24.000209372690883" cy="5.000000001153605" r="6"/><circle cx="33.500201468253636" cy="7.545633647490664" r="6"/><circle cx="40.45461062038969" cy="14.500221616723953" r="6"/></g><g fill="currentColor" stroke="currentColor"><circle cx="18.5" cy="23" r="1.9"/><circle cx="29.5" cy="23" r="1.9"/><path d="M21.5 28.5 L26.5 28.5 L24 31.5Z"/><path d="M24 31.5 L24 34.5 M24 34.5 Q21 37.5 18.5 35 M24 34.5 Q27 37.5 29.5 35" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.5 19 Q18 17.5 21 19.5 M33.5 19 Q30 17.5 27 19.5" fill="none" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></g></symbol><symbol id="ic-bison" viewBox="0 0 48 48"><mask id="mk-bison" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48"><rect width="48" height="48" fill="#fff"/><circle cx="16.5" cy="26" r="2" fill="#000"/><circle cx="31.5" cy="26" r="2" fill="#000"/><circle cx="20.5" cy="39" r="1.6" fill="#000"/><circle cx="27.5" cy="39" r="1.6" fill="#000"/><path d="M12 15 L16 20 L20 14 L24 20 L28 14 L32 20 L36 15" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/></mask><g fill="currentColor" stroke="currentColor" mask="url(#mk-bison)"><ellipse cx="24" cy="28" rx="16.5" ry="14.5"/><path d="M9 18 Q0 14 4 3" fill="none" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M39 18 Q48 14 44 3" fill="none" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="24" cy="39" rx="8.5" ry="5.8"/></g><g fill="currentColor" stroke="currentColor"></g></symbol><symbol id="ic-ele" viewBox="0 0 48 48"><mask id="mk-ele" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48"><rect width="48" height="48" fill="#fff"/><circle cx="8.5" cy="24" r="4" fill="#000"/><circle cx="39.5" cy="24" r="4" fill="#000"/><circle cx="19" cy="19" r="1.9" fill="#000"/><circle cx="29" cy="19" r="1.9" fill="#000"/><path d="M24 30 L24 37 M24 33 L24 34" fill="none" stroke-width="0.01" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/></mask><g fill="currentColor" stroke="currentColor" mask="url(#mk-ele)"><circle cx="24" cy="22" r="12"/><circle cx="8.5" cy="24" r="9"/><circle cx="39.5" cy="24" r="9"/><path d="M24 28 L24 38 Q24 46 31 44" fill="none" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M17.5 34 Q13 40 14.5 45 M30.5 34 Q35 40 33.5 45" fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g><g fill="currentColor" stroke="currentColor"></g></symbol><symbol id="ic-mon" viewBox="0 0 48 48"><mask id="mk-mon" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48"><rect width="48" height="48" fill="#fff"/><circle cx="10" cy="24" r="2.4" fill="#000"/><circle cx="38" cy="24" r="2.4" fill="#000"/><path d="M14 21 Q16 17 20 19 Q24 21 28 19 Q32 17 34 21 Q36 30 30 34 Q24 37 18 34 Q12 30 14 21Z" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/><circle cx="19.5" cy="24" r="1.8" fill="#000"/><circle cx="28.5" cy="24" r="1.8" fill="#000"/><circle cx="22.5" cy="29" r="0.9" fill="#000"/><circle cx="25.5" cy="29" r="0.9" fill="#000"/><path d="M20 32 Q24 35 28 32" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/></mask><g fill="currentColor" stroke="currentColor" mask="url(#mk-mon)"><circle cx="10" cy="24" r="5.5"/><circle cx="38" cy="24" r="5.5"/><circle cx="24" cy="22" r="14"/><path d="M12 32 Q24 50 36 32Z"/></g><g fill="currentColor" stroke="currentColor"></g></symbol><symbol id="ic-tur" viewBox="0 0 48 48"><mask id="mk-tur" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="48"><rect width="48" height="48" fill="#fff"/><circle cx="22" cy="8.5" r="1.2" fill="#000"/><circle cx="26" cy="8.5" r="1.2" fill="#000"/><path d="M24 17 L31 21.5 L31 30.5 L24 35 L17 30.5 L17 21.5Z" fill="#000"/><path d="M24 17 L24 12 M31 21.5 L36 19 M31 30.5 L36 33 M24 35 L24 40 M17 30.5 L12 33 M17 21.5 L12 19" fill="none" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" stroke="#000"/></mask><g fill="currentColor" stroke="currentColor" mask="url(#mk-tur)"><circle cx="24" cy="27" r="13.5"/><circle cx="24" cy="9.5" r="5.5"/><ellipse cx="9" cy="17" rx="4.2" ry="6.5" transform="rotate(-40 9 17)"/><ellipse cx="39" cy="17" rx="4.2" ry="6.5" transform="rotate(40 39 17)"/><ellipse cx="10" cy="38" rx="4.2" ry="6.5" transform="rotate(40 10 38)"/><ellipse cx="38" cy="38" rx="4.2" ry="6.5" transform="rotate(-40 38 38)"/><path d="M21 39 L24 46 L27 39Z"/></g><g fill="currentColor" stroke="currentColor"><path d="M24 20 L28.5 22.8 L28.5 28.8 L24 31.6 L19.5 28.8 L19.5 22.8Z"/></g></symbol></svg>
 
 <svg class="defs" aria-hidden="true" focusable="false">
   <defs>
@@ -755,7 +853,7 @@ details.card summary::after{font-size:20px}
       <h1 class="logo" aria-label="Cờ Thú"><span aria-hidden="true">C</span><span aria-hidden="true">Ờ</span><span aria-hidden="true"></span><span aria-hidden="true">T</span><span aria-hidden="true">H</span><span aria-hidden="true">Ú</span></h1>
       <p class="tag" id="tagline">Đưa một quân vào hang đối phương để thắng.</p>
     </div>
-    <div class="score" aria-label="Điểm số"><span class="pv"><em id="sc1-l">Thắng</em> <b id="wins">0</b></span><span class="pv"><em id="sc2-l">Thua</em> <b id="losses">0</b></span></div>
+    <div class="top-right"><button class="theme-toggle" id="btn-theme" type="button" aria-pressed="false">Giao diện: Mặc định</button><div class="score" aria-label="Điểm số"><span class="pv"><em id="sc1-l">Thắng</em> <b id="wins">0</b></span><span class="pv"><em id="sc2-l">Thua</em> <b id="losses">0</b></span></div></div>
   </header>
 
       <section class="card online-card" id="online-card" aria-labelledby="online-title">
@@ -885,7 +983,7 @@ details.card summary::after{font-size:20px}
 <section class="main-menu" id="main-menu" aria-label="Trang chủ Cờ Thú">
   <div class="hm-wrap">
     <header class="hm-top">
-      <div class="hm-mark"><span class="hm-seal" aria-hidden="true">獣</span><span class="hm-word">CỜ THÚ</span></div>
+      <div class="hm-mark"><span class="hm-seal" lang="zh-Hant" aria-hidden="true">獸</span><span class="hm-word">CỜ THÚ</span></div>
       <nav class="hm-util" aria-label="Cài đặt nhanh">
         <button class="home-utility" id="menu-sound" type="button" aria-pressed="true"><span class="utility-icon">🔊</span><span class="utility-label">Âm thanh bật</span></button>
         <button class="home-utility" id="menu-music" type="button" aria-pressed="false"><span class="utility-icon">♫</span><span class="utility-label">Nhạc nền tắt</span></button>
@@ -896,21 +994,21 @@ details.card summary::after{font-size:20px}
     </header>
     <main class="hm-hero">
       <div class="hm-copy">
-        <p class="hm-kicker">獣棋 · TRÒ CHƠI CHIẾN THUẬT</p>
+        <p class="hm-kicker"><span lang="zh-Hant">棋獸</span> · TRÒ CHƠI CHIẾN THUẬT</p>
         <h1 class="hm-title" aria-label="Cờ Thú">Cờ Thú<i class="hm-sun" aria-hidden="true"></i></h1>
         <p class="hm-sub">Chỉ huy đội quân muông thú,<br/>chiếm hang đối thủ bằng địa hình và tuyệt kỹ.</p>
         <ol class="hm-menu">
-          <li><button class="hm-row" id="menu-single" type="button"><span class="hm-no" aria-hidden="true">一</span><span class="hm-rt"><b>Đấu với máy</b><small>Chọn đội hình và cấp độ</small></span><span class="hm-go" aria-hidden="true">→</span></button></li>
-          <li><button class="hm-row" id="menu-online" type="button"><span class="hm-no" aria-hidden="true">二</span><span class="hm-rt"><b>Chơi trực tuyến</b><small>Tạo phòng, gửi mã cho bạn bè</small></span><span class="hm-go" aria-hidden="true">→</span></button></li>
-          <li><button class="hm-row" id="menu-local" type="button"><span class="hm-no" aria-hidden="true">三</span><span class="hm-rt"><b>Hai người cùng máy</b><small>Luân phiên trên một thiết bị</small></span><span class="hm-go" aria-hidden="true">→</span></button></li>
+          <li><button class="hm-row" id="menu-single" type="button"><span class="hm-no" aria-hidden="true">01</span><span class="hm-rt"><b>Đấu với máy</b><small>Chọn đội hình và cấp độ</small></span><span class="hm-go" aria-hidden="true">→</span></button></li>
+          <li><button class="hm-row" id="menu-online" type="button"><span class="hm-no" aria-hidden="true">02</span><span class="hm-rt"><b>Chơi trực tuyến</b><small>Tạo phòng, gửi mã cho bạn bè</small></span><span class="hm-go" aria-hidden="true">→</span></button></li>
+          <li><button class="hm-row" id="menu-local" type="button"><span class="hm-no" aria-hidden="true">03</span><span class="hm-rt"><b>Hai người cùng máy</b><small>Luân phiên trên một thiết bị</small></span><span class="hm-go" aria-hidden="true">→</span></button></li>
         </ol>
         <p class="home-hint" id="home-hint" role="status" aria-live="polite">Chọn một chế độ để bắt đầu. Bạn có thể quay lại trang chủ bất cứ lúc nào.</p>
       </div>
-      <div class="hm-stage" aria-hidden="true"><svg viewBox="-6 -6 372 372" class="hm-svg" role="img" aria-label="Bàn cờ 9×9 thu nhỏ"><g><rect x="40" y="120" width="40" height="40" class="w"/><rect x="80" y="120" width="40" height="40" class="w"/><rect x="240" y="120" width="40" height="40" class="w"/><rect x="280" y="120" width="40" height="40" class="w"/><rect x="40" y="160" width="40" height="40" class="w"/><rect x="80" y="160" width="40" height="40" class="w"/><rect x="240" y="160" width="40" height="40" class="w"/><rect x="280" y="160" width="40" height="40" class="w"/><rect x="40" y="200" width="40" height="40" class="w"/><rect x="80" y="200" width="40" height="40" class="w"/><rect x="240" y="200" width="40" height="40" class="w"/><rect x="280" y="200" width="40" height="40" class="w"/><rect x="160" y="0" width="40" height="40" class="den f"/><rect x="160" y="320" width="40" height="40" class="den m"/><circle cx="140" cy="20" r="5" class="trap"/><circle cx="220" cy="20" r="5" class="trap"/><circle cx="180" cy="60" r="5" class="trap"/><circle cx="140" cy="340" r="5" class="trap"/><circle cx="220" cy="340" r="5" class="trap"/><circle cx="180" cy="300" r="5" class="trap"/></g><g class="grid"><path d="M40 0V360M0 40H360"/><path d="M80 0V360M0 80H360"/><path d="M120 0V360M0 120H360"/><path d="M160 0V360M0 160H360"/><path d="M200 0V360M0 200H360"/><path d="M240 0V360M0 240H360"/><path d="M280 0V360M0 280H360"/><path d="M320 0V360M0 320H360"/></g><rect x="0" y="0" width="360" height="360" class="edge"/><g class="pc f"><circle cx="100" cy="20" r="15"/><text x="100" y="27">象</text></g><g class="pc f"><circle cx="260" cy="20" r="15"/><text x="260" y="27">獅</text></g><g class="pc f"><circle cx="60" cy="60" r="15"/><text x="60" y="67">狼</text></g><g class="pc f"><circle cx="220" cy="100" r="15"/><text x="220" y="107">鷹</text></g><g class="pc w"><circle cx="140" cy="180" r="15"/><text x="140" y="187">鰐</text></g><g class="pc m"><circle cx="220" cy="220" r="15"/><text x="220" y="227">猫</text></g><g class="pc m"><circle cx="140" cy="260" r="15"/><text x="140" y="267">牛</text></g><g class="pc m"><circle cx="300" cy="300" r="15"/><text x="300" y="307">鼠</text></g><g class="pc m"><circle cx="100" cy="340" r="15"/><text x="100" y="347">豹</text></g><g class="pc m"><circle cx="260" cy="340" r="15"/><text x="260" y="347">虎</text></g></svg><p class="hm-cap">Đưa một quân vào hang đối phương để thắng</p></div>
+      <div class="hm-stage" aria-hidden="true"><svg viewBox="-6 -6 372 372" class="hm-svg" role="img" aria-label="Bàn cờ 9×9 thu nhỏ"><g><rect x="40" y="120" width="40" height="40" class="w"/><rect x="80" y="120" width="40" height="40" class="w"/><rect x="240" y="120" width="40" height="40" class="w"/><rect x="280" y="120" width="40" height="40" class="w"/><rect x="40" y="160" width="40" height="40" class="w"/><rect x="80" y="160" width="40" height="40" class="w"/><rect x="240" y="160" width="40" height="40" class="w"/><rect x="280" y="160" width="40" height="40" class="w"/><rect x="40" y="200" width="40" height="40" class="w"/><rect x="80" y="200" width="40" height="40" class="w"/><rect x="240" y="200" width="40" height="40" class="w"/><rect x="280" y="200" width="40" height="40" class="w"/><rect x="160" y="0" width="40" height="40" class="den f"/><rect x="160" y="320" width="40" height="40" class="den m"/><circle cx="140" cy="20" r="5" class="trap"/><circle cx="220" cy="20" r="5" class="trap"/><circle cx="180" cy="60" r="5" class="trap"/><circle cx="140" cy="340" r="5" class="trap"/><circle cx="220" cy="340" r="5" class="trap"/><circle cx="180" cy="300" r="5" class="trap"/></g><g class="grid"><path d="M40 0V360M0 40H360"/><path d="M80 0V360M0 80H360"/><path d="M120 0V360M0 120H360"/><path d="M160 0V360M0 160H360"/><path d="M200 0V360M0 200H360"/><path d="M240 0V360M0 240H360"/><path d="M280 0V360M0 280H360"/><path d="M320 0V360M0 320H360"/></g><rect x="0" y="0" width="360" height="360" class="edge"/><g class="pc f"><circle cx="100" cy="20" r="15"/><use href="#ic-ele" x="89" y="7" width="22" height="22"/></g><g class="pc f"><circle cx="260" cy="20" r="15"/><use href="#ic-lio" x="249" y="7" width="22" height="22"/></g><g class="pc f"><circle cx="60" cy="60" r="15"/><use href="#ic-wolf" x="49" y="47" width="22" height="22"/></g><g class="pc f"><circle cx="220" cy="100" r="15"/><use href="#ic-eagle" x="209" y="87" width="22" height="22"/></g><g class="pc w"><circle cx="140" cy="180" r="15"/><use href="#ic-croc" x="129" y="167" width="22" height="22"/></g><g class="pc m"><circle cx="220" cy="220" r="15"/><use href="#ic-cat" x="209" y="207" width="22" height="22"/></g><g class="pc m"><circle cx="140" cy="260" r="15"/><use href="#ic-bison" x="129" y="247" width="22" height="22"/></g><g class="pc m"><circle cx="300" cy="300" r="15"/><use href="#ic-rat" x="289" y="287" width="22" height="22"/></g><g class="pc m"><circle cx="100" cy="340" r="15"/><use href="#ic-leo" x="89" y="327" width="22" height="22"/></g><g class="pc m"><circle cx="260" cy="340" r="15"/><use href="#ic-tig" x="249" y="327" width="22" height="22"/></g></svg><p class="hm-cap">Đưa một quân vào hang đối phương để thắng</p></div>
     </main>
     <footer class="hm-roster" aria-label="Thứ hạng quân">
       <span class="hm-rl">Quân cờ <em>số nhỏ là bậc sức mạnh</em></span>
-      <ul><li title="Bậc 1"><span>鼠</span><em>1</em></li><li title="Bậc 2"><span>猫</span><em>2</em></li><li title="Bậc 2"><span>狐</span><em>2</em></li><li title="Bậc 3"><span>狼</span><em>3</em></li><li title="Bậc 3"><span>猪</span><em>3</em></li><li title="Bậc 4"><span>犬</span><em>4</em></li><li title="Bậc 4"><span>熊</span><em>4</em></li><li title="Bậc 5"><span>豹</span><em>5</em></li><li title="Bậc 5"><span>鰐</span><em>5</em></li><li title="Bậc 6"><span>虎</span><em>6</em></li><li title="Bậc 6"><span>鷹</span><em>6</em></li><li title="Bậc 7"><span>獅</span><em>7</em></li><li title="Bậc 7"><span>牛</span><em>7</em></li><li title="Bậc 8"><span>象</span><em>8</em></li></ul>
+      <ul><li title="Bậc 1"><svg class="ico" aria-hidden="true"><use href="#ic-rat"/></svg><em>1</em></li><li title="Bậc 2"><svg class="ico" aria-hidden="true"><use href="#ic-cat"/></svg><em>2</em></li><li title="Bậc 2"><svg class="ico" aria-hidden="true"><use href="#ic-fox"/></svg><em>2</em></li><li title="Bậc 3"><svg class="ico" aria-hidden="true"><use href="#ic-wolf"/></svg><em>3</em></li><li title="Bậc 3"><svg class="ico" aria-hidden="true"><use href="#ic-boar"/></svg><em>3</em></li><li title="Bậc 4"><svg class="ico" aria-hidden="true"><use href="#ic-dog"/></svg><em>4</em></li><li title="Bậc 4"><svg class="ico" aria-hidden="true"><use href="#ic-bear"/></svg><em>4</em></li><li title="Bậc 5"><svg class="ico" aria-hidden="true"><use href="#ic-leo"/></svg><em>5</em></li><li title="Bậc 5"><svg class="ico" aria-hidden="true"><use href="#ic-croc"/></svg><em>5</em></li><li title="Bậc 6"><svg class="ico" aria-hidden="true"><use href="#ic-tig"/></svg><em>6</em></li><li title="Bậc 6"><svg class="ico" aria-hidden="true"><use href="#ic-eagle"/></svg><em>6</em></li><li title="Bậc 7"><svg class="ico" aria-hidden="true"><use href="#ic-lio"/></svg><em>7</em></li><li title="Bậc 7"><svg class="ico" aria-hidden="true"><use href="#ic-bison"/></svg><em>7</em></li><li title="Bậc 8"><svg class="ico" aria-hidden="true"><use href="#ic-ele"/></svg><em>8</em></li></ul>
     </footer>
   </div>
 </section>
@@ -1679,6 +1777,11 @@ var engineSrc=makeEngine.toString();
 
 /* ---------- Du lieu quan co ---------- */
 function H(k,n,e,s,ep,br,t){return {k:k,n:n,e:e,s:s,ep:ep,br:br,t:t};}
+/* Icon thu (SVG don sac trong sprite #ic-<k>); chi chen HTML khi dung dung dinh dang nay */
+function ico(h){return '<svg class="ico" aria-hidden="true"><use href="#ic-'+h.k+'"/></svg>';}
+function ie(h){return h.k?ico(h):h.e;}
+var IC_RE=/^<svg class="ico" aria-hidden="true"><use href="#ic-[a-z]+"\/><\/svg>$/;
+function setIc(el,v){ if(IC_RE.test(v)) el.innerHTML=v; else el.textContent=v; }
 var HEROES=[null,
  [H('rat','Chuột','🐭','Chít chít!','Thợ lặn','Bơi hồ · ăn Voi trên bờ',[
    ['g','Bơi hồ; trên bờ ăn được Voi.'],
@@ -1874,7 +1977,7 @@ var markEls=[], pieceEls={}, rankEls={}, miniEls={};
   });
   var lad=$('ladder'), q;
   for(q=1;q<=8;q++){
-    var span=document.createElement('span'); span.className='mini'; span.id='lad-'+q; span.textContent=HEROES[q][0].e;
+    var span=document.createElement('span'); span.className='mini'; span.id='lad-'+q; span.innerHTML=ico(HEROES[q][0]);
     lad.appendChild(span);
     if(q<8){var ar=document.createElement('span'); ar.textContent='›'; lad.appendChild(ar);}
   }
@@ -2295,7 +2398,7 @@ function updateOutposts(){
 }
 function startHas(code){ return !EN.isClassic()&&SQ[code>0?0:1][9]>0; }
 function setBubble(emo,text){
-  bubbleEl.querySelector('.b-emo').textContent=emo;
+  setIc(bubbleEl.querySelector('.b-emo'),emo);
   bubbleEl.querySelector('.b-text').textContent=text;
   bubbleEl.classList.remove('pop'); void bubbleEl.offsetWidth; bubbleEl.classList.add('pop');
 }
@@ -2376,9 +2479,9 @@ function eatsList(r,side,K){
   if(r===9) return '<i>không ăn được quân nào</i>';
   if(K==='croc'&&!EN.isClassic()) r=5;
   for(q=1;q<=8;q++){
-    if(r===1?(q===1||q===8):(r===8?(q>=2):(q<=r))) out.push(hero(hc*q).e);
+    if(r===1?(q===1||q===8):(r===8?(q>=2):(q<=r))) out.push(ico(hero(hc*q)));
   }
-  if(!EN.isClassic()&&SQ[side>0?1:0][9]===1) out.push('🐒');
+  if(!EN.isClassic()&&SQ[side>0?1:0][9]===1) out.push(ico(H_MON));
   return out.join(' ');
 }
 function updateInfo(){
@@ -2398,10 +2501,10 @@ function updateInfo(){
     if(ip>=0){ ie=effRank(cells,ip); rankTxt=ie; rcls=ie>nominal(inspectCode)?' buff':ie<nominal(inspectCode)?' nerf':''; if(ie!==r) subRank='bậc gốc '+nominal(inspectCode)+' · hiện tại '+ie; }
   }
   var lis=hh.t.map(function(t){return '<li class="'+t[0]+'">'+t[1]+'</li>';}).join('');
-  el.innerHTML='<div class="info-head"><div class="info-token '+cls+'">'+hh.e+'<span class="rank'+rcls+'">'+rankTxt+'</span></div>'+
+  el.innerHTML='<div class="info-head"><div class="info-token '+cls+'">'+ico(hh)+'<span class="rank'+rcls+'">'+rankTxt+'</span></div>'+
     '<div><h3>'+hh.n+'<em>'+hh.ep+'</em></h3><small>'+label+' · '+subRank+'</small></div></div>'+
     '<p class="eats"><span>Ăn được</span> '+eatsList(r,side,hh.k)+'</p>'+extra+
-    '<div class="info-body"><ul class="traits">'+lis+'</ul>'+diagram(hh.k,r,hh.e)+'</div>'+
+    '<div class="info-body"><ul class="traits">'+lis+'</ul>'+diagram(hh.k,r,ico(hh))+'</div>'+
     (!previewHero&&selected>=0&&inspectCode*turn>0&&humanTurn()?'<p><b>'+legal.length+'</b> nước đi hợp lệ</p>':'');
 }
 function updateButtons(){
@@ -2421,7 +2524,7 @@ function refresh(){
 function syncHeroes(){
   var c, h, k;
   for(c in pieceEls){
-    h=hero(+c); pieceEls[c].querySelector('.emo').textContent=h.e; miniEls[c].textContent=h.e; miniEls[c].title=h.n;
+    h=hero(+c); pieceEls[c].querySelector('.emo').innerHTML=ico(h); miniEls[c].innerHTML=ico(h); miniEls[c].title=h.n;
   }
 }
 
@@ -2438,7 +2541,7 @@ function renderRoster(){
   rosterList=list;
   list.forEach(function(it,ix){
     h=it[1]; b=document.createElement('button'); b.type='button'; b.className='row'; b.setAttribute('data-i',ix);
-    b.innerHTML='<span class="mini">'+h.e+'</span><span><b>'+h.n+' · '+h.ep+'</b><small>'+(it[0]<=8?'Bậc '+it[0]+' · ':'Ngoài bậc · ')+h.br+'</small></span>';
+    b.innerHTML='<span class="mini">'+ico(h)+'</span><span><b>'+h.n+' · '+h.ep+'</b><small>'+(it[0]<=8?'Bậc '+it[0]+' · ':'Ngoài bậc · ')+h.br+'</small></span>';
     ros.appendChild(b);
   });
 }
@@ -2472,7 +2575,7 @@ function renderRules(){
 /* ---------- Mo ta nuoc di ---------- */
 function describe(f,t,code,tcode,k){
   var s=code>0?1:-1, rk=Math.abs(code), K=HK[code+9], owner=pnl(s), foeName=pnl(-s);
-  var h=hero(code), emo=h.e, snd=h.s, who=h.n+' của '+owner, th=tcode?hero(tcode).n:'';
+  var h=hero(code), emo=ico(h), snd=h.s, who=h.n+' của '+owner, th=tcode?hero(tcode).n:'';
   if(k===5) return {emo:emo,text:snd+' '+who+' đổi chỗ với '+th+(tcode*s>0?'':' của '+foeName)+'.'};
   if(k===6) return {emo:emo,text:snd+' '+who+' '+(K==='croc'?'bắt mồi':'tấn công từ bờ')+', ăn '+th+' của '+foeName+' mà không rời chỗ.'};
   if(k===7) return {emo:emo,text:snd+' '+who+' vồ xa, ăn '+th+' của '+foeName+' mà không rời chỗ.'};
@@ -2659,9 +2762,9 @@ function finish(winner,why,code){
   else if(why==='pieces') sub=(pn(loser)==='Máy'?'Máy':pn(loser))+' chỉ còn lại Rùa hoặc đã hết quân.';
   else if(why==='rep') sub=pn(loser)+' chỉ còn nước lặp thế lần thứ 3 (bị cấm) nên không còn nước đi hợp lệ.';
   else sub=pn(loser)+' không còn nước đi nào.';
-  if(pvp()){ title=pn(winner)+' thắng!'; emoji=why==='den'?hero(code).e:'🏆'; }
-  else{ title=mine?'Bạn thắng rồi!':'Máy thắng ván này'; emoji=why==='den'?hero(code).e:(mine?'🏆':'🐾'); if(!mine) sub+=' Thử lại nhé, đàn thú của bạn sẽ khá hơn.'; }
-  $('res-emoji').textContent=emoji; $('res-title').textContent=title; $('res-sub').textContent=sub;
+  if(pvp()){ title=pn(winner)+' thắng!'; emoji=why==='den'?ico(hero(code)):'🏆'; }
+  else{ title=mine?'Bạn thắng rồi!':'Máy thắng ván này'; emoji=why==='den'?ico(hero(code)):(mine?'🏆':'🐾'); if(!mine) sub+=' Thử lại nhé, đàn thú của bạn sẽ khá hơn.'; }
+  setIc($('res-emoji'),emoji); $('res-title').textContent=title; $('res-sub').textContent=sub;
   setTimeout(function(){resultEl.hidden=false;},650);
   if(pvp()){
     if(mine){p1w++;store('cothu:p1',String(p1w));}else{p2w++;store('cothu:p2',String(p2w));}
@@ -2809,14 +2912,14 @@ function showDraft(){
 function showDraftInfo(h){
   var el=$('draft-info'); if(!el) return;
   if(!h.t){ el.innerHTML='<b>Không dùng quân ngoài bậc</b>: mỗi bên chơi với 8 quân.'; return; }
-  el.innerHTML='<b>'+h.e+' '+h.n+'</b> · '+h.br+'. '+h.t.filter(function(t){return t[0]==='g';}).slice(0,2).map(function(t){return t[1];}).join(' ');
+  el.innerHTML='<b>'+ie(h)+' '+h.n+'</b> · '+h.br+'. '+h.t.filter(function(t){return t[0]==='g';}).slice(0,2).map(function(t){return t[1];}).join(' ');
 }
 function renderDraft(){
   var box=$('draft-rows'); box.innerHTML='';
   var s=dr.sides[dr.idx], pick=dr.picks[s];
   [1,2,3,4,5,6,7,8,9].forEach(function(r){
     var row=document.createElement('div'), opts, many;
-    if(r===9) opts=[{e:'🚫',n:'Không dùng',br:'8 quân'},{e:H_MON.e,n:H_MON.n,br:H_MON.br},{e:H_TUR.e,n:H_TUR.n,br:H_TUR.br}];
+    if(r===9) opts=[{e:'⊘',n:'Không dùng',br:'8 quân'},H_MON,H_TUR];
     else opts=HEROES[r];
     many=opts.length>1;
     row.className='dr'; row.style.setProperty('--n',opts.length);
@@ -2827,7 +2930,7 @@ function renderDraft(){
       if(many&&!locked) b.type='button';
       b.className='opt'+(pick[r]===idx?' on':'')+(many?'':' fixed')+(locked&&pick[r]!==idx?' lock':'');
       b.title=h.br;
-      b.innerHTML='<b>'+h.e+' '+h.n+'</b><small>'+h.br+'</small>';
+      b.innerHTML='<b>'+ie(h)+' '+h.n+'</b><small>'+h.br+'</small>';
       b.addEventListener('mouseenter',function(){showDraftInfo(h);});
       if(many&&!locked) b.addEventListener('click',function(){pick[r]=idx;renderDraft();showDraftInfo(h);});
       else b.addEventListener('click',function(){showDraftInfo(h);});
@@ -2867,7 +2970,7 @@ function doHint(){
     if(my!==token||over||turn!==side||!mv) return;
     hint={f:mv.f,t:destOf(mv.f,mv.t,mv.k)};
     var h=hero(cells[mv.f]);
-    setBubble(h.e,'Gợi ý: thử đi '+h.n+' tới ô đang nhấp nháy'+(mv.bf!==undefined&&mv.bf!==mv.bt?', rồi dùng bước thưởng tiền đồn.':'.'));
+    setBubble(ico(h),'Gợi ý: thử đi '+h.n+' tới ô đang nhấp nháy'+(mv.bf!==undefined&&mv.bf!==mv.bt?', rồi dùng bước thưởng tiền đồn.':'.'));
     updateMarks();
     clearTimeout(hintTimer); hintTimer=setTimeout(function(){hint=null;updateMarks();},7000);
   });
@@ -2966,12 +3069,16 @@ function applyTheme(t){
  document.documentElement.setAttribute('data-theme',t);
  var b=$('menu-theme');
  if(b){b.setAttribute('aria-pressed',String(t==='dark'));b.querySelector('.utility-label').textContent='Giao diện: '+(t==='dark'?'Tối':'Mặc định');}
+ var b2=$('btn-theme');
+ if(b2){b2.setAttribute('aria-pressed',String(t==='dark'));b2.textContent='Giao diện: '+(t==='dark'?'Tối':'Mặc định');}
 }
 (function(){var t='light';try{t=localStorage.getItem('cothu:theme')==='dark'?'dark':'light';}catch(e){}applyTheme(t);})();
-$('menu-theme').addEventListener('click',function(){
+function toggleTheme(){
  var t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
  applyTheme(t);try{localStorage.setItem('cothu:theme',t);}catch(e){}
-});
+}
+$('menu-theme').addEventListener('click',toggleTheme);
+$('btn-theme').addEventListener('click',toggleTheme);
 $('online-back').addEventListener('click',showMainMenu);
 $('menu-single').addEventListener('click',function(){enterMenuMode('single');});
 $('menu-local').addEventListener('click',function(){enterMenuMode('local');});
